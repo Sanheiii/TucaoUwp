@@ -1,0 +1,87 @@
+﻿<Page
+    x:Class="Tucao.Search"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Tucao"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    NavigationCacheMode="Enabled">
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition x:Name="navigationTransition">
+                <DrillInNavigationTransitionInfo/>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    <Page.Resources>
+        <DataTemplate x:Key="VideoTemplate">
+            <Grid Background="#FFEEEEEE" Tag="{Binding link}" Tapped="VideoPanel_Tapped">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" MinWidth="150"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <toolkit:ImageEx Grid.Column="0"
+                    Source="{Binding img}"
+                    Stretch="UniformToFill"
+                    CornerRadius="1,1,1,1"
+                    HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Top"/>
+                <Grid Grid.Column="1">
+                    <TextBlock Text="{Binding title}" FontSize="13" Height="52" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,0,0"/>
+                    <TextBlock Text="{Binding play}" FontSize="10" VerticalAlignment="Bottom" Margin="8,0,0,2"/>
+                </Grid>
+                <StackPanel Grid.ColumnSpan="2" Grid.Row="1">
+                    <TextBlock Text="{Binding description}" TextTrimming="CharacterEllipsis"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding up}" Foreground="#FFFF3366"/>
+                        <TextBlock Text="{Binding time}" FontSize="12" Margin="5,3,0,0"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Background="#55DDDDDD">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid VerticalAlignment="Top" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MaxWidth="500"/>
+            </Grid.ColumnDefinitions>
+            <AutoSuggestBox Name="SearchBox" QueryIcon="Find" PlaceholderText="搜索关键字 HID" Margin="5,10,5,5" QuerySubmitted="SearchBox_QuerySubmitted"/>
+        </Grid>
+        <ScrollViewer Grid.Row="1">
+            <ScrollViewer.Content>
+                <Grid ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <toolkit:AdaptiveGridView Name="VideoList"
+                                   OneRowModeEnabled="False"
+                                   ItemHeight="120"
+                                   DesiredWidth="400"
+                                   SelectionMode="Single"
+                                   IsItemClickEnabled="True"
+                                   ItemTemplate="{StaticResource VideoTemplate}" 
+                                  HorizontalContentAlignment="Left" 
+                                  Padding="10,0,10,10">
+                    </toolkit:AdaptiveGridView>
+                    <Grid Grid.Row="1" VerticalAlignment="Top" Height="30" HorizontalAlignment="Stretch">
+                        <ProgressBar VerticalAlignment="Top" Height="35" Name="LoadingProgress" IsIndeterminate="True" ShowPaused="False" ShowError="False" Visibility="Collapsed"/>
+                        <TextBlock Name="BottomText" HorizontalAlignment="Center" Visibility="Collapsed"/>
+                    </Grid>
+                </Grid>
+            </ScrollViewer.Content>
+        </ScrollViewer>
+    </Grid>
+</Page>

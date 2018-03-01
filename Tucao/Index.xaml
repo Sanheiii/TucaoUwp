@@ -1,0 +1,130 @@
+﻿<Page
+    x:Class="Tucao.Index"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Tucao"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    NavigationCacheMode="Enabled">
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition x:Name="navigationTransition">
+                <DrillInNavigationTransitionInfo/>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    <Page.Resources>
+        <DataTemplate x:Key="VideoTemplate">
+            <Grid Background="#FFEEEEEE" Tag="{Binding link}" Tapped="VideoPanel_Tapped">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" MinWidth="150"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <toolkit:ImageEx Grid.Column="0"
+                    Source="{Binding img}"
+                    Stretch="UniformToFill"
+                    CornerRadius="1,1,1,1"
+                    HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Top"/>
+                <Grid Grid.Column="1">
+                    <TextBlock Text="{Binding title}" FontSize="13" Height="52" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,0,0"/>
+                    <TextBlock Text="{Binding play}" FontSize="10" VerticalAlignment="Bottom" Margin="8,0,0,2"/>
+                </Grid>
+                <StackPanel Grid.ColumnSpan="2" Grid.Row="1">
+                    <TextBlock Text="{Binding description}" TextTrimming="CharacterEllipsis"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding up}" Foreground="#FFFF3366"/>
+                        <TextBlock Text="{Binding time}" FontSize="12" Margin="5,3,0,0"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Background="#55DDDDDD">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="48"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Image Source="Assets/logo.png" Margin="20,0,0,0" Height="20" HorizontalAlignment="Left"/>
+            <AppBarButton Name="Search"
+                          Click="Search_Click"
+                          VerticalAlignment="Stretch"
+                          Height="48"
+                                  RelativePanel.RightOf="SearchText"
+                              HorizontalAlignment="Right">
+                <SymbolIcon Symbol="Find"/>
+            </AppBarButton>
+        </Grid>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Top">
+            <TextBlock Text="&#xE735;" FontSize="25" Foreground="#FFFF3366" FontFamily="Segoe MDL2 Assets" AutomationProperties.Name="Favorite" Margin="10,5,10,5" />
+            <TextBlock Text="连载新番" FontSize="25" Margin="5,0,0,5" />
+        </StackPanel>
+        <ScrollViewer Grid.Row="2">
+            <Grid ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Enabled">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <toolkit:AdaptiveGridView Name="VideoList"
+                                   OneRowModeEnabled="False"
+                                   ItemHeight="120"
+                                   DesiredWidth="400"
+                                   SelectionMode="Single"
+                                   IsItemClickEnabled="True"
+                                   ItemTemplate="{StaticResource VideoTemplate}" 
+                                  HorizontalContentAlignment="Left" 
+                                  Padding="10,0,10,0"
+                                          Grid.Row="0">
+                </toolkit:AdaptiveGridView>
+                <Grid Grid.Row="1" VerticalAlignment="Top" Height="30" HorizontalAlignment="Stretch">
+                    <ProgressBar VerticalAlignment="Top" Height="35" Name="LoadingProgress" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
+                    <TextBlock Name="BottomText" HorizontalAlignment="Center" Tapped="BottomText_Tapped" Text="加载下一页"/>
+                </Grid>
+
+            </Grid>
+        </ScrollViewer>
+        <CommandBar Grid.RowSpan="4" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" RequestedTheme="Dark">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Name="RefreshButton" Label="刷新" Tapped="Refresh_Tapped" IsEnabled="False">
+                    <FontIcon  FontFamily="Segoe MDL2 Assets" Glyph="&#xE72C;" />
+                </AppBarButton>
+                <!--<AppBarButton Label="随机视频">
+                    <FontIcon  FontFamily="Segoe MDL2 Assets" Glyph="&#xE786;" />
+                </AppBarButton>-->
+            </CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="关于" Tapped="AppBarButton_Tapped"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+        <!--<SplitView Name="LeftSplitView"
+                   Grid.Row="1"
+                   Grid.RowSpan="2"
+                   Grid.Column="0"
+              DisplayMode="Overlay" 
+              OpenPaneLength="240">
+            <SplitView.Pane>
+                <StackPanel>
+                    <ListBox>
+                        <ListBoxItem>稍后再看</ListBoxItem>
+                        <ListBoxItem>历史记录</ListBoxItem>
+                        <ListBoxItem>离线下载</ListBoxItem>
+                        <ListBoxItem>设置</ListBoxItem>
+                        <ListBoxItem>关于</ListBoxItem>
+                    </ListBox>
+                </StackPanel>
+            </SplitView.Pane>
+        </SplitView>-->
+    </Grid>
+
+</Page>

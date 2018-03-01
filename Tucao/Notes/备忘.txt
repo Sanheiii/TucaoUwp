@@ -1,0 +1,2 @@
+﻿SubmissionInfo中case太多,可以写成dictionary
+离线缓存
