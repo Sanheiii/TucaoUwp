@@ -21,11 +21,18 @@ namespace Tucao.Content
         static public async Task<SubmissionInfo> GetSubmissionInfo(string hid)
         {
             SubmissionInfo info = new SubmissionInfo();
-            string message = await HttpService._getSubmissionInfo(hid);
-            var information = Newtonsoft.Json.JsonConvert.DeserializeObject<Hashtable>(message);
+            //通过api获取绝大多数信息
+            string message1 = await HttpService._getSubmissionInfo(hid);
+            var information = Newtonsoft.Json.JsonConvert.DeserializeObject<Hashtable>(message1);
             var result = Newtonsoft.Json.JsonConvert.DeserializeObject<Hashtable>(information["result"].ToString());
             info.Parse(result);
-
+            //解析html得到头像和介绍
+            HttpResponseMessage message2 = await HttpService.HttpGet("http://www.tucao.tv/play/h" + hid);
+            string webpage=await message2.Content.ReadAsStringAsync();
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(webpage);
+            info.Description = doc.DocumentNode.SelectSingleNode("//div[@class='show_content']").InnerHtml;
+            info.UserIcon = doc.DocumentNode.SelectSingleNode("//img[@alt='"+info.User+"']").Attributes["src"].Value;
             return info;
         }
 
@@ -59,6 +66,12 @@ namespace Tucao.Content
             }
             return result;
         }
+        /// <summary>
+        /// 获取分类里的视频
+        /// </summary>
+        /// <param name="tid">分类id</param>
+        /// <param name="pagenum">页码</param>
+        /// <returns></returns>
         static public async Task<List<VideoPanel>> GetSubclassiFication(int tid, int pagenum)
         {
             var webpage = await HttpService._getsubclassification(tid, pagenum);

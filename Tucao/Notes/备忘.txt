@@ -1,2 +1,7 @@
 ﻿SubmissionInfo中case太多,可以写成dictionary
 离线缓存
+评论     http://www.tucao.tv/index.php?m=comment&c=index&a=init&commentid=content_11-4075504-1&hot=0&iframe=1
+
+
+
+修复了列表滚动

@@ -147,10 +147,16 @@ namespace Tucao
             Task.Run(() => LoadItems(p));
         }
 
-        private void AppBarButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void About_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Frame root = Window.Current.Content as Frame;
             root.Navigate(typeof(About), null, new DrillInNavigationTransitionInfo());
+        }
+
+        private void DownloadList_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Frame root = Window.Current.Content as Frame;
+            root.Navigate(typeof(DownloadList), null, new DrillInNavigationTransitionInfo());
         }
     }
 }

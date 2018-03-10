@@ -26,8 +26,8 @@ namespace Tucao.Http
                 param.Add("forward", "http%3A%2F%2Ftucao.tv%2F");
                 param.Add("siteid", "1");
             }
-            string result = await HttpGet("http://www.tucao.tv/index.php", param);
-            return result;
+            var result = await HttpGet("http://www.tucao.tv/index.php", param);
+            return await result.Content.ReadAsStringAsync();
         }
         /// <summary>
         /// 获取子分类的视频
@@ -35,8 +35,8 @@ namespace Tucao.Http
         /// <returns></returns>
         static public async Task<string> _getsubclassification(int tid,int page)
         {
-            string result = await HttpGet("http://www.tucao.tv/list/" + tid + "/index_" + page + ".html");
-            return result;
+            var result = await HttpGet("http://www.tucao.tv/list/" + tid + "/index_" + page + ".html");
+            return await result.Content.ReadAsStringAsync();
         }
 
 
@@ -55,8 +55,8 @@ namespace Tucao.Http
                 param.Add("vid", part["vid"]);
                 param.Add("r", (unixtimestamp / 1000).ToString());
             }
-            var result = await HttpService.HttpGet("http://api.tucao.tv/api/playurl", param);
-            return result;
+            var result = await HttpGet("http://api.tucao.tv/api/playurl", param);
+            return await result.Content.ReadAsStringAsync();
         }
         /// <summary>
         /// 获取投稿详情
@@ -71,8 +71,8 @@ namespace Tucao.Http
                 param.Add("apikey", apikey);
                 param.Add("type", "json");
             }
-            string result = await HttpGet("http://www.tucao.tv/api_v2/view.php", param);
-            return result;
+            var result = await HttpGet("http://www.tucao.tv/api_v2/view.php", param);
+            return await result.Content.ReadAsStringAsync();
         }
         /// <summary>
         /// 搜索视频
@@ -98,8 +98,8 @@ namespace Tucao.Http
                 param.Add("q", keywords);
                 param.Add("page", page);
             }
-            string result = await HttpGet("http://www.tucao.tv/index.php", param);
-            return result;
+            var result = await HttpGet("http://www.tucao.tv/index.php", param);
+            return await result.Content.ReadAsStringAsync();
         }
 
 
@@ -110,7 +110,7 @@ namespace Tucao.Http
         /// <param name="url">请求地址</param>
         /// <param name="param">参数</param>
         /// <returns></returns>
-        static public async Task<string> HttpGet(string url, Hashtable param)
+        static public async Task<HttpResponseMessage> HttpGet(string url, Hashtable param)
         {
             if (param != null)
             {
@@ -121,10 +121,10 @@ namespace Tucao.Http
                 }
             url = url.Remove(url.Length - 1, 1);
             }
-            string response = await client.GetStringAsync(new Uri(url));
+            var response = await client.GetAsync(new Uri(url));
             return response;
         }
-        static public async Task<string> HttpGet(string url)
+        static public async Task<HttpResponseMessage> HttpGet(string url)
         {
             return await HttpGet(url, null);
         }

@@ -64,6 +64,10 @@ namespace Tucao.Content
         /// </summary>
         public string User { get; set; }
         /// <summary>
+        ///发布人的头像
+        /// </summary>
+        public string UserIcon { get; set; }
+        /// <summary>
         ///发布人UID
         /// </summary>
         public string UserId { get; set; }
@@ -165,8 +169,6 @@ namespace Tucao.Content
             TypeName = result["typename"].ToString();
             Title = result["title"].ToString();
             Play = result["play"].ToString();
-            Description = result["description"].ToString();
-            if (Description.Trim() == "") Description = "暂无简介";
             KeyWords = result["keywords"].ToString();
             Thumb = result["thumb"].ToString();
             User = result["user"].ToString();

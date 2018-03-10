@@ -99,6 +99,10 @@
     <Compile Include="About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DownloadList.xaml.cs">
+      <DependentUpon>DownloadList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\DownloadHelper.cs" />
     <Compile Include="Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
     </Compile>
@@ -134,7 +138,6 @@
   <ItemGroup>
     <Content Include="Assets\bg_y_png24.png" />
     <Content Include="Notes\备忘.txt" />
-    <Content Include="Notes\引用.txt" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml">
       <SubType>Designer</SubType>
@@ -153,6 +156,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DownloadList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

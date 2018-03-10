@@ -293,32 +293,44 @@
                                        FontSize="11" 
                                        HorizontalAlignment="Left" 
                                        Margin="0,5,0,0"/>
-                                <!--介绍-->
-                                <TextBlock Name="Description"
-                                       AllowDrop="False" 
-                                       IsHitTestVisible="True" 
-                                       HorizontalAlignment="Left" 
-                                       TextWrapping="WrapWholeWords"
-                                       Margin="0,5,0,0"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <AppBarButton Label="收藏" Name="Favorite" Foreground="Gray" Grid.Column="0" HorizontalAlignment="Center">
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE734;" Foreground="Red"/>
+                                    </AppBarButton>
+                                    <AppBarButton Label="稍后再看" Name="Mark" Foreground="Gray" Grid.Column="1" HorizontalAlignment="Center">
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8A4;" Foreground="Orange"/>
+                                    </AppBarButton>
+                                    <AppBarButton Label="分享" Name="Share" Foreground="Gray" Grid.Column="2" HorizontalAlignment="Center">
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;" Foreground="Green"/>
+                                    </AppBarButton>
+                                    <AppBarToggleButton Label="缓存" Name="Download" Foreground="Gray" Grid.Column="3" HorizontalAlignment="Center">
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE896;" Foreground="CornflowerBlue"/>
+                                    </AppBarToggleButton>
+                                </Grid>
                                 <RelativePanel>
                                     <!--这里是头像-->
-                                    <toolkit:ImageEx Name="Portrait" 
+                                    <Image Name="UserIcon" 
                                                      Height="40" 
                                                      Width="40" 
-                                                     CornerRadius="999"
                                                      Margin="0,8,0,0"
                                                      Stretch="UniformToFill"/>
                                     <!--发布者-->
                                     <TextBlock Name="User"
-                                           RelativePanel.RightOf="Portrait"
+                                           RelativePanel.RightOf="UserIcon"
                                            FontSize="13"
                                            Margin="5,8,0,0"
                                            FontWeight="Bold"/>
                                     <!--创建时间-->
                                     <TextBlock Name="Create" 
-                                           RelativePanel.RightOf="Portrait"
+                                           RelativePanel.RightOf="UserIcon"
                                            FontSize="13"
-                                           RelativePanel.AlignBottomWith="Portrait" 
+                                           RelativePanel.AlignBottomWith="UserIcon" 
                                            Margin="5,0,0,0"/>
                                 </RelativePanel>
                                 <!--分割线-->
@@ -343,19 +355,40 @@
                                 <toolkit:WrapPanel  x:Name="Parts"
                                                         Orientation="Horizontal"
                                                         ScrollViewer.VerticalScrollBarVisibility="Auto" >
-                                                    <!--Height="38"-->
+                                    <!--Height="38"-->
                                 </toolkit:WrapPanel>
                             </StackPanel>
                         </ScrollViewer>
                         <!--下面的工具栏-->
                     </Grid>
                 </PivotItem>
+                <PivotItem Header="详情">
+                    <!--介绍-->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Background="#eee"
+                                  Margin="0,0,0,0"
+                          Grid.Row="0">
+                            <Rectangle Fill="#aaa"
+                                           VerticalAlignment="Bottom"
+                                           Height="1"/>
+                        </Grid>
+                        <WebView Name="Description" Margin="0,5,0,0" Grid.Row="1"/>
+                    </Grid>
+                </PivotItem>
                 <!--<PivotItem Header="评论">
                     <Grid>
-                        --><!--显示一个提示--><!--
+                        -->
+                <!--显示一个提示-->
+                <!--
                         <toolkit:InAppNotification
                         x:Name="ExampleInAppNotification" />
-                        --><!--转转转--><!--
+                        -->
+                <!--转转转-->
+                <!--
                         <toolkit:Loading
                              IsLoading="True">
                             <StackPanel Orientation="Horizontal"
@@ -371,8 +404,9 @@
                            VerticalAlignment="Center" />
                             </StackPanel>
                         </toolkit:Loading>
-                        --><!--下拉刷新-->
-                        <!--<toolkit:PullToRefreshListView Name="PullToRefreshListViewControl"
+                        -->
+                <!--下拉刷新-->
+                <!--<toolkit:PullToRefreshListView Name="PullToRefreshListViewControl"
                                                    ItemsSource="{x:Bind _items}"   
                                                    OverscrollLimit="0.4"
                                                    PullThreshold="100"
@@ -383,7 +417,8 @@
                         <toolkit:PullToRefreshListView.RefreshIndicatorContent>
                             <Border HorizontalAlignment="Center" x:Name="refreshindicator" CornerRadius="30" Height="20" Width="20" ></Border>
                         </toolkit:PullToRefreshListView.RefreshIndicatorContent>
-                    </toolkit:PullToRefreshListView>--><!--
+                    </toolkit:PullToRefreshListView>-->
+                <!--
                     </Grid>
                 </PivotItem>-->
             </Pivot>

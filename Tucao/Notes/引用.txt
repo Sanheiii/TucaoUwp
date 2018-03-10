@@ -1,5 +1,0 @@
-﻿NewtonSoft.Json                      https://www.newtonsoft.com/json
-ShanYe MediaPlayer Engine            https://github.com/amamiya/SYEngine
-XMLParser                            http://dev.grumpyferret.com/unity/
-Microsoft.Toolkit.Uwp.UI.Controls    https://github.com/Microsoft/UWPCommunityToolkit/
-HtmlAgilityPack                      http://html-agility-pack.net/

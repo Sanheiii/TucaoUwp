@@ -70,6 +70,7 @@
                                    OneRowModeEnabled="False"
                                    ItemHeight="120"
                                    DesiredWidth="400"
+                                          ScrollViewer.VerticalScrollMode="Disabled"
                                    SelectionMode="Single"
                                    IsItemClickEnabled="True"
                                    ItemTemplate="{StaticResource VideoTemplate}" 

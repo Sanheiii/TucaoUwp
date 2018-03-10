@@ -82,9 +82,10 @@ namespace Tucao
             {
                 Title.Text = info.Title;//标题
                 PAD.Text = "播放数:" + info.Play + "  弹幕数:" + info.Mukio;//播放,弹幕
-                Description.Text = info.Description;//详情
+                Description.NavigateToString(info.Description.Replace("<img", "<img style=\"width: 100%; \""));//详情
                 User.Text = info.User;//发布者
                 Create.Text = info.Create;//创建时间
+                UserIcon.Source= new BitmapImage(new Uri(info.UserIcon));
                 Media.PosterSource = new BitmapImage(new Uri(info.Thumb));
 
                 //添加分p列表
@@ -96,7 +97,6 @@ namespace Tucao
                     btn.Click += Part_Click;
                     btn.Margin = new Thickness(3, 3, 3, 3);
                     btn.Content = p["title"];
-                    btn.Background = new SolidColorBrush(Color.FromArgb(255, 255, 51, 102));
                     btn.Foreground = new SolidColorBrush(Colors.White);
                     //btn.Width = 150;
                     btn.Name = (i + 1).ToString();
@@ -105,6 +105,7 @@ namespace Tucao
                     {
                         btn.Tag = await info.GetPlayUrl(i + 1);
                         if (((List<string>)btn.Tag).Count == 0) throw new Exception();
+                        btn.Background = new SolidColorBrush(Color.FromArgb(255, 255, 51, 102));
                     }
                     catch
                     {
@@ -124,35 +125,44 @@ namespace Tucao
         /// <param name="e"></param>
         private async void Part_Click(object sender, RoutedEventArgs e)
         {
-            Media.Stop();
-            Media.Tapped -= Media_Tapped;
-            ControlPanelGrid.Visibility = Visibility.Collapsed;
-            StatusText.Text = "";
-            int part = int.Parse(((Button)sender).Name);
-            //获取选定项的索引
-            List<string> play_list = (List<string>)((Button)sender).Tag;
-
-            Status.Visibility = Visibility.Visible;
-            //如果之前获取播放地址失败再次尝试获取播放地址
-            if (play_list == null || play_list.Count == 0)
+            //是否选择了缓存
+            if (Download.IsChecked == true)
             {
-                StatusText.Text += Environment.NewLine + "再次尝试获取播放地址...";
-                try
-                {
-                    play_list = await info.GetPlayUrl(part);
-                    if (play_list.Count == 0) throw new Exception();
-                    ((Button)sender).Tag = play_list;
-                    ((Button)sender).Background = new SolidColorBrush(Color.FromArgb(255, 255, 51, 102));
-                    StatusText.Text += "    [成功]";
-                }
-                catch
-                {
-                    StatusText.Text += "    [失败]";
-                    return;
-                }
+                var d=await DownloadHelper.Download(((List<string>)((Button)sender).Tag)[0],"h"+info.Hid+"-"+((Button)sender).Name+".mp4",ApplicationData.Current.LocalCacheFolder);
+                d.StartAsync();
             }
-            PlayerTitle.Text = "P" + part + ":" + info.Video[part - 1]["title"].ToString();
-            Play(play_list);
+            else
+            {
+                Media.Stop();
+                Media.Tapped -= Media_Tapped;
+                ControlPanelGrid.Visibility = Visibility.Collapsed;
+                StatusText.Text = "";
+                int part = int.Parse(((Button)sender).Name);
+                //获取选定项的索引
+                List<string> play_list = (List<string>)((Button)sender).Tag;
+
+                Status.Visibility = Visibility.Visible;
+                //如果之前获取播放地址失败再次尝试获取播放地址
+                if (play_list == null || play_list.Count == 0)
+                {
+                    StatusText.Text += Environment.NewLine + "再次尝试获取播放地址...";
+                    try
+                    {
+                        play_list = await info.GetPlayUrl(part);
+                        if (play_list.Count == 0) throw new Exception();
+                        ((Button)sender).Tag = play_list;
+                        ((Button)sender).Background = new SolidColorBrush(Color.FromArgb(255, 255, 51, 102));
+                        StatusText.Text += "    [成功]";
+                    }
+                    catch
+                    {
+                        StatusText.Text += "    [失败]";
+                        return;
+                    }
+                }
+                PlayerTitle.Text = "P" + part + ":" + info.Video[part - 1]["title"].ToString();
+                Play(play_list);
+            }
         }
         /// <summary>
         /// 播放视频

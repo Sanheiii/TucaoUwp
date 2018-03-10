@@ -79,6 +79,7 @@
                 <toolkit:AdaptiveGridView Name="VideoList"
                                    OneRowModeEnabled="False"
                                    ItemHeight="120"
+                                          ScrollViewer.VerticalScrollMode="Disabled"
                                    DesiredWidth="400"
                                    SelectionMode="Single"
                                    IsItemClickEnabled="True"
@@ -104,7 +105,8 @@
                 </AppBarButton>-->
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="关于" Tapped="AppBarButton_Tapped"/>
+                <AppBarButton Label="关于" Tapped="About_Tapped"/>
+                <AppBarButton Label="下载队列" Tapped="DownloadList_Tapped"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
         <!--<SplitView Name="LeftSplitView"
