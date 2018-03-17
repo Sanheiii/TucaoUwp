@@ -13,26 +13,47 @@
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
-    <Page.Resources>
-        <DataTemplate x:Key="DownloadItem">
-            <Grid>
-                <TextBlock/>
-                <Slider/>
-                <AppBarButton>
-                    <FontIcon/>
-                </AppBarButton>
-            </Grid>
-        </DataTemplate>
-    </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="48"/>
         </Grid.RowDefinitions>
         <TextBlock Text="下载列表" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="10,10,10,10"/>
-        <ListBox ItemTemplate="{StaticResource DownloadItem}" Grid.Row="1">
-        </ListBox>
-        <CommandBar VerticalAlignment="Bottom" Grid.Row="1" RequestedTheme="Dark">
+        <ListView Name="List" Grid.Row="1" IsItemClickEnabled="True" SelectionMode="None" ItemClick="List_ItemClick">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="WrapWholeWords" Text="{Binding Name}" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                            <StackPanel HorizontalAlignment="Right" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,10,0,0">
+                                <TextBlock FontSize="10" Text="{Binding Size}"></TextBlock>
+                                <TextBlock FontSize="10" >/</TextBlock>
+                                <TextBlock FontSize="10"  Text="{Binding TotalSize}"></TextBlock>
+                                <TextBlock FontSize="10" >-</TextBlock>
+                                <TextBlock FontSize="10"  Text="{Binding Status}"></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                        <ProgressBar Grid.Row="1" Value="{Binding Process}" Margin="10,10,0,10"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Margin" Value="0,0,0,0"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+        <CommandBar VerticalAlignment="Bottom" Grid.RowSpan="3" RequestedTheme="Dark">
             <AppBarButton Label="下载目录" Name="OpenDownloadFolder" Tapped="OpenDownloadFolder_Tapped">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8DE;"/>
             </AppBarButton>
@@ -42,9 +63,9 @@
             <AppBarButton Label="全部暂停">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE769;"/>
             </AppBarButton>
-            <AppBarButton Label="删除">
+            <AppBarToggleButton Label="删除" Name="Delete">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74D;"/>
-            </AppBarButton>
+            </AppBarToggleButton>
         </CommandBar>
     </Grid>
 </Page>

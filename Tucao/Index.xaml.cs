@@ -34,7 +34,6 @@ namespace Tucao
     public sealed partial class Index : Page
     {
         int p = 0;
-        ObservableCollection<VideoPanel> items = new ObservableCollection<VideoPanel>();
         public Index()
         {
             this.InitializeComponent();

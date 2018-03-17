@@ -169,6 +169,7 @@ namespace Tucao.Content
             TypeName = result["typename"].ToString();
             Title = result["title"].ToString();
             Play = result["play"].ToString();
+            Part = result["part"].ToString();
             KeyWords = result["keywords"].ToString();
             Thumb = result["thumb"].ToString();
             User = result["user"].ToString();

@@ -23,7 +23,10 @@ using System.Threading.Tasks;
 using Windows.Foundation.Collections;
 using Windows.Web.Http;
 using Windows.Storage;
+using System.IO;
+using Windows.Networking.BackgroundTransfer;
 using Windows.Storage.Streams;
+using Windows.Data.Json;
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
 namespace Tucao
@@ -85,7 +88,7 @@ namespace Tucao
                 Description.NavigateToString(info.Description.Replace("<img", "<img style=\"width: 100%; \""));//详情
                 User.Text = info.User;//发布者
                 Create.Text = info.Create;//创建时间
-                UserIcon.Source= new BitmapImage(new Uri(info.UserIcon));
+                UserIcon.Source = new BitmapImage(new Uri(info.UserIcon));
                 Media.PosterSource = new BitmapImage(new Uri(info.Thumb));
 
                 //添加分p列表
@@ -125,11 +128,54 @@ namespace Tucao
         /// <param name="e"></param>
         private async void Part_Click(object sender, RoutedEventArgs e)
         {
+            var folder = ApplicationData.Current.LocalCacheFolder;
+            JsonArray jsons = new JsonArray();
             //是否选择了缓存
             if (Download.IsChecked == true)
             {
-                var d=await DownloadHelper.Download(((List<string>)((Button)sender).Tag)[0],"h"+info.Hid+"-"+((Button)sender).Name+".mp4",ApplicationData.Current.LocalCacheFolder);
-                d.StartAsync();
+                string title = info.Title + "-" + ((Button)sender).Name;
+                title = title.Replace("/", " ").Replace(":", "：");
+                var file = await folder.CreateFileAsync("list.json", CreationCollisionOption.OpenIfExists);
+                using (Stream file0 = await file.OpenStreamForReadAsync())
+                {
+                    StreamReader reader = new StreamReader(file0);
+                    string txt = await reader.ReadToEndAsync();
+                    if (txt == "")
+                    {
+                        jsons = new JsonArray();
+                    }
+                    else
+                    {
+                        jsons = JsonArray.Parse(txt);
+                    }
+                    JsonObject json = new JsonObject
+                    {
+                        { "title", JsonValue.CreateStringValue(title) },
+                        { "hid", JsonValue.CreateStringValue(info.Hid) },
+                        { "part", JsonValue.CreateStringValue(info.Part) }
+                    };
+                    foreach (var j in jsons)
+                    {
+                        if (j.ToString() == json.ToString())
+                        {
+                            return;
+                        }
+                    }
+                    List<DownloadOperation> d = new List<DownloadOperation>();
+                    foreach (var url in ((List<string>)((Button)sender).Tag))
+                    {
+                        d.Add(await DownloadHelper.Download(url, title+"-"+(d.Count+1), folder));
+                        d[d.Count - 1].StartAsync();
+                    }
+                    jsons.Add(json);
+                }
+                using (Stream file1 = await file.OpenStreamForWriteAsync())
+                {
+                    using (StreamWriter writer = new StreamWriter(file1))
+                    {
+                        await writer.WriteAsync(jsons.ToString());
+                    }
+                }
             }
             else
             {
