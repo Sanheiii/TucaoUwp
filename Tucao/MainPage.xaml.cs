@@ -130,52 +130,13 @@ namespace Tucao
         {
             var folder = ApplicationData.Current.LocalCacheFolder;
             JsonArray jsons = new JsonArray();
+            Button button = (Button)sender;
+            List<string> play_list = (List<string>)button.Tag;
+            int part = int.Parse(button.Name);
             //是否选择了缓存
             if (Download.IsChecked == true)
             {
-                string title = info.Title + "-" + ((Button)sender).Name;
-                title = title.Replace("/", " ").Replace(":", "：");
-                var file = await folder.CreateFileAsync("list.json", CreationCollisionOption.OpenIfExists);
-                using (Stream file0 = await file.OpenStreamForReadAsync())
-                {
-                    StreamReader reader = new StreamReader(file0);
-                    string txt = await reader.ReadToEndAsync();
-                    if (txt == "")
-                    {
-                        jsons = new JsonArray();
-                    }
-                    else
-                    {
-                        jsons = JsonArray.Parse(txt);
-                    }
-                    JsonObject json = new JsonObject
-                    {
-                        { "title", JsonValue.CreateStringValue(title) },
-                        { "hid", JsonValue.CreateStringValue(info.Hid) },
-                        { "part", JsonValue.CreateStringValue(info.Part) }
-                    };
-                    foreach (var j in jsons)
-                    {
-                        if (j.ToString() == json.ToString())
-                        {
-                            return;
-                        }
-                    }
-                    List<DownloadOperation> d = new List<DownloadOperation>();
-                    foreach (var url in ((List<string>)((Button)sender).Tag))
-                    {
-                        d.Add(await DownloadHelper.Download(url, title+"-"+(d.Count+1), folder));
-                        d[d.Count - 1].StartAsync();
-                    }
-                    jsons.Add(json);
-                }
-                using (Stream file1 = await file.OpenStreamForWriteAsync())
-                {
-                    using (StreamWriter writer = new StreamWriter(file1))
-                    {
-                        await writer.WriteAsync(jsons.ToString());
-                    }
-                }
+                DownloadHelper.Download(info, part);
             }
             else
             {
@@ -183,9 +144,6 @@ namespace Tucao
                 Media.Tapped -= Media_Tapped;
                 ControlPanelGrid.Visibility = Visibility.Collapsed;
                 StatusText.Text = "";
-                int part = int.Parse(((Button)sender).Name);
-                //获取选定项的索引
-                List<string> play_list = (List<string>)((Button)sender).Tag;
 
                 Status.Visibility = Visibility.Visible;
                 //如果之前获取播放地址失败再次尝试获取播放地址
@@ -196,8 +154,8 @@ namespace Tucao
                     {
                         play_list = await info.GetPlayUrl(part);
                         if (play_list.Count == 0) throw new Exception();
-                        ((Button)sender).Tag = play_list;
-                        ((Button)sender).Background = new SolidColorBrush(Color.FromArgb(255, 255, 51, 102));
+                        button.Tag = play_list;
+                        button.Background = new SolidColorBrush(Color.FromArgb(255, 255, 51, 102));
                         StatusText.Text += "    [成功]";
                     }
                     catch

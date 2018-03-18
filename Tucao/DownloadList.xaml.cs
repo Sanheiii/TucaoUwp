@@ -65,7 +65,7 @@ namespace Tucao
             }
             catch (Exception e)
             {
-                return;
+                Helpers.ErrorHelper.PopUp(e.Message);
             }
         }
         private async Task HandleDownloadAsync(DownloadOperation download)
@@ -136,35 +136,7 @@ namespace Tucao
                     await model.DownOpration.ResultFile.DeleteAsync();
                     model.CTS.Dispose();
                     transfers.Remove(model);
-
                     var folder = ApplicationData.Current.LocalCacheFolder;
-                    JsonArray jsons = new JsonArray();
-                    var file = await folder.CreateFileAsync("list.json", CreationCollisionOption.OpenIfExists);
-                    using (Stream file0 = await file.OpenStreamForReadAsync())
-                    {
-                        StreamReader reader = new StreamReader(file0);
-                        string txt = await reader.ReadToEndAsync();
-                        jsons = JsonArray.Parse(txt);
-                        for (int i = 0; i < jsons.Count; i++)
-                        {
-                            var k = jsons[i].GetObject()["title"].ToString().Replace("\"", "");
-                            var l = model.DownOpration.ResultFile.Name.Substring(0, model.DownOpration.ResultFile.Name.LastIndexOf('-'));
-                            if (jsons[i].GetObject()["title"].ToString().Replace("\"", "") == model.DownOpration.ResultFile.Name.Substring(0, model.DownOpration.ResultFile.Name.LastIndexOf('-')))
-                            {
-                                jsons.Remove(jsons[i]);
-                                break;
-                            }
-                        }
-                    }
-                    using (Stream file1 = await file.OpenStreamForWriteAsync())
-                    {
-                        file1.SetLength(0);
-                        using (StreamWriter writer = new StreamWriter(file1))
-                        {
-                            await writer.WriteAsync(jsons.ToString());
-                        }
-                    }
-
                 }
                 catch (Exception ex)
                 {

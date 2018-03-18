@@ -42,7 +42,6 @@
                         <TextBlock Text="{Binding up}" Foreground="#FFFF3366"/>
                         <TextBlock Text="{Binding time}" FontSize="12" Margin="5,3,0,0"/>
                     </StackPanel>
-
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -99,6 +98,8 @@
                 <AppBarButton Name="RefreshButton" Label="刷新" Tapped="Refresh_Tapped" IsEnabled="False">
                     <FontIcon  FontFamily="Segoe MDL2 Assets" Glyph="&#xE72C;" />
                 </AppBarButton>
+                
+                
                 <!--<AppBarButton Label="随机视频">
                     <FontIcon  FontFamily="Segoe MDL2 Assets" Glyph="&#xE786;" />
                 </AppBarButton>-->

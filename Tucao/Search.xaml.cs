@@ -62,9 +62,12 @@ namespace Tucao
         {
             p = 1;
             VideoList.ItemsSource = new ObservableCollection<VideoPanel>();
-            var q = sender.Text;
+            var q = args.QueryText;
+            //如果搜索框的文本由数字组成(前面可以有h)就直接跳到视频页
             if (Regex.IsMatch(q, @"^h?\d+$"))
             {
+                //去掉h
+                q = q.Replace("h","");
                 Frame.Navigate(typeof(MainPage), q.Remove(0, 1), new DrillInNavigationTransitionInfo());
             }
             else

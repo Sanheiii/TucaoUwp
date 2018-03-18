@@ -8,18 +8,90 @@ using Windows.Data.Json;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using System.Collections.Generic;
+using Windows.Networking.BackgroundTransfer;
 using Windows.Web.Http;
+using Tucao.Content;
 namespace Tucao.Helpers
 {
     class DownloadHelper
     {
+        //下载hid和分P
+        static public async void Download(SubmissionInfo info, int part)
+        {
+            try
+            {
+                //软件的临时文件夹\LocalCache\Download\视频的HID
+                StorageFolder localfolder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("Download", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(info.Hid, CreationCollisionOption.OpenIfExists);
+                //保存视频信息
+                {
+                    //上面那个文件夹\info.json   用于存储视频信息
+                    if (await localfolder.TryGetItemAsync("info.json") == null)
+                    {
+                        StorageFile file = await localfolder.CreateFileAsync("info.json", CreationCollisionOption.OpenIfExists);
+                        //创建json
+                        JsonObject json = new JsonObject
+                        {
+                            { "hid", JsonValue.CreateStringValue(info.Hid) },
+                            { "title", JsonValue.CreateStringValue(info.Title) },
+                        };
+                        //打开文件
+                        Stream file1 = await file.OpenStreamForWriteAsync();
+                        StreamWriter writer = new StreamWriter(file1);
+                        //写入
+                        await writer.WriteAsync(json.ToString());
+                        //关闭文件
+                        writer.Dispose();
+                        file1.Dispose();
+                    }
+                }
+                //上面那个文件夹\分p号
+                StorageFolder folder = await localfolder.CreateFolderAsync(part.ToString(), CreationCollisionOption.OpenIfExists);
+                //保存分P信息
+                {
+                    //如果有part.json说明下载过了
+                    if (await folder.TryGetItemAsync("part.json") == null)
+                    {
+                        int i = 0;
+                        //获取视频地址
+                        var url_list = await info.GetPlayUrl(part);
+                        //下载
+                        foreach (var url in url_list)
+                        {
+                            DownloadOperation d = await DownloadHelper.DownloadFile(url, i.ToString(), folder);
+                            //开始下载
+                            d.StartAsync();
+                            i++;
+                        }
+                        StorageFile file = await folder.CreateFileAsync("part.json", CreationCollisionOption.OpenIfExists);
+                        JsonObject json = new JsonObject
+                        {
+                            { "title",JsonValue.CreateStringValue(info.Video[part-1]["title"].ToString())},
+                            { "filecount",JsonValue.CreateNumberValue(url_list.Count) }
+                        };
+                        //打开文件
+                        Stream file1 = await file.OpenStreamForWriteAsync();
+                        StreamWriter writer = new StreamWriter(file1);
+                        //写入
+                        await writer.WriteAsync(json.ToString());
+                        //关闭文件
+                        writer.Dispose();
+                        file1.Dispose();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorHelper.PopUp(ex.Message);
+            };
+        }
         /// <summary>
         /// 下载文件
         /// </summary>
         /// <param name="url">下载地址</param>
         /// <param name="filename">文件名</param>
         /// <param name="folder">下载到的文件夹</param>
-        static public async Task<DownloadOperation> Download(string url, string filename, StorageFolder folder)
+        static public async Task<DownloadOperation> DownloadFile(string url, string filename, StorageFolder folder)
         {
             try
             {
