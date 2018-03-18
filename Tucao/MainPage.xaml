@@ -54,7 +54,8 @@
                           RealTimePlayback="True" 
                           CurrentStateChanged="Media_CurrentStateChanged"
                           MediaFailed="Media_MediaFailed"
-                          Stretch="Uniform" BufferingProgressChanged="Media_BufferingProgressChanged">
+                          Stretch="Uniform" 
+                          BufferingProgressChanged="Media_BufferingProgressChanged">
             </MediaElement>
             <!--加载视频提示-->
             <Grid Background="#50000000" 

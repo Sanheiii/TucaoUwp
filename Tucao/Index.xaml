@@ -47,7 +47,6 @@
             </Grid>
         </DataTemplate>
     </Page.Resources>
-
     <Grid Background="#55DDDDDD">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
