@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.Storage;
+using Windows.UI.Core;
 using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.UI.Xaml.Media;
@@ -49,13 +50,16 @@ namespace Tucao.View
                     Video v = new Video();
                     StorageFile file = await folder.GetFileAsync("info.json");
                     Stream stream =await file.OpenStreamForReadAsync();
-                    BinaryReader reader = new BinaryReader(stream);
-                    string str=reader.ReadString();
+                    StreamReader reader = new StreamReader(stream);
+                    string str=await reader.ReadToEndAsync();
                     JsonObject json = JsonObject.Parse(str);
-                    v.hid = json["hid"].ToString();
-                    v.title = json["title"].ToString();
+                    v.hid = json["hid"].GetString();
+                    v.title = json["title"].GetString();
                     v.parts = await LoadParts(folder);
-                    (Videos.ItemsSource as ObservableCollection<Video>).Add(v);
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                    {
+                        (Videos.ItemsSource as ObservableCollection<Video>).Add(v);
+                    });
                 }
             }
         }
@@ -63,24 +67,36 @@ namespace Tucao.View
         {
             ObservableCollection<Part> parts = new ObservableCollection<Part>();
             var folders = await storage.GetFoldersAsync();
-            foreach(var folder in folders)
+            foreach(StorageFolder folder in folders)
             {
                 if (await folder.TryGetItemAsync("part.json") != null)
                 {
                     Part p = new Part();
-                    StorageFile file = await folder.GetFileAsync("part.json");
-                    Stream stream = await file.OpenStreamForReadAsync();
-                    BinaryReader reader = new BinaryReader(stream);
-                    string str = reader.ReadString();
+                    StorageFile jsonfile = await folder.GetFileAsync("part.json");
+                    Stream stream = await jsonfile.OpenStreamForReadAsync();
+                    StreamReader reader = new StreamReader(stream);
+                    string str =await reader.ReadToEndAsync();
+                    reader.Dispose();
+                    stream.Dispose();
                     JsonObject json = JsonObject.Parse(str);
-                    p.partTitle = json["title"].ToString();
-                    ulong size;
+                    p.partTitle = json["title"].GetString();
+                    ulong size=0;
                     List<string> uri = new List<string>();
                     for(int i=0;i<json["filecount"].GetNumber();i++)
                     {
-
+                        if (await folder.TryGetItemAsync(i.ToString()) != null)
+                        {
+                            StorageFile file = await folder.GetFileAsync(i.ToString());
+                            size += (await file.GetBasicPropertiesAsync()).Size;
+                            uri.Add(file.Path);
+                        }
                     }
-                    p.uri=
+                    foreach(StorageFile file in await folder.GetFilesAsync())
+                    {
+                        
+                    }
+                    p.size = $"{(((double)size / 1024 / 1024)).ToString("0.0")}M";
+                    p.uri = uri;
                     parts.Add(p);
                 }
             }
@@ -110,7 +126,7 @@ namespace Tucao.View
         public class Part
         {
             public string partTitle { get; set; }
-            public ulong size { get; set; }
+            public string size { get; set; }
             public List<string> uri { get; set; }
         }
 
