@@ -1,8 +1,9 @@
-﻿<Page
-    x:Class="Tucao.Index"
+﻿<!--首页-->
+<Page
+    x:Class="Tucao.View.Index"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Tucao"
+    xmlns:local="using:Tucao.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -98,8 +99,8 @@
                 <AppBarButton Name="RefreshButton" Label="刷新" Tapped="Refresh_Tapped" IsEnabled="False">
                     <FontIcon  FontFamily="Segoe MDL2 Assets" Glyph="&#xE72C;" />
                 </AppBarButton>
-                
-                
+
+
                 <!--<AppBarButton Label="随机视频">
                     <FontIcon  FontFamily="Segoe MDL2 Assets" Glyph="&#xE786;" />
                 </AppBarButton>-->

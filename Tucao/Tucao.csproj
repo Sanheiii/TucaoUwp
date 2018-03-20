@@ -96,14 +96,17 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="About.xaml.cs">
+    <Compile Include="View\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DownloadList.xaml.cs">
+    <Compile Include="View\DownloadList.xaml.cs">
       <DependentUpon>DownloadList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DownloadHelper.cs" />
-    <Compile Include="Search.xaml.cs">
+    <Compile Include="View\LocalVideo.xaml.cs">
+      <DependentUpon>LocalVideo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
     </Compile>
     <Content Include="Assets\logo.png" />
@@ -115,10 +118,10 @@
     <Compile Include="Helpers\SettingHelper.cs" />
     <Compile Include="Http\HttpService.cs" />
     <Compile Include="Content\Content.cs" />
-    <Compile Include="Index.xaml.cs">
+    <Compile Include="View\Index.xaml.cs">
       <DependentUpon>Index.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="View\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Methods\Method.cs" />
@@ -154,19 +157,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="About.xaml">
+    <Page Include="View\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DownloadList.xaml">
+    <Page Include="View\DownloadList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Index.xaml">
+    <Page Include="View\Index.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainPage.xaml">
+    <Page Include="View\LocalVideo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -175,7 +182,7 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="Search.xaml">
+    <Page Include="View\Search.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

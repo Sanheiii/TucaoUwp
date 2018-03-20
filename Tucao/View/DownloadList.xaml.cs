@@ -20,11 +20,12 @@ using System.ComponentModel;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage.Streams;
 using Windows.Data.Json;
+using Windows.UI.Xaml.Media.Animation;
 using Tucao.Helpers;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
-namespace Tucao
+namespace Tucao.View
 {
 
     /// <summary>
@@ -37,6 +38,9 @@ namespace Tucao
         public DownloadList()
         {
             this.InitializeComponent();
+        }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
             this.List.ItemsSource = transfers;
             DiscoverDownloadsAsync();
         }
@@ -56,7 +60,6 @@ namespace Tucao
                     {
                         tasks.Add(HandleDownloadAsync(download));
                     }
-                    await Task.WhenAll(tasks);
                 }
                 else
                 {
@@ -131,12 +134,23 @@ namespace Tucao
                 model.CTS.Dispose();
                 try
                 {
-                    // 删除目标文件
+                    //各种关闭各种删除
                     model.DownOpration.AttachAsync().Cancel();
                     await model.DownOpration.ResultFile.DeleteAsync();
                     model.CTS.Dispose();
                     transfers.Remove(model);
-                    var folder = ApplicationData.Current.LocalCacheFolder;
+
+                    string path = model.DownOpration.ResultFile.Path;
+                    var folder = await StorageFolder.GetFolderFromPathAsync(path.Remove(path.LastIndexOf("\\"), path.Length- path.LastIndexOf("\\")));
+                    var parent = await folder.GetParentAsync();
+                    //删除文件夹
+                    await folder.DeleteAsync();
+                    //父文件夹没有文件夹时删除它
+                    int count = (await parent.GetFoldersAsync()).Count;
+                    if (count==0)
+                    {
+                        await parent.DeleteAsync();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -163,14 +177,11 @@ namespace Tucao
                 }
             }
         }
-        public void Dispose()
+
+        private void HyperlinkButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (cts != null)
-            {
-                cts.Dispose();
-                cts = null;
-            }
-            GC.SuppressFinalize(this);
+            Frame root = Window.Current.Content as Frame;
+            root.Navigate(typeof(LocalVideo), null, new DrillInNavigationTransitionInfo());
         }
     }
 }

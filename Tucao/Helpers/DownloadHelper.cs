@@ -56,6 +56,19 @@ namespace Tucao.Helpers
                         //获取视频地址
                         var url_list = await info.GetPlayUrl(part);
                         //下载
+                        if (url_list.Count == 0)
+                        {
+                            var parent = await folder.GetParentAsync();
+                            //删除文件夹
+                            await folder.DeleteAsync();
+                            //父文件夹没有文件夹时删除它
+                            int count = (await parent.GetFoldersAsync()).Count;
+                            if (count == 0)
+                            {
+                                await parent.DeleteAsync();
+                            }
+                            return;
+                        }
                         foreach (var url in url_list)
                         {
                             DownloadOperation d = await DownloadHelper.DownloadFile(url, i.ToString(), folder);

@@ -1,0 +1,67 @@
+﻿<!--本地视频-->
+<Page
+    x:Class="Tucao.View.LocalVideo"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Tucao.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition x:Name="navigationTransition">
+                <DrillInNavigationTransitionInfo/>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="48"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="本地视频" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="10,10,0,0"/>
+        <HyperlinkButton Grid.Row="1" Content="下载中" FontSize="13" Margin="10,0,0,0"/>
+        <ListView Name="Videos" Grid.Row="2" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Videos_ItemClick">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <TextBlock Text="{Binding title}"/>
+                        <ListView Name="Parts" Grid.Row="2" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Parts_ItemClick" ItemsSource="{Binding parts}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Grid.Column="0" TextWrapping="WrapWholeWords" Text="{Binding partTitle}" VerticalAlignment="Center" Margin="0,10,0,0" HorizontalAlignment="Left"/>
+                                        <TextBlock Grid.Column="0" TextWrapping="WrapWholeWords" Text="{Binding size}" VerticalAlignment="Center" Margin="0,10,0,0" HorizontalAlignment="Right"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Margin" Value="0,0,0,0"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Margin" Value="0,0,0,0"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+
+        <CommandBar VerticalAlignment="Bottom" Grid.RowSpan="4" RequestedTheme="Dark">
+            <AppBarButton Label="下载目录" Name="OpenDownloadFolder" Tapped="OpenDownloadFolder_Tapped">
+                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8DE;"/>
+            </AppBarButton>
+            <AppBarToggleButton Label="删除" Name="Delete">
+                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74D;"/>
+            </AppBarToggleButton>
+        </CommandBar>
+    </Grid>
+</Page>
