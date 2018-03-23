@@ -23,7 +23,7 @@
             <RowDefinition Height="48"/>
         </Grid.RowDefinitions>
         <TextBlock Text="本地视频" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="10,10,0,0"/>
-        <HyperlinkButton Grid.Row="1" Content="下载中" FontSize="13" Margin="10,0,0,0"/>
+        <HyperlinkButton Grid.Row="1" Content="下载中" FontSize="13" Margin="10,0,0,0" Click="HyperlinkButton_Click"/>
         <ListView Name="Videos" Grid.Row="2" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Videos_ItemClick">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -32,7 +32,7 @@
                             <RowDefinition Height="48"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Height="40" FontSize="20" Text="{Binding title}" VerticalAlignment="Bottom"/>
+                        <TextBlock MinHeight="40" FontSize="20" Text="{Binding title}" TextWrapping="WrapWholeWords"  VerticalAlignment="Bottom"/>
                         <ListView Name="Parts" Grid.Row="2" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Parts_ItemClick" ItemsSource="{Binding parts}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>

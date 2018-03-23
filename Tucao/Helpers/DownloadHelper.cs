@@ -9,7 +9,6 @@ using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using System.Collections.Generic;
-using Windows.Networking.BackgroundTransfer;
 using Windows.Web.Http;
 using Tucao.Content;
 namespace Tucao.Helpers

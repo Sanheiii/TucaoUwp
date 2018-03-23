@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.Storage;
 using Windows.UI.Core;
+using Windows.UI.Xaml.Media.Animation;
 using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.UI.Xaml.Media;
@@ -49,9 +50,9 @@ namespace Tucao.View
                 {
                     Video v = new Video();
                     StorageFile file = await folder.GetFileAsync("info.json");
-                    Stream stream =await file.OpenStreamForReadAsync();
+                    Stream stream = await file.OpenStreamForReadAsync();
                     StreamReader reader = new StreamReader(stream);
-                    string str=await reader.ReadToEndAsync();
+                    string str = await reader.ReadToEndAsync();
                     JsonObject json = JsonObject.Parse(str);
                     v.hid = json["hid"].GetString();
                     v.title = json["title"].GetString();
@@ -67,7 +68,8 @@ namespace Tucao.View
         {
             ObservableCollection<Part> parts = new ObservableCollection<Part>();
             var folders = await storage.GetFoldersAsync();
-            foreach(StorageFolder folder in folders)
+            int c = 1;
+            foreach (StorageFolder folder in folders)
             {
                 if (await folder.TryGetItemAsync("part.json") != null)
                 {
@@ -75,14 +77,14 @@ namespace Tucao.View
                     StorageFile jsonfile = await folder.GetFileAsync("part.json");
                     Stream stream = await jsonfile.OpenStreamForReadAsync();
                     StreamReader reader = new StreamReader(stream);
-                    string str =await reader.ReadToEndAsync();
+                    string str = await reader.ReadToEndAsync();
                     reader.Dispose();
                     stream.Dispose();
                     JsonObject json = JsonObject.Parse(str);
-                    p.partTitle = json["title"].GetString();
-                    ulong size=0;
+                    p.partTitle =c+":"+ json["title"].GetString();
+                    ulong size = 0;
                     List<string> uri = new List<string>();
-                    for(int i=0;i<json["filecount"].GetNumber();i++)
+                    for (int i = 0; i < json["filecount"].GetNumber(); i++)
                     {
                         if (await folder.TryGetItemAsync(i.ToString()) != null)
                         {
@@ -91,21 +93,23 @@ namespace Tucao.View
                             uri.Add(file.Path);
                         }
                     }
-                    foreach(StorageFile file in await folder.GetFilesAsync())
+                    foreach (StorageFile file in await folder.GetFilesAsync())
                     {
-                        
+
                     }
                     p.size = $"{(((double)size / 1024 / 1024)).ToString("0.0")}M";
                     p.uri = uri;
                     parts.Add(p);
                 }
+                c++;
             }
             return parts;
         }
         //点击一个视频
         private void Videos_ItemClick(object sender, ItemClickEventArgs e)
         {
-
+            Frame root = Window.Current.Content as Frame;
+            root.Navigate(typeof(MainPage), (e.ClickedItem as Video).hid, new DrillInNavigationTransitionInfo());
         }
         //点击一个分P
         private void Parts_ItemClick(object sender, ItemClickEventArgs e)
@@ -116,6 +120,11 @@ namespace Tucao.View
         private void OpenDownloadFolder_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Windows.System.Launcher.LaunchFolderAsync(ApplicationData.Current.LocalCacheFolder);
+        }
+        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame root = Window.Current.Content as Frame;
+            root.Navigate(typeof(DownloadList), null, new DrillInNavigationTransitionInfo());
         }
         public class Video
         {

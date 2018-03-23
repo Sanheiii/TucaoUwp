@@ -134,6 +134,10 @@ namespace Tucao
                     e.Handled = true;
                     rootFrame.GoBack();
                 }
+                else
+                {
+                    Application.Current.Exit();
+                }
             }
         }
     }

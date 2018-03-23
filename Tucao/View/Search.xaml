@@ -27,12 +27,14 @@
                     <RowDefinition Height="75"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <toolkit:ImageEx Grid.Column="0"
-                    Source="{Binding img}"
+                <Image Grid.Column="0"
                     Stretch="UniformToFill"
-                    CornerRadius="1,1,1,1"
                     HorizontalAlignment="Stretch"
-                                 VerticalAlignment="Top"/>
+                                 VerticalAlignment="Top">
+                    <Image.Source>
+                        <BitmapImage UriSource="{Binding img}"/>
+                    </Image.Source>
+                </Image>
                 <Grid Grid.Column="1">
                     <TextBlock Text="{Binding title}" FontSize="13" Height="52" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,0,0"/>
                     <TextBlock Text="{Binding play}" FontSize="10" VerticalAlignment="Bottom" Margin="8,0,0,2"/>

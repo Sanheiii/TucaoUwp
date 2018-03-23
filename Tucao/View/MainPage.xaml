@@ -10,9 +10,7 @@
     xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d">
     <Page.Resources>
-        <local:MediaConverter x:Key="cvt1"/>
-        <local:TimeConverter x:Key="cvt2"/>
-        <local:MediaHeightConverter x:Key="cvt3"/>
+        <local:MediaHeightConverter x:Key="sizecvt"/>
     </Page.Resources>
     <Page.Transitions>
         <TransitionCollection>
@@ -33,232 +31,24 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition x:Name="Row0" 
-                           Height="{x:Bind Mproxy.ActualWidthValue,Mode=OneWay,Converter={StaticResource cvt3}}"/>
+                           Height="{x:Bind Mproxy.ActualWidthValue,Mode=OneWay,Converter={StaticResource sizecvt}}"/>
             <RowDefinition x:Name="Row1"/>
         </Grid.RowDefinitions>
         <!--媒体-->
-        <Grid x:Name="MediaPlayer"
-              VerticalAlignment="Top"
-              Background="Black">
+        <Grid Name="PlayerGrid">
             <Grid.Resources>
-                <local:ActualSizePropertyProxy Element="{Binding ElementName=MediaPlayer}"
+                <local:ActualSizePropertyProxy Element="{Binding ElementName=PlayerGrid}"
                                            x:Name="Mproxy"/>
             </Grid.Resources>
+            <Image>
+                <Image.Source>
+                    <BitmapImage x:Name="Thumb"/>
+                </Image.Source>
+            </Image>
             <Border Name="MediaBorder" 
                     BorderBrush="#FFAAAAAA"
                     Margin="12,12,0,0"/>
-            <MediaElement x:Name="Media"
-                          MediaOpened="Media_MediaOpened" 
-                          MediaEnded="Media_MediaEnded"
-                          AudioCategory="Movie" 
-                          AutoPlay="True" 
-                          RealTimePlayback="True" 
-                          CurrentStateChanged="Media_CurrentStateChanged"
-                          MediaFailed="Media_MediaFailed"
-                          Stretch="Uniform" 
-                          BufferingProgressChanged="Media_BufferingProgressChanged">
-            </MediaElement>
-            <!--加载视频提示-->
-            <Grid Background="#50000000" 
-                  Name="Status"
-                  Visibility="Collapsed">
-                <TextBlock Name="StatusText"
-                           Margin="10,0,0,10"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Bottom" 
-                           Foreground="White"/>
-                <TextBlock Name="BufferingProgress"
-                       Visibility="Collapsed" 
-                       Foreground="White"
-                       FontSize="50"
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"/>
-            </Grid>
-            <!--<toolkit:Loading x:Name="LoadVideo"
-                             IsLoading="False">
-                <StackPanel Orientation="Horizontal"
-                        Padding="12">
-                    <Grid Margin="0,0,8,0">
-                        <Image Source="../../Assets/ToolkitLogo.png" 
-                           Height="50" />
-                        <ProgressRing IsActive="True" 
-                                  Foreground="Blue" />
-                    </Grid>
-                    <TextBlock Name="LoadingText"
-                               Foreground="White" 
-                               Text="准备播放"
-                           VerticalAlignment="Center" />
-                </StackPanel>
-            </toolkit:Loading>-->
-            <!--趴着的cc娘-->
-            <!--<Image Name="Logo" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" 
-                   Source="Assets/bg_y_png24.png"
-                   Stretch="None"></Image>-->
-            <!--控制栏-->
-            <Grid x:Name="ControlPanelGrid" 
-                  Visibility="Collapsed">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <!--上面的控制栏-->
-                <Grid Background="#99000000" VerticalAlignment="Bottom" Grid.Row="0">
-                    <CommandBar Name="TopControls" 
-                                IsDynamicOverflowEnabled="False"
-                                Margin="0,0" 
-                                RequestedTheme="Dark"
-                                Style="{StaticResource CommandBarStyle}">
-                        <CommandBar.Content>
-                            <StackPanel Orientation="Horizontal" Height="48">
-                                <AppBarButton x:Name="FullWindowBackButton" 
-                                              MediaTransportControlsHelper.DropoutOrder="17" 
-                                              Style="{StaticResource AppBarButtonStyle}"
-                                              Visibility="Collapsed"
-                                              Click="FullWindowButton_Click">
-                                    <AppBarButton.Icon>
-                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE76B;"/>
-                                    </AppBarButton.Icon>
-                                </AppBarButton>
-                                <TextBlock Name="PlayerTitle" 
-                                           Margin="20,0,0,0" 
-                                           FontSize="18"
-                                           VerticalAlignment="Center"
-                                           Foreground="#FFFFFFFF"/>
-                            </StackPanel>
-                        </CommandBar.Content>
-                        <CommandBar.PrimaryCommands>
-
-                        </CommandBar.PrimaryCommands>
-                        <!--翻转屏幕-->
-                        <CommandBar.SecondaryCommands>
-                            <AppBarButton x:Name="InvertScreen"
-                                          Label="旋转屏幕" 
-                                          Click="InvertScreen_Click"
-                                          />
-                        </CommandBar.SecondaryCommands>
-                    </CommandBar>
-                </Grid>
-                <!--下面的控制栏-->
-                <Grid Background="#99000000"
-                      VerticalAlignment="Bottom" 
-                      Grid.Row="2">
-                    <Grid.RenderTransform>
-                        <TranslateTransform x:Name="TranslateVertical"/>
-                    </Grid.RenderTransform>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <!--时间轴-->
-                    <Border x:Name="MediaTransportControls_Timeline_Border"
-                            Grid.Row="0">
-                        <Grid x:Name="MediaTransportControls_Timeline_Grid">
-                            <Slider x:Name="ProgressSlider" 
-                                Height="32" 
-                                IsThumbToolTipEnabled="False" 
-                                MinWidth="80" 
-                                Margin="12,0" 
-                                Style="{StaticResource MediaSliderStyle}" 
-                                VerticalAlignment="Top"
-                                Value="{Binding ElementName=Media,Path=Position,Mode=TwoWay,Converter={StaticResource cvt1}}"/>
-                        </Grid>
-                    </Border>
-                    <!--控制栏的按键-->
-                    <Border x:Name="MediaTransportControls_Command_Border"
-                            Grid.Row="1">
-                        <CommandBar x:Name="MediaControlsCommandBar"
-                                    IsDynamicOverflowEnabled="False"
-                                    Margin="0,0" 
-                                    RequestedTheme="Dark"
-                                    Style="{StaticResource CommandBarStyle}"
-                                    FontFamily="Segoe UI">
-                            <CommandBar.PrimaryCommands>
-                                <!--音量-->
-                                <!--<AppBarButton x:Name="VolumeMuteButton" 
-                                              MediaTransportControlsHelper.DropoutOrder="19" 
-                                              Style="{StaticResource AppBarButtonStyle}"
-                                              FontFamily="Segoe UI">
-                                    -->
-                                <!--音量的弹出窗口-->
-                                <!--
-                                    <AppBarButton.Flyout>
-                                        <Flyout x:Name="VolumeFlyout"
-                                                FlyoutPresenterStyle="{StaticResource FlyoutStyle}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <AppBarButton x:Name="AudioMuteButton" 
-                                                              HorizontalAlignment="Center"
-                                                              Margin="12" 
-                                                              Style="{StaticResource AppBarButtonStyle}" 
-                                                              VerticalAlignment="Center">
-                                                    <AppBarButton.Icon>
-                                                        <SymbolIcon x:Name="AudioMuteSymbol" 
-                                                                    Symbol="Volume"/>
-                                                    </AppBarButton.Icon>
-                                                </AppBarButton>
-                                                <Slider x:Name="VolumeSlider"
-                                                        HorizontalAlignment="Center" 
-                                                        IsThumbToolTipEnabled="False" Margin="0" 
-                                                        VerticalAlignment="Center"
-                                                        Value="50" 
-                                                        Width="{ThemeResource MTCHorizontalVolumeSliderWidth}"/>
-                                                <TextBlock x:Name="VolumeValue"
-                                                           HorizontalAlignment="Center" 
-                                                           Margin="12"
-                                                           Style="{StaticResource MediaTextBlockStyle}"
-                                                           Text="{Binding Value, ElementName=VolumeSlider}"
-                                                           VerticalAlignment="Center" Width="24"/>
-                                            </StackPanel>
-                                        </Flyout>
-                                    </AppBarButton.Flyout>
-                                    <AppBarButton.Icon>
-                                        <SymbolIcon x:Name="VolumeMuteSymbol" 
-                                                    Symbol="Volume"/>
-                                    </AppBarButton.Icon>
-                                </AppBarButton>-->
-                                <!--全屏-->
-                                <AppBarButton x:Name="FullWindowButton" 
-                                              MediaTransportControlsHelper.DropoutOrder="17" 
-                                              Style="{StaticResource AppBarButtonStyle}"
-                                              Click="FullWindowButton_Click">
-                                    <AppBarButton.Icon>
-                                        <SymbolIcon x:Name="FullWindowSymbol" 
-                                                    Symbol="FullScreen"/>
-                                    </AppBarButton.Icon>
-                                </AppBarButton>
-                            </CommandBar.PrimaryCommands>
-                            <CommandBar.Content>
-                                <!--开始/暂停-->
-                                <StackPanel Orientation="Horizontal">
-                                    <AppBarButton x:Name="PlayPauseButton" 
-                                                  MediaTransportControlsHelper.DropoutOrder="23" 
-                                                  Style="{StaticResource AppBarButtonStyle}"
-                                                  Click="PlayPauseButton_Click" FontFamily="Segoe UI">
-                                        <AppBarButton.Icon>
-                                            <SymbolIcon x:Name="PlayPauseSymbol" 
-                                                        Symbol="Pause"/>
-                                        </AppBarButton.Icon>
-                                    </AppBarButton>
-                                    <!--开始暂停旁边的时间-->
-                                    <TextBlock x:Name="TimeElapsedElement"
-                                               Margin="20,0,0,0" 
-                                               Foreground="#FFFFFFFF"
-                                               Text="{Binding ElementName=ProgressSlider,Path=Value,Mode=TwoWay,Converter={StaticResource cvt2}}"
-                                               VerticalAlignment="Center" FontFamily="Segoe UI"/>
-                                    <TextBlock Text="/" 
-                                               VerticalAlignment="Center" 
-                                               Foreground="#FFFFFFFF" FontFamily="Segoe UI"/>
-                                    <TextBlock x:Name="TimeRemainingElement"
-                                               Foreground="#FFFFFFFF" Text="00:00" 
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </CommandBar.Content>
-                        </CommandBar>
-                    </Border>
-                </Grid>
-            </Grid>
+            <Frame Name="MediaPlayer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SizeChanged="MediaPlayer_SizeChanged"></Frame>
         </Grid>
         <!--详情-->
         <Grid Name="Details">

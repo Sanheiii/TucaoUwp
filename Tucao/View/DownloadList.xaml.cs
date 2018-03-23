@@ -177,7 +177,11 @@ namespace Tucao.View
                 }
             }
         }
-
+        /// <summary>
+        /// 点击已完成跳转到本地视频页面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HyperlinkButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Frame root = Window.Current.Content as Frame;

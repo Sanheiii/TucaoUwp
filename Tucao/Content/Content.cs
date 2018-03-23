@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.Web.Http;
 using System.Collections;
+using Windows.Storage;
 using Tucao.Content;
 using Tucao.Http;
+using Windows.UI.Xaml.Media.Imaging;
 using HtmlAgilityPack;
 namespace Tucao.Content
 {
