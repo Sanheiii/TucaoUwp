@@ -18,7 +18,7 @@
     </Page.Transitions>
     <Page.Resources>
         <DataTemplate x:Key="VideoTemplate">
-            <Grid Background="#FFEEEEEE" Tag="{Binding link}" Tapped="VideoPanel_Tapped">
+            <Grid Background="#FFEEEEEE">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*" MinWidth="150"/>
                     <ColumnDefinition Width="3*"/>
@@ -66,16 +66,17 @@
             <ScrollViewer.Content>
                 <Grid ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <toolkit:AdaptiveGridView Name="VideoList"
                                    OneRowModeEnabled="False"
                                    ItemHeight="120"
                                    DesiredWidth="400"
                                           ScrollViewer.VerticalScrollMode="Disabled"
-                                   SelectionMode="Single"
-                                   IsItemClickEnabled="True"
+                                  IsItemClickEnabled="True" 
+                                              SelectionMode="None" 
+                                              ItemClick="VideoList_ItemClick"
                                    ItemTemplate="{StaticResource VideoTemplate}" 
                                   HorizontalContentAlignment="Left" 
                                   Padding="10,0,10,10">

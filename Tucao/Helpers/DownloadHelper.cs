@@ -20,6 +20,12 @@ namespace Tucao.Helpers
         {
             try
             {
+                //获取视频地址
+                var url_list = await info.GetPlayUrl(part);
+                if (url_list.Count == 0)
+                {
+                    return;
+                }
                 //软件的临时文件夹\LocalCache\Download\视频的HID
                 StorageFolder localfolder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("Download", CreationCollisionOption.OpenIfExists)).CreateFolderAsync(info.Hid, CreationCollisionOption.OpenIfExists);
                 //保存视频信息
@@ -52,22 +58,7 @@ namespace Tucao.Helpers
                     if (await folder.TryGetItemAsync("part.json") == null)
                     {
                         int i = 0;
-                        //获取视频地址
-                        var url_list = await info.GetPlayUrl(part);
                         //下载
-                        if (url_list.Count == 0)
-                        {
-                            var parent = await folder.GetParentAsync();
-                            //删除文件夹
-                            await folder.DeleteAsync();
-                            //父文件夹没有文件夹时删除它
-                            int count = (await parent.GetFoldersAsync()).Count;
-                            if (count == 0)
-                            {
-                                await parent.DeleteAsync();
-                            }
-                            return;
-                        }
                         foreach (var url in url_list)
                         {
                             DownloadOperation d = await DownloadHelper.DownloadFile(url, i.ToString(), folder);

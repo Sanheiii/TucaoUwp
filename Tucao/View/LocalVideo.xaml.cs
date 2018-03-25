@@ -57,6 +57,8 @@ namespace Tucao.View
                     v.hid = json["hid"].GetString();
                     v.title = json["title"].GetString();
                     v.parts = await LoadParts(folder);
+                    //没有下载完成的分p就不显示标题
+                    if (v.parts.Count == 0) continue;
                     await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                     {
                         (Videos.ItemsSource as ObservableCollection<Video>).Add(v);
@@ -73,6 +75,7 @@ namespace Tucao.View
             {
                 if (await folder.TryGetItemAsync("part.json") != null)
                 {
+                    int i;
                     Part p = new Part();
                     StorageFile jsonfile = await folder.GetFileAsync("part.json");
                     Stream stream = await jsonfile.OpenStreamForReadAsync();
@@ -84,19 +87,20 @@ namespace Tucao.View
                     p.partTitle =c+":"+ json["title"].GetString();
                     ulong size = 0;
                     List<string> playlist = new List<string>();
-                    for (int i = 0; i < json["filecount"].GetNumber(); i++)
+                    for (i = 0; i < json["filecount"].GetNumber(); i++)
                     {
                         if (await folder.TryGetItemAsync(i.ToString()) != null)
                         {
                             StorageFile file = await folder.GetFileAsync(i.ToString());
-                            size += (await file.GetBasicPropertiesAsync()).Size;
+                            var filesize= (await file.GetBasicPropertiesAsync()).Size;
+                            //文件大小为0时不继续判断
+                            if (filesize == 0) break;
+                            size += filesize;
                             playlist.Add(file.Path);
                         }
                     }
-                    foreach (StorageFile file in await folder.GetFilesAsync())
-                    {
-
-                    }
+                    //有分段视频没有下载完不添加这个分p
+                    if (i < json["filecount"].GetNumber()) continue;
                     p.size = $"{(((double)size / 1024 / 1024)).ToString("0.0")}M";
                     p.play_list = playlist;
                     parts.Add(p);

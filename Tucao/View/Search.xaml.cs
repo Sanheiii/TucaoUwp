@@ -43,10 +43,10 @@ namespace Tucao.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void VideoPanel_Tapped(object sender, TappedRoutedEventArgs e)
+        private void VideoList_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var tag = ((Grid)sender).Tag.ToString();
-            var id = tag.Replace("http://www.tucao.tv/play/", "").Replace("/", "");
+            var v=e.ClickedItem as VideoPanel;
+            var id = v.link.Replace("http://www.tucao.tv/play/", "").Replace("/", "");
             Frame root = Window.Current.Content as Frame;
             if (id.First() == 'h')
             {
@@ -68,7 +68,7 @@ namespace Tucao.View
             {
                 //去掉h
                 q = q.Replace("h","");
-                Frame.Navigate(typeof(MainPage), q.Remove(0, 1), new DrillInNavigationTransitionInfo());
+                Frame.Navigate(typeof(MainPage), q, new DrillInNavigationTransitionInfo());
             }
             else
             {

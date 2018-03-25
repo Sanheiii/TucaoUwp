@@ -9,6 +9,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Input;
 using Windows.UI.ViewManagement;
 using Windows.Graphics.Display;
@@ -32,9 +33,10 @@ namespace Tucao.View
         {
             this.InitializeComponent();
         }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (!DeviceHelper.IsMobile) TopControls.SecondaryCommands.Clear();
+            if (!DeviceHelper.IsMobile) TopControls.SecondaryCommands.Remove(InvertScreen);
             param = e.Parameter as MediaPlayerSource;
             Media.Stop();
             Media.Tapped -= Media_Tapped;
@@ -142,27 +144,39 @@ namespace Tucao.View
             ApplicationView view = ApplicationView.GetForCurrentView();
             if (view.IsFullScreenMode)
             {
+                //做个标记以便mainpage判断是否需要隐藏其他控件
                 isfullwindow = false;
                 view.ExitFullScreenMode();
                 //和下面都是反着的
-                //Details.Visibility = Visibility.Visible;
                 FullWindowSymbol.Symbol = Symbol.FullScreen;
+                InvertScreen.Visibility = Visibility.Collapsed;
                 FullWindowBackButton.Visibility = Visibility.Collapsed;
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
+                //返回恢复原来的功能
+                SystemNavigationManager.GetForCurrentView().BackRequested -= MediaPlayer_BackRequested;
+                SystemNavigationManager.GetForCurrentView().BackRequested += App.OnBackrequested;
             }
             else
             {
                 isfullwindow = true;
                 view.TryEnterFullScreenMode();
-                ////隐藏详情
-                //Details.Visibility = Visibility.Collapsed;
                 //修改按钮图标
                 FullWindowSymbol.Symbol = Symbol.BackToWindow;
+                //显示翻转屏幕按钮
+                InvertScreen.Visibility = Visibility.Visible;
                 //显示返回键
                 FullWindowBackButton.Visibility = Visibility.Visible;
                 //横过来
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
+                //使得返回变成退出全屏
+                SystemNavigationManager.GetForCurrentView().BackRequested -= App.OnBackrequested;
+                SystemNavigationManager.GetForCurrentView().BackRequested += MediaPlayer_BackRequested;
             }
+        }
+        private void MediaPlayer_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            e.Handled = true;
+            FullWindowButton_Click(this, new RoutedEventArgs());
         }
 
         /// <summary>

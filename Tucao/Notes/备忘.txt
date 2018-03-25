@@ -6,10 +6,18 @@
 修复了列表滚动
 添加了视频详情
 添加了下载视频
+添加了复制链接
 现在略缩图会被缓存以节省流量
+修复了全屏时按返回直接退出播放
+优化细节的视觉效果
+--播放时快捷键
 
 
-        <Grid x:Name="MediaPlayer"
+        
+		
+		
+		原来的播放器
+		<Grid x:Name="MediaPlayer"
               VerticalAlignment="Top"
               Background="Black">
             <Grid.Resources>

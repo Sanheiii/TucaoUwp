@@ -16,39 +16,6 @@
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
-    <Page.Resources>
-        <DataTemplate x:Key="VideoTemplate">
-            <Grid Background="#FFEEEEEE" Tag="{Binding link}" Tapped="VideoPanel_Tapped">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" MinWidth="150"/>
-                    <ColumnDefinition Width="3*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="75"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Image Grid.Column="0"
-                    Stretch="UniformToFill"
-                    HorizontalAlignment="Stretch"
-                                 VerticalAlignment="Top">
-                    <Image.Source>
-                        <BitmapImage UriSource="{Binding img}"/>
-                    </Image.Source>
-                </Image>
-                <Grid Grid.Column="1">
-                    <TextBlock Text="{Binding title}" FontSize="13" Height="52" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,0,0"/>
-                    <TextBlock Text="{Binding play}" FontSize="10" VerticalAlignment="Bottom" Margin="8,0,0,2"/>
-                </Grid>
-                <StackPanel Grid.ColumnSpan="2" Grid.Row="1">
-                    <TextBlock Text="{Binding description}" TextTrimming="CharacterEllipsis"/>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding up}" Foreground="#FFFF3366"/>
-                        <TextBlock Text="{Binding time}" FontSize="12" Margin="5,3,0,0"/>
-                    </StackPanel>
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-    </Page.Resources>
     <Grid Background="#55DDDDDD">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -82,12 +49,45 @@
                                    ItemHeight="120"
                                           ScrollViewer.VerticalScrollMode="Disabled"
                                    DesiredWidth="400"
-                                   SelectionMode="Single"
-                                   IsItemClickEnabled="True"
-                                   ItemTemplate="{StaticResource VideoTemplate}" 
+                                          IsItemClickEnabled="True"
+                                          ItemClick="VideoList_ItemClick"
+                                          SelectionMode="None" 
                                   HorizontalContentAlignment="Left" 
                                   Padding="10,0,10,0"
                                           Grid.Row="0">
+                    <toolkit:AdaptiveGridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Background="#FFEEEEEE">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*" MinWidth="150"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="75"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Image Grid.Column="0"
+                    Stretch="UniformToFill"
+                    HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Top">
+                                    <Image.Source>
+                                        <BitmapImage UriSource="{Binding img}"/>
+                                    </Image.Source>
+                                </Image>
+                                <Grid Grid.Column="1">
+                                    <TextBlock Text="{Binding title}" FontSize="13" Height="52" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,0,0"/>
+                                    <TextBlock Text="{Binding play}" FontSize="10" VerticalAlignment="Bottom" Margin="8,0,0,2"/>
+                                </Grid>
+                                <StackPanel Grid.ColumnSpan="2" Grid.Row="1">
+                                    <TextBlock Text="{Binding description}" TextTrimming="CharacterEllipsis"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding up}" Foreground="#FFFF3366"/>
+                                        <TextBlock Text="{Binding time}" FontSize="12" Margin="5,3,0,0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </toolkit:AdaptiveGridView.ItemTemplate>
                 </toolkit:AdaptiveGridView>
                 <Grid Grid.Row="1" VerticalAlignment="Top" Height="30" HorizontalAlignment="Stretch">
                     <ProgressBar VerticalAlignment="Top" Height="35" Name="LoadingProgress" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>

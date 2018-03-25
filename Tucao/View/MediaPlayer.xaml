@@ -104,6 +104,9 @@
                         <AppBarButton x:Name="InvertScreen"
                                           Label="旋转屏幕" 
                                           Click="InvertScreen_Click"
+                                      Visibility="Collapsed"
+                                          />
+                        <AppBarButton Label="略略略" 
                                           />
                     </CommandBar.SecondaryCommands>
                 </CommandBar>

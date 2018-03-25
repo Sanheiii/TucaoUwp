@@ -35,7 +35,7 @@
             <RowDefinition x:Name="Row1"/>
         </Grid.RowDefinitions>
         <!--媒体-->
-        <Grid Name="PlayerGrid">
+        <Grid Name="PlayerGrid" Background="Black">
             <Grid.Resources>
                 <local:ActualSizePropertyProxy Element="{Binding ElementName=PlayerGrid}"
                                            x:Name="Mproxy"/>
@@ -45,9 +45,6 @@
                     <BitmapImage x:Name="Thumb"/>
                 </Image.Source>
             </Image>
-            <Border Name="MediaBorder" 
-                    BorderBrush="#FFAAAAAA"
-                    Margin="12,12,0,0"/>
             <Frame Name="MediaPlayer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SizeChanged="MediaPlayer_SizeChanged"></Frame>
         </Grid>
         <!--详情-->
