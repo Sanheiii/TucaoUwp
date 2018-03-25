@@ -1,32 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Tucao.Content;
 using Tucao.Helpers;
-using Windows.Graphics.Display;
-using Windows.UI.Core;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.Data.Json;
+using Windows.Storage;
+using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.Media.Playback;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI;
-using Windows.Media.Core;
 using Windows.UI.Xaml.Navigation;
-using Windows.Foundation;
-using Windows.ApplicationModel.Core;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using Windows.Foundation.Collections;
-using Windows.Web.Http;
-using Windows.Storage;
-using System.IO;
-using Windows.Networking.BackgroundTransfer;
-using Windows.Storage.Streams;
-using Windows.Data.Json;
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
 namespace Tucao.View
@@ -153,6 +141,7 @@ namespace Tucao.View
                 }
                 param.title = "P" + part + ":" + info.Video[part - 1]["title"].ToString();
                 param.play_list = play_list;
+                param.islocalfile = false;
                 MediaPlayer.Navigate(typeof(MediaPlayer), param);
                 //Media.Stop();
                 //Media.Tapped -= Media_Tapped;
@@ -193,9 +182,11 @@ namespace Tucao.View
             else
             {
                 Chevron.Glyph = "";//ChevronDown
-                //设置为Double.NaN即可设为Auto
+                                    //设置为Double.NaN即可设为Auto
                 Parts.Height = Double.NaN;
             }
+
+
         }
         private void MediaPlayer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -209,6 +200,16 @@ namespace Tucao.View
                     Row0.Height = new GridLength(ActualWidth / 16 * 9);
                 Details.Visibility = Visibility.Visible;
             }
+        }
+
+        private void Share_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            DataPackage dataPackage = new DataPackage();
+            // copy 
+            dataPackage.RequestedOperation = DataPackageOperation.Copy;
+            dataPackage.SetText("http://www.tucao.tv/play/h" + info.Hid+"/");
+            Clipboard.SetContent(dataPackage);
+            ErrorHelper.PopUp("分享链接已复制到剪切板");
         }
     }
     /// <summary>
@@ -317,12 +318,4 @@ namespace Tucao.View
         }
     }
 }
-/*
-            DataPackage dataPackage = new DataPackage();
-            // copy 
-            dataPackage.RequestedOperation = DataPackageOperation.Copy;
-            dataPackage.SetText("http://www.tucao.tv/play/h"+ info.Hid);
-            Clipboard.SetContent(dataPackage);
-            ErrorHelper.PopUp("分享链接已复制到剪切板");
-*/
 

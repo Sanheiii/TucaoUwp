@@ -83,14 +83,14 @@ namespace Tucao.View
                     JsonObject json = JsonObject.Parse(str);
                     p.partTitle =c+":"+ json["title"].GetString();
                     ulong size = 0;
-                    List<string> uri = new List<string>();
+                    List<string> playlist = new List<string>();
                     for (int i = 0; i < json["filecount"].GetNumber(); i++)
                     {
                         if (await folder.TryGetItemAsync(i.ToString()) != null)
                         {
                             StorageFile file = await folder.GetFileAsync(i.ToString());
                             size += (await file.GetBasicPropertiesAsync()).Size;
-                            uri.Add(file.Path);
+                            playlist.Add(file.Path);
                         }
                     }
                     foreach (StorageFile file in await folder.GetFilesAsync())
@@ -98,7 +98,7 @@ namespace Tucao.View
 
                     }
                     p.size = $"{(((double)size / 1024 / 1024)).ToString("0.0")}M";
-                    p.uri = uri;
+                    p.play_list = playlist;
                     parts.Add(p);
                 }
                 c++;
@@ -114,6 +114,13 @@ namespace Tucao.View
         //点击一个分P
         private void Parts_ItemClick(object sender, ItemClickEventArgs e)
         {
+            var part=e.ClickedItem as Part;
+            var param = new MediaPlayer.MediaPlayerSource();
+            param.title = part.partTitle;
+            param.play_list = part.play_list;
+            param.islocalfile = true;
+            Frame root = Window.Current.Content as Frame;
+            root.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
 
         }
         //打开缓存文件夹
@@ -136,7 +143,7 @@ namespace Tucao.View
         {
             public string partTitle { get; set; }
             public string size { get; set; }
-            public List<string> uri { get; set; }
+            public List<string> play_list { get; set; }
         }
 
     }

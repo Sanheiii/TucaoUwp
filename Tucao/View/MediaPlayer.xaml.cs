@@ -59,7 +59,8 @@ namespace Tucao.View
 
             //载入播放引擎
             SYEngine.Core.Initialize();
-            var playlist = new SYEngine.Playlist(SYEngine.PlaylistTypes.NetworkHttp);
+            var playlist = new SYEngine.Playlist(param.islocalfile ? SYEngine.PlaylistTypes.LocalFile : SYEngine.PlaylistTypes.NetworkHttp);
+            //playlist=new SYEngine.Playlist(SYEngine.PlaylistTypes.LocalFile);
             //将分段添加到playlist
             foreach (var url in play_list)
             {
@@ -243,7 +244,7 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void Media_BufferingProgressChanged(object sender, RoutedEventArgs e)
         {
-            if (Media.BufferingProgress < 1 || Media.BufferingProgress == 0)
+            if (Media.BufferingProgress < 1 && Media.BufferingProgress > 0)
             {
                 Status.Visibility = Visibility.Visible;
                 BufferingProgress.Visibility = Visibility.Visible;
@@ -259,6 +260,7 @@ namespace Tucao.View
         public class MediaPlayerSource
         {
             public string title { get; set; }
+            public bool islocalfile { get; set; }
             public List<string> play_list { get; set; }
         }
     }

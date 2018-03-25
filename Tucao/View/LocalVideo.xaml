@@ -36,9 +36,9 @@
                         <ListView Name="Parts" Grid.Row="2" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Parts_ItemClick" ItemsSource="{Binding parts}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Height="28">
-                                    <TextBlock Grid.Column="0" TextWrapping="WrapWholeWords" Text="{Binding partTitle}" VerticalAlignment="Center" Margin="0,10,0,0" HorizontalAlignment="Left"/>
-                                    <TextBlock Grid.Column="0" TextWrapping="WrapWholeWords" Text="{Binding size}" VerticalAlignment="Center" Margin="0,10,0,0" HorizontalAlignment="Right"/>
+                                    <Grid Height="Auto" Margin="0,0,0,5">
+                                        <TextBlock Grid.Column="0" TextWrapping="WrapWholeWords" Text="{Binding partTitle}" VerticalAlignment="Center" Margin="0,10,0,0" HorizontalAlignment="Left"/>
+                                    <TextBlock Grid.Column="0" TextWrapping="WrapWholeWords" Text="{Binding size}" VerticalAlignment="Bottom" Margin="0,10,0,0" HorizontalAlignment="Right"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
