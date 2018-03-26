@@ -9,9 +9,6 @@
     xmlns:local="using:Tucao.View"
     xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d">
-    <Page.Resources>
-        <local:MediaHeightConverter x:Key="sizecvt"/>
-    </Page.Resources>
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition x:Name="navigationTransition">
@@ -30,16 +27,11 @@
             <ColumnDefinition  x:Name="Col1" Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="Row0" 
-                           Height="{x:Bind Mproxy.ActualWidthValue,Mode=OneWay,Converter={StaticResource sizecvt}}"/>
+            <RowDefinition x:Name="Row0"/>
             <RowDefinition x:Name="Row1"/>
         </Grid.RowDefinitions>
         <!--媒体-->
         <Grid Name="PlayerGrid" Background="Black">
-            <Grid.Resources>
-                <local:ActualSizePropertyProxy Element="{Binding ElementName=PlayerGrid}"
-                                           x:Name="Mproxy"/>
-            </Grid.Resources>
             <Image>
                 <Image.Source>
                     <BitmapImage x:Name="Thumb"/>
@@ -94,7 +86,7 @@
                                     <AppBarButton Label="稍后再看" Name="Mark" Foreground="Gray" Grid.Column="1" HorizontalAlignment="Center">
                                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8A4;" Foreground="Orange"/>
                                     </AppBarButton>
-                                    <AppBarButton Label="分享" Name="Share" Foreground="Gray" Grid.Column="2" HorizontalAlignment="Center" Tapped="Share_Tapped">
+                                    <AppBarButton Label="复制链接" Name="Share" Foreground="Gray" Grid.Column="2" HorizontalAlignment="Center" Tapped="Share_Tapped">
                                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;" Foreground="Green"/>
                                     </AppBarButton>
                                     <AppBarToggleButton Label="缓存" Name="Download" Foreground="Gray" Grid.Column="3" HorizontalAlignment="Center">
@@ -138,7 +130,6 @@
                                               Glyph="&#xE70D;" 
                                               FontSize="15"
                                               />
-                                    <!--Tapped="Chevron_Tapped"-->
                                 </StackPanel>
                                 <toolkit:WrapPanel  x:Name="Parts"
                                                         Orientation="Horizontal"
@@ -239,10 +230,6 @@
                         <Setter Target="Details.(Grid.Column)" Value="1"/>
                         <Setter Target="Details.Width" Value="360"/>
                         <Setter Target="Row1.Height" Value="0"/>
-                        <Setter Target="MediaBorder.BorderThickness" Value="0,0,1,0" />
-                        <Setter Target="MediaBorder.Margin" Value="12,12,0,0"/>
-                        <!--<Setter Target="Parts.Height" Value="Auto"/>
-                        <Setter Target="Chevron.Visibility" Value="Collapsed"/>-->
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="NarrowState">
@@ -251,10 +238,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="Details.(Grid.Row)" Value="1"/>
-                        <!--<Setter Target="Row0.Height" Value="231"/>-->
                         <Setter Target="Row1.Height" Value="*"/>
-                        <Setter Target="MediaBorder.BorderThickness" Value="0,0,0,1" />
-                        <Setter Target="MediaBorder.Margin" Value="12,12,12,0"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
