@@ -169,12 +169,6 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void Share_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            DataPackage dataPackage = new DataPackage();
-            // copy 
-            dataPackage.RequestedOperation = DataPackageOperation.Copy;
-            dataPackage.SetText("http://www.tucao.tv/play/h" + info.Hid + "/");
-            Clipboard.SetContent(dataPackage);
-           
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
             dataTransferManager.DataRequested += DataTransferManager_DataRequested;
             DataTransferManager.ShowShareUI();
@@ -185,8 +179,6 @@ namespace Tucao.View
             
             DataRequest request = args.Request;
             Uri uri = new Uri("http://www.tucao.tv/play/h" + info.Hid + "/");
-
-
             request.Data.SetWebLink(uri);
             request.Data.Properties.Title = info.Title;
             request.Data.Properties.Description = "分享自吐槽UWP";

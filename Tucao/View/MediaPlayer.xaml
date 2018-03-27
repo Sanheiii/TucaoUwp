@@ -41,28 +41,6 @@
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Center"/>
         </Grid>
-        <!--<toolkit:Loading x:Name="LoadVideo"
-                             IsLoading="False">
-                <StackPanel Orientation="Horizontal"
-                        Padding="12">
-                    <Grid Margin="0,0,8,0">
-                        <Image Source="../../Assets/ToolkitLogo.png" 
-                           Height="50" />
-                        <ProgressRing IsActive="True" 
-                                  Foreground="Blue" />
-                    </Grid>
-                    <TextBlock Name="LoadingText"
-                               Foreground="White" 
-                               Text="准备播放"
-                           VerticalAlignment="Center" />
-                </StackPanel>
-            </toolkit:Loading>-->
-        <!--趴着的cc娘-->
-        <!--<Image Name="Logo" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" 
-                   Source="Assets/bg_y_png24.png"
-                   Stretch="None"></Image>-->
         <!--控制栏-->
         <Grid x:Name="ControlPanelGrid" 
                   Visibility="Collapsed">
@@ -205,7 +183,8 @@
                                 <AppBarButton x:Name="PlayPauseButton" 
                                                   MediaTransportControlsHelper.DropoutOrder="23" 
                                                   Style="{StaticResource AppBarButtonStyle}"
-                                                  Click="PlayPauseButton_Click" FontFamily="Segoe UI">
+                                                  Click="PlayPauseButton_Click"
+                                              AccessKey="S">
                                     <AppBarButton.Icon>
                                         <SymbolIcon x:Name="PlayPauseSymbol" 
                                                         Symbol="Pause"/>
