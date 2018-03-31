@@ -75,7 +75,25 @@ namespace Tucao.View
         {
             try
             {
-                string name = download.ResultFile.Name.Split('.')[0];
+                string name;
+                string path = download.ResultFile.Path;
+                var folderpath = path.Remove(path.LastIndexOf('\\'));
+                var folder=await StorageFolder.GetFolderFromPathAsync(folderpath);
+                if (await folder.TryGetItemAsync("part.json") != null)
+                {
+                    StorageFile jsonfile = await folder.GetFileAsync("part.json");
+                    Stream stream = await jsonfile.OpenStreamForReadAsync();
+                    StreamReader reader = new StreamReader(stream);
+                    string str = await reader.ReadToEndAsync();
+                    reader.Dispose();
+                    stream.Dispose();
+                    JsonObject json = JsonObject.Parse(str);
+                    name = json["title"].GetString();
+                }
+                else
+                {
+                    name = download.ResultFile.Name.Split('.')[0];
+                }
                 Transfer transfer = new Transfer
                 {
                     DownOpration = download,

@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Tucao.Content;
 using Tucao.Helpers;
+using Windows.System;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -32,17 +33,17 @@ namespace Tucao.View
         public MediaPlayer()
         {
             this.InitializeComponent();
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
             if (!DeviceHelper.IsMobile) TopControls.SecondaryCommands.Remove(InvertScreen);
-            param = e.Parameter as MediaPlayerSource;
             Media.Stop();
             Media.Tapped -= Media_Tapped;
             ControlPanelGrid.Visibility = Visibility.Collapsed;
             StatusText.Text = "";
             Status.Visibility = Visibility.Visible;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            param = e.Parameter as MediaPlayerSource;
             PlayerTitle.Text = param.title;
             Play(param.play_list);
         }
@@ -77,7 +78,14 @@ namespace Tucao.View
             cfgs.DownloadRetryOnFail = true;
             cfgs.DetectDurationForParts = true;
             playlist.NetworkConfigs = cfgs;
-            Media.Source = await playlist.SaveAndGetFileUriAsync();
+            try
+            {
+                Media.Source = await playlist.SaveAndGetFileUriAsync();
+            }
+            catch (Exception ex)
+            {
+                ErrorHelper.PopUp(ex.Message);
+            }
 
             StatusText.Text += "    [成功]";
             //开始播放
@@ -101,6 +109,7 @@ namespace Tucao.View
             Media.Tapped += Media_Tapped;
             //双击可以开始/暂停播放
             Media.DoubleTapped += PlayPauseButton_Click;
+            FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
         }
 
         /// <summary>
@@ -116,6 +125,7 @@ namespace Tucao.View
             Media.Tapped -= Media_Tapped;
             Media.DoubleTapped -= PlayPauseButton_Click;
         }
+
         /// <summary>
         /// 开始/暂停按钮点击事件
         /// </summary>
@@ -276,6 +286,39 @@ namespace Tucao.View
             public string title { get; set; }
             public bool islocalfile { get; set; }
             public List<string> play_list { get; set; }
+        }
+
+        private void Page_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            e.Handled = true;
+            switch (e.Key)
+            {
+                case VirtualKey.Space:
+                    {
+                        PlayPauseButton_Click(PlayPauseButton, null);
+                    }
+                    break;
+                case VirtualKey.Escape:
+                    {
+                        FullWindowButton_Click(FullWindowButton, null);
+                    }
+                    break;
+                case VirtualKey.Enter:
+                    {
+                        Media_Tapped(Media, null);
+                    }
+                    break;
+                case VirtualKey.Left:
+                    {
+                        Media.Position -= new TimeSpan(30000000);
+                    }
+                    break;
+                case VirtualKey.Right:
+                    {
+                        Media.Position += new TimeSpan(30000000);
+                    }
+                    break;
+            }
         }
     }
 }

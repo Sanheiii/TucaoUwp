@@ -86,7 +86,7 @@
                                     <AppBarButton Label="稍后再看" Name="Mark" Foreground="Gray" Grid.Column="1" HorizontalAlignment="Center">
                                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8A4;" Foreground="Orange"/>
                                     </AppBarButton>
-                                    <AppBarButton Label="复制链接" Name="Share" Foreground="Gray" Grid.Column="2" HorizontalAlignment="Center" Tapped="Share_Tapped">
+                                    <AppBarButton Label="分享" Name="Share" Foreground="Gray" Grid.Column="2" HorizontalAlignment="Center" Tapped="Share_Tapped">
                                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;" Foreground="Green"/>
                                     </AppBarButton>
                                     <AppBarToggleButton Label="缓存" Name="Download" Foreground="Gray" Grid.Column="3" HorizontalAlignment="Center">

@@ -132,6 +132,7 @@ namespace Tucao.View
                 param.play_list = play_list;
                 param.islocalfile = false;
                 MediaPlayer.Navigate(typeof(MediaPlayer), param);
+                FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
             }
         }
         /// <summary>
