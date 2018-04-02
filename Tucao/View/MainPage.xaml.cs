@@ -74,6 +74,7 @@ namespace Tucao.View
                 btn.Margin = new Thickness(3, 3, 3, 3);
                 btn.Content = p["title"];
                 btn.Foreground = new SolidColorBrush(Colors.White);
+                btn.IsTabStop = false;
                 //btn.Width = 150;
                 btn.Name = (i + 1).ToString();
                 Parts.Children.Add(btn);
@@ -132,7 +133,6 @@ namespace Tucao.View
                 param.play_list = play_list;
                 param.islocalfile = false;
                 MediaPlayer.Navigate(typeof(MediaPlayer), param);
-                FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
             }
         }
         /// <summary>

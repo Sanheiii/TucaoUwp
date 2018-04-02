@@ -88,7 +88,7 @@ namespace Tucao.View
                     reader.Dispose();
                     stream.Dispose();
                     JsonObject json = JsonObject.Parse(str);
-                    name = json["title"].GetString();
+                    name = json["title"].GetString()+ "-"+download.ResultFile.Name;
                 }
                 else
                 {
@@ -159,7 +159,7 @@ namespace Tucao.View
                     transfers.Remove(model);
 
                     string path = model.DownOpration.ResultFile.Path;
-                    var folder = await StorageFolder.GetFolderFromPathAsync(path.Remove(path.LastIndexOf("\\"), path.Length- path.LastIndexOf("\\")));
+                    var folder = await StorageFolder.GetFolderFromPathAsync(path.Remove(path.LastIndexOf("\\")));
                     var parent = await folder.GetParentAsync();
                     //删除文件夹
                     await folder.DeleteAsync();

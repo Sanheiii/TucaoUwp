@@ -41,7 +41,7 @@
         </Grid>
         <!--详情-->
         <Grid Name="Details">
-            <Pivot>
+            <Pivot IsTabStop="False">
                 <PivotItem Header="简介" 
                        FontFamily="Segoe UI">
                     <Grid Name="Introduction" Visibility="Collapsed">
@@ -80,16 +80,16 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <AppBarButton Label="收藏" Name="Favorite" Foreground="Gray" Grid.Column="0" HorizontalAlignment="Center">
+                                    <AppBarButton Label="收藏" IsTabStop="False" Name="Favorite" Foreground="Gray" Grid.Column="0" HorizontalAlignment="Center">
                                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE734;" Foreground="Red"/>
                                     </AppBarButton>
-                                    <AppBarButton Label="稍后再看" Name="Mark" Foreground="Gray" Grid.Column="1" HorizontalAlignment="Center">
+                                    <AppBarButton Label="稍后再看" IsTabStop="False" Name="Mark" Foreground="Gray" Grid.Column="1" HorizontalAlignment="Center">
                                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8A4;" Foreground="Orange"/>
                                     </AppBarButton>
-                                    <AppBarButton Label="分享" Name="Share" Foreground="Gray" Grid.Column="2" HorizontalAlignment="Center" Tapped="Share_Tapped">
+                                    <AppBarButton Label="分享" IsTabStop="False" Name="Share" Foreground="Gray" Grid.Column="2" HorizontalAlignment="Center" Tapped="Share_Tapped">
                                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;" Foreground="Green"/>
                                     </AppBarButton>
-                                    <AppBarToggleButton Label="缓存" Name="Download" Foreground="Gray" Grid.Column="3" HorizontalAlignment="Center">
+                                    <AppBarToggleButton Label="缓存" IsTabStop="False" Name="Download" Foreground="Gray" Grid.Column="3" HorizontalAlignment="Center">
                                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE896;" Foreground="CornflowerBlue"/>
                                     </AppBarToggleButton>
                                 </Grid>

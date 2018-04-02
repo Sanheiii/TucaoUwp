@@ -84,7 +84,7 @@ namespace Tucao.View
                     reader.Dispose();
                     stream.Dispose();
                     JsonObject json = JsonObject.Parse(str);
-                    p.partTitle =c+":"+ json["title"].GetString();
+                    p.partTitle = c + ":" + json["title"].GetString();
                     ulong size = 0;
                     List<string> playlist = new List<string>();
                     for (i = 0; i < json["filecount"].GetNumber(); i++)
@@ -92,7 +92,7 @@ namespace Tucao.View
                         if (await folder.TryGetItemAsync(i.ToString()) != null)
                         {
                             StorageFile file = await folder.GetFileAsync(i.ToString());
-                            var filesize= (await file.GetBasicPropertiesAsync()).Size;
+                            var filesize = (await file.GetBasicPropertiesAsync()).Size;
                             //文件大小为0时不继续判断
                             if (filesize == 0) break;
                             size += filesize;
@@ -112,19 +112,50 @@ namespace Tucao.View
         //点击一个视频
         private void Videos_ItemClick(object sender, ItemClickEventArgs e)
         {
-            Frame root = Window.Current.Content as Frame;
-            root.Navigate(typeof(MainPage), (e.ClickedItem as Video).hid, new DrillInNavigationTransitionInfo());
+            if (Delete.IsChecked == false)
+            {
+                Frame root = Window.Current.Content as Frame;
+                root.Navigate(typeof(MainPage), (e.ClickedItem as Video).hid, new DrillInNavigationTransitionInfo());
+            }
+            else
+            {
+
+            }
         }
         //点击一个分P
-        private void Parts_ItemClick(object sender, ItemClickEventArgs e)
+        private async void Parts_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var part=e.ClickedItem as Part;
-            var param = new MediaPlayer.MediaPlayerSource();
-            param.title = part.partTitle;
-            param.play_list = part.play_list;
-            param.islocalfile = true;
-            Frame root = Window.Current.Content as Frame;
-            root.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
+            var part = e.ClickedItem as Part;
+            if (Delete.IsChecked == false)
+            {
+                var param = new MediaPlayer.MediaPlayerSource();
+                param.title = part.partTitle;
+                param.play_list = part.play_list;
+                param.islocalfile = true;
+                Frame root = Window.Current.Content as Frame;
+                root.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
+            }
+            else
+            {
+                var folderpath = part.play_list[0].Remove(part.play_list[0].LastIndexOf("\\"));
+                var folder = await StorageFolder.GetFolderFromPathAsync(folderpath);
+                var parent = await folder.GetParentAsync();
+                //删除文件夹
+                await folder.DeleteAsync();
+                var items = ((sender as ListView).ItemsSource as ObservableCollection<Part>);
+                items.Remove(e.ClickedItem as Part);
+                if (items.Count == 0)
+                {
+                    var parentlist = Videos;
+                    (parentlist.ItemsSource as ObservableCollection<Video>).Remove((sender as ListView).DataContext as Video);
+                }
+                //父文件夹没有文件夹时删除它
+                int count = (await parent.GetFoldersAsync()).Count;
+                if (count == 0)
+                {
+                    await parent.DeleteAsync();
+                }
+            }
 
         }
         //打开缓存文件夹

@@ -109,7 +109,16 @@ namespace Tucao.View
             Media.Tapped += Media_Tapped;
             //双击可以开始/暂停播放
             Media.DoubleTapped += PlayPauseButton_Click;
-            FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
+            Player.Focus(FocusState.Programmatic);
+        }
+        /// <summary>
+        /// 播放器失去焦点后立即重新获取焦点
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Player_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Player.Focus(FocusState.Programmatic);
         }
 
         /// <summary>

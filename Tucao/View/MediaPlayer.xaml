@@ -1,4 +1,5 @@
 ﻿<Page
+    x:Name="Player"
     x:Class="Tucao.View.MediaPlayer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,7 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     IsTabStop="True"
-    KeyDown="Page_KeyDown">
+    KeyDown="Page_KeyDown"
+    LostFocus="Player_LostFocus">
     <Page.Resources>
         <local:MediaConverter x:Key="cvt1"/>
         <local:TimeConverter x:Key="cvt2"/>
@@ -76,14 +78,17 @@
                                            Foreground="#FFFFFFFF"/>
                         </StackPanel>
                     </CommandBar.Content>
-                    <!--翻转屏幕-->
-                    <CommandBar.SecondaryCommands>
+                    <CommandBar.PrimaryCommands>
                         <AppBarButton x:Name="InvertScreen"
                                           Label="旋转屏幕" 
                                           Click="InvertScreen_Click"
-                                      Visibility="Collapsed" IsTabStop="False"/>
-                        <AppBarButton Label="略略略"/>
-                    </CommandBar.SecondaryCommands>
+                                      Visibility="Collapsed"
+                                      IsTabStop="False">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE845;"/>
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                    </CommandBar.PrimaryCommands>
                 </CommandBar>
             </Grid>
             <!--下面的控制栏-->
