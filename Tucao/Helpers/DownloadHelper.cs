@@ -3,20 +3,16 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Tucao.Http;
+using Tucao.Content;
 using Windows.Data.Json;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
-using Windows.Storage.Streams;
-using System.Collections.Generic;
-using Windows.Web.Http;
-using Tucao.Content;
 namespace Tucao.Helpers
 {
     class DownloadHelper
     {
         //下载hid和分P
-        static public async void Download(SubmissionInfo info, int part)
+        static public async void Download(VideoInfo info, int part)
         {
             try
             {

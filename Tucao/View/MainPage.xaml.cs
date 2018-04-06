@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Tucao.Content;
 using Tucao.Helpers;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Data.Json;
 using Windows.Storage;
 using Windows.UI;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -24,7 +22,7 @@ namespace Tucao.View
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        SubmissionInfo info = new SubmissionInfo();
+        VideoInfo info = new VideoInfo();
 
         /// <summary>
         /// 加载页面时调用
@@ -145,6 +143,7 @@ namespace Tucao.View
             if (View.MediaPlayer.isfullwindow)
             {
                 Details.Visibility = Visibility.Collapsed;
+                Row0.Height = new GridLength(1, GridUnitType.Star);
             }
             else
             {

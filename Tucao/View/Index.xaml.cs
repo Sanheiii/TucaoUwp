@@ -1,28 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Threading.Tasks;
+using Tucao.Content;
+using Tucao.Helpers;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Security.Cryptography;
-using Tucao.Http;
-using Microsoft.Toolkit.Uwp.UI.Controls;
-using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Core;
-using Tucao.Content;
-using System.Threading.Tasks;
-using System.Threading;
-using Tucao.Helpers;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 

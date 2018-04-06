@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Web.Http;
-using System.Collections;
-using Windows.Data.Json;
 namespace Tucao
 {
     class Method

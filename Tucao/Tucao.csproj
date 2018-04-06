@@ -18,7 +18,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <PackageCertificateKeyFile>Tucao_StoreKey.pfx</PackageCertificateKeyFile>
-    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <PackageCertificateThumbprint>04D11A8114AA2241F201FBA331933CA166285B07</PackageCertificateThumbprint>
     <AppxBundle>Always</AppxBundle>
@@ -129,7 +129,7 @@
     </Compile>
     <Compile Include="Methods\Method.cs" />
     <Compile Include="Methods\XMLParser.cs" />
-    <Compile Include="Content\SubmissionInfo.cs" />
+    <Compile Include="Content\VideoInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +144,7 @@
     <Content Include="Assets\bg_y_png24.png" />
     <Content Include="Notes\备忘.txt" />
     <None Include="Package.StoreAssociation.xml" />
+    <None Include="Package.xml" />
     <Content Include="Properties\Default.rd.xml">
       <SubType>Designer</SubType>
     </Content>

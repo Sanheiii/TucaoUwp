@@ -1,21 +1,18 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Tucao.Http;
 using System.Threading.Tasks;
-using System.Collections;
+using Tucao.Http;
 
 namespace Tucao.Content
 {
     //定义 投稿 类
-    public class SubmissionInfo
+    public class VideoInfo
     {
-        public SubmissionInfo()
+        public VideoInfo()
         {
 
         }
-        public SubmissionInfo(Hashtable str)
+        public VideoInfo(Hashtable str)
         {
             Parse(str);
         }

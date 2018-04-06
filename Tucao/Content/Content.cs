@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Data.Json;
-using Windows.Web.Http;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections;
-using Windows.Storage;
-using Tucao.Content;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Tucao.Http;
-using Windows.UI.Xaml.Media.Imaging;
-using HtmlAgilityPack;
+using Windows.Web.Http;
 namespace Tucao.Content
 {
     public class Content
@@ -20,9 +14,9 @@ namespace Tucao.Content
         /// </summary>
         /// <param name="hid">Hid</param>
         /// <returns></returns>
-        static public async Task<SubmissionInfo> GetSubmissionInfo(string hid)
+        static public async Task<VideoInfo> GetSubmissionInfo(string hid)
         {
-            SubmissionInfo info = new SubmissionInfo();
+            VideoInfo info = new VideoInfo();
             //通过api获取绝大多数信息
             string message1 = await HttpService._getSubmissionInfo(hid);
             var information = Newtonsoft.Json.JsonConvert.DeserializeObject<Hashtable>(message1);

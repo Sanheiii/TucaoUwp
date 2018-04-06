@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Tucao.Helpers;
+using Windows.Graphics.Display;
+using Windows.System;
+using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Core;
 using Windows.UI.Xaml.Input;
-using Windows.UI.ViewManagement;
-using Windows.Graphics.Display;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Tucao.Content;
-using Tucao.Helpers;
-using Windows.System;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -33,7 +25,6 @@ namespace Tucao.View
         public MediaPlayer()
         {
             this.InitializeComponent();
-            if (!DeviceHelper.IsMobile) TopControls.SecondaryCommands.Remove(InvertScreen);
             Media.Stop();
             Media.Tapped -= Media_Tapped;
             ControlPanelGrid.Visibility = Visibility.Collapsed;
@@ -182,7 +173,7 @@ namespace Tucao.View
                 //修改按钮图标
                 FullWindowSymbol.Symbol = Symbol.BackToWindow;
                 //显示翻转屏幕按钮
-                InvertScreen.Visibility = Visibility.Visible;
+                if (DeviceHelper.IsMobile) InvertScreen.Visibility = Visibility.Visible;
                 //显示返回键
                 FullWindowBackButton.Visibility = Visibility.Visible;
                 //横过来
