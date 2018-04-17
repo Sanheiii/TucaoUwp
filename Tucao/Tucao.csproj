@@ -96,6 +96,10 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Content\Danmaku.cs" />
+    <Compile Include="Resource\DanmakuLauncher.xaml.cs">
+      <DependentUpon>DanmakuLauncher.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
@@ -161,6 +165,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Resource\DanmakuLauncher.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

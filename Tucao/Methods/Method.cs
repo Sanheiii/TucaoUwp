@@ -25,7 +25,7 @@ namespace Tucao
             DateTime date;
             unixDate = long.Parse(unixtimestamp);
             start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            date = start.AddMilliseconds(unixDate).ToLocalTime();
+            date = start.AddSeconds(unixDate).ToLocalTime();
             return date.ToString("yyyy-MM-dd HH:mm");
         }
         //public static string MillisecondToMinute()

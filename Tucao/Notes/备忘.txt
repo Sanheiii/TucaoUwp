@@ -1,4 +1,6 @@
 ﻿更新
+1.1.4.0
+把Newtonsoft.Json的链接改到了GitHub防止被应用商店打回
 1.1.3.0
 修复了列表滚动的
 修复了全屏时按返回直接退出播放的bug
@@ -14,6 +16,7 @@
   *esc-全屏 space-暂停\播放 enter-显示\隐藏控制栏 左右方向- 前进\后退3s
 
 VideoInfo中case太多,可以写成dictionary
+
 评论     http://www.tucao.tv/index.php?m=comment&c=index&a=init&commentid=content_11-4075504-1&hot=0&iframe=1
 
 弹幕信息获得地址<xml>:

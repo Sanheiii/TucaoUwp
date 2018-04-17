@@ -161,7 +161,7 @@ namespace Tucao.Content
         {
             Hid = result["hid"].ToString();
             TypeId = result["typeid"].ToString();
-            Create = Method.LongDateTimeToDateTimeString(result["create"].ToString() + "000");
+            Create = Method.LongDateTimeToDateTimeString(result["create"].ToString());
             Mukio = result["mukio"].ToString();
             TypeName = result["typename"].ToString();
             Title = result["title"].ToString();

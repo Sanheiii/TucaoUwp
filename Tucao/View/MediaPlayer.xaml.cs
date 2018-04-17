@@ -47,8 +47,6 @@ namespace Tucao.View
 
             //设置资源
             StatusText.Text += Environment.NewLine + "正在初始化播放器...";
-            //设置实时通信
-            Media.RealTimePlayback = true;
 
 
             //载入播放引擎
