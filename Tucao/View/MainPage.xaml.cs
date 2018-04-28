@@ -33,7 +33,7 @@ namespace Tucao.View
             string hid = (string)e.Parameter;
             try
             {
-                info = await Tucao.Content.Content.GetSubmissionInfo(hid);
+                info = await Tucao.Content.Content.GetVideoInfo(hid);
             }
             catch
             {
@@ -129,6 +129,7 @@ namespace Tucao.View
                 }
                 param.title = "P" + part + ":" + info.Video[part - 1]["title"].ToString();
                 param.play_list = play_list;
+                param.hid = info.Hid;
                 param.islocalfile = false;
                 MediaPlayer.Navigate(typeof(MediaPlayer), param);
             }

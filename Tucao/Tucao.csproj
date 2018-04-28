@@ -96,12 +96,11 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Content\Danmaku.cs" />
-    <Compile Include="Resource\DanmakuLauncher.xaml.cs">
-      <DependentUpon>DanmakuLauncher.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\BlankPage1.xaml.cs">
+      <DependentUpon>BlankPage1.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\DownloadList.xaml.cs">
       <DependentUpon>DownloadList.xaml</DependentUpon>
@@ -165,11 +164,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Resource\DanmakuLauncher.xaml">
+    <Page Include="View\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\About.xaml">
+    <Page Include="View\BlankPage1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -235,7 +234,12 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\VS2017\SkylarkWsp.DanmakuEngine\SkylarkWsp.DanmakuEngine.csproj">
+      <Project>{9777633e-4ea2-40ea-be74-86aaaa1feef7}</Project>
+      <Name>SkylarkWsp.DanmakuEngine</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     IsTabStop="True"
+    xmlns:Danmaku="using:SkylarkWsp.DanmakuEngine"
     KeyDown="Page_KeyDown"
     LostFocus="Player_LostFocus">
     <Page.Resources>
@@ -17,18 +18,14 @@
 
     <Grid VerticalAlignment="Top"
               Background="Black">
-        
-        <MediaElement x:Name="Media"
+        <Danmaku:DanmakuPlayer x:Name="Media"
                           MediaOpened="Media_MediaOpened" 
                           MediaEnded="Media_MediaEnded"
-                          AudioCategory="Movie" 
-                          AutoPlay="True" 
-                          RealTimePlayback="True" 
                           CurrentStateChanged="Media_CurrentStateChanged"
                           MediaFailed="Media_MediaFailed"
-                          Stretch="Uniform" 
-                          BufferingProgressChanged="Media_BufferingProgressChanged">
-        </MediaElement>
+                          BufferingProgressChanged="Media_BufferingProgressChanged" 
+                               ShowLogger="False">
+        </Danmaku:DanmakuPlayer>
         <!--加载视频提示-->
         <Grid Background="#50000000" 
                   Name="Status"
@@ -113,7 +110,7 @@
                                 Margin="12,0" 
                                 Style="{StaticResource MediaSliderStyle}" 
                                 VerticalAlignment="Top" IsTabStop="False"
-                                Value="{Binding ElementName=Media,Path=Position,Mode=TwoWay,Converter={StaticResource cvt1}}"/>
+                                Value="{Binding ElementName=Media,Path=Media.Position,Mode=TwoWay,Converter={StaticResource cvt1}}"/>
                     </Grid>
                 </Border>
                 <!--控制栏的按键-->

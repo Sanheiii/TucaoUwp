@@ -85,6 +85,9 @@ namespace Tucao.View
                     //获取一页
                     r = await Tucao.Content.Content.Search(0, page * 2 - i, q);
                     //添加到控件中
+                    //不够12的话说明没有下一页
+                    if (r.Count < 12||r==null)
+                        break;
                     for (int j = 0; j < r.Count; j++)
                     {
                         await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
@@ -93,9 +96,6 @@ namespace Tucao.View
                         });
                         await Task.Delay(10);
                     }
-                    //不够12的话说明没有下一页
-                    if (r.Count < 12)
-                        break;
                 }
             }
             catch (Exception e)

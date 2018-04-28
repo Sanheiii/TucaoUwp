@@ -14,7 +14,7 @@ namespace Tucao.Content
         /// </summary>
         /// <param name="hid">Hid</param>
         /// <returns></returns>
-        static public async Task<VideoInfo> GetSubmissionInfo(string hid)
+        static public async Task<VideoInfo> GetVideoInfo(string hid)
         {
             VideoInfo info = new VideoInfo();
             //通过api获取绝大多数信息
@@ -24,11 +24,11 @@ namespace Tucao.Content
             info.Parse(result);
             //解析html得到头像和介绍
             HttpResponseMessage message2 = await HttpService.HttpGet("http://www.tucao.tv/play/h" + hid);
-            string webpage=await message2.Content.ReadAsStringAsync();
+            string webpage = await message2.Content.ReadAsStringAsync();
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(webpage);
             info.Description = doc.DocumentNode.SelectSingleNode("//div[@class='show_content']").InnerHtml;
-            info.UserIcon = doc.DocumentNode.SelectSingleNode("//img[@alt='"+info.User+"']").Attributes["src"].Value;
+            info.UserIcon = doc.DocumentNode.SelectSingleNode("//img[@alt='" + info.User + "']").Attributes["src"].Value;
             return info;
         }
 
@@ -41,13 +41,13 @@ namespace Tucao.Content
         /// <returns></returns>
         static public async Task<List<VideoPanel>> Search(int tid, int page, string keywords)
         {
-            
+
             string webpage = await HttpService._getsearchresult(tid, page, keywords);
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(webpage);
             var list = doc.DocumentNode.SelectNodes(".//div[@class='list']");
-            if (list == null) return null;
             List<VideoPanel> result = new List<VideoPanel>();
+            if (list == null) return result;
             foreach (var item in list)
             {
                 var v = new VideoPanel();
@@ -55,7 +55,7 @@ namespace Tucao.Content
                 v.link = item.SelectSingleNode(".//div[1]").FirstChild.Attributes["href"].Value;
                 v.title = item.SelectSingleNode(".//div[2]/div[1]").InnerText;
                 v.up = item.SelectSingleNode(".//div[2]/div[2]/ul[1]/li[1]/a[1]").InnerText;
-                v.time = item.SelectSingleNode(".//div[2]/div[2]/ul[1]/li[2]").InnerText.Replace ("发布于：", "UP:");
+                v.time = item.SelectSingleNode(".//div[2]/div[2]/ul[1]/li[2]").InnerText.Replace("发布于：", "UP:");
                 v.description = item.SelectSingleNode(".//div[2]/div[3]").InnerText;
                 if (v.description.Trim() == "") v.description += "暂无简介";
                 result.Add(v);
@@ -67,7 +67,7 @@ namespace Tucao.Content
         /// </summary>
         /// <param name="tid">分类id</param>
         /// <param name="pagenum">页码</param>
-        /// <returns></returns>
+        /// <returns>含有视频信息的列表</returns>
         static public async Task<List<VideoPanel>> GetSubclassiFication(int tid, int pagenum)
         {
             var webpage = await HttpService._getsubclassification(tid, pagenum);

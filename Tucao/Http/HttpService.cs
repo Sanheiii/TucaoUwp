@@ -98,9 +98,6 @@ namespace Tucao.Http
             var result = await HttpGet("http://www.tucao.tv/index.php", param);
             return await result.Content.ReadAsStringAsync();
         }
-
-
-
         /// <summary>
         /// 整合参数并发出get请求
         /// </summary>

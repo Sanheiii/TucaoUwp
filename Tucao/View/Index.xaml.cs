@@ -23,7 +23,6 @@ namespace Tucao.View
         int p = 0;
         public Index()
         {
-            var i = new Danmaku("<d p=\"34.2,5,25,16777215,1522827434\">我C站牛逼！</d>");
             this.InitializeComponent();
             VideoList.ItemsSource = new ObservableCollection<VideoPanel>();
             Task.Run(() =>

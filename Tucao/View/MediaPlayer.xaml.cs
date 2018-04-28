@@ -36,6 +36,7 @@ namespace Tucao.View
         {
             param = e.Parameter as MediaPlayerSource;
             PlayerTitle.Text = param.title;
+            Media.LoadDanmaku(param.hid, SkylarkWsp.DanmakuEngine.DanmakuSource.Tucao);
             Play(param.play_list);
         }
         /// <summary>
@@ -131,7 +132,7 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void PlayPauseButton_Click(object sender, RoutedEventArgs e)
         {
-            var i = Media.CurrentState;
+            var i = Media.Media.CurrentState;
             if (i == MediaElementState.Playing)
             {
                 //暂停
@@ -229,7 +230,7 @@ namespace Tucao.View
         }
         private void Media_CurrentStateChanged(object sender, RoutedEventArgs e)
         {
-            var i = Media.CurrentState;
+            var i = Media.Media.CurrentState;
             switch (i)
             {
                 case MediaElementState.Playing:
@@ -266,11 +267,11 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void Media_BufferingProgressChanged(object sender, RoutedEventArgs e)
         {
-            if (Media.BufferingProgress < 1 && Media.BufferingProgress > 0)
+            if (Media.Media.BufferingProgress < 1 && Media.Media.BufferingProgress > 0)
             {
                 Status.Visibility = Visibility.Visible;
                 BufferingProgress.Visibility = Visibility.Visible;
-                BufferingProgress.Text = ((int)(Media.BufferingProgress * 100)).ToString() + "%";
+                BufferingProgress.Text = ((int)(Media.Media.BufferingProgress * 100)).ToString() + "%";
             }
             else
             {
@@ -282,6 +283,7 @@ namespace Tucao.View
         public class MediaPlayerSource
         {
             public string title { get; set; }
+            public string hid { get; set; }
             public bool islocalfile { get; set; }
             public List<string> play_list { get; set; }
         }
