@@ -16,29 +16,8 @@
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
-    <Grid Background="#55DDDDDD">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="48"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Image Source="ms-appx:///Assets/logo.png" Margin="20,0,0,0" Height="20" HorizontalAlignment="Left"/>
-            <AppBarButton Name="Search"
-                          Click="Search_Click"
-                          VerticalAlignment="Stretch"
-                          Height="48"
-                                  RelativePanel.RightOf="SearchText"
-                              HorizontalAlignment="Right">
-                <SymbolIcon Symbol="Find"/>
-            </AppBarButton>
-        </Grid>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Top">
-            <TextBlock Text="&#xE735;" FontSize="25" Foreground="#FFFF3366" FontFamily="Segoe MDL2 Assets" AutomationProperties.Name="Favorite" Margin="10,5,10,5" />
-            <TextBlock Text="连载新番" FontSize="25" Margin="5,0,0,5" />
-        </StackPanel>
-        <ScrollViewer Grid.Row="2">
+    <Grid>
+        <ScrollViewer>
             <Grid ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Enabled">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -93,43 +72,11 @@
                     <ProgressBar VerticalAlignment="Top" Height="35" Name="LoadingProgress" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
                     <TextBlock Name="BottomText" HorizontalAlignment="Center" Tapped="BottomText_Tapped" Text="加载下一页"/>
                 </Grid>
-
             </Grid>
         </ScrollViewer>
-        <CommandBar Grid.RowSpan="4" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" RequestedTheme="Dark">
-            <CommandBar.PrimaryCommands>
-                <AppBarButton Name="RefreshButton" Label="刷新" Tapped="Refresh_Tapped" IsEnabled="False">
-                    <FontIcon  FontFamily="Segoe MDL2 Assets" Glyph="&#xE72C;" />
-                </AppBarButton>
-
-
-                <!--<AppBarButton Label="随机视频">
-                    <FontIcon  FontFamily="Segoe MDL2 Assets" Glyph="&#xE786;" />
-                </AppBarButton>-->
-            </CommandBar.PrimaryCommands>
-            <CommandBar.SecondaryCommands>
-                <AppBarButton Label="关于" Tapped="About_Tapped"/>
-                <AppBarButton Label="下载队列" Tapped="DownloadList_Tapped"/>
-            </CommandBar.SecondaryCommands>
-        </CommandBar>
-        <!--<SplitView Name="LeftSplitView"
-                   Grid.Row="1"
-                   Grid.RowSpan="2"
-                   Grid.Column="0"
-              DisplayMode="Overlay" 
-              OpenPaneLength="240">
-            <SplitView.Pane>
-                <StackPanel>
-                    <ListBox>
-                        <ListBoxItem>稍后再看</ListBoxItem>
-                        <ListBoxItem>历史记录</ListBoxItem>
-                        <ListBoxItem>离线下载</ListBoxItem>
-                        <ListBoxItem>设置</ListBoxItem>
-                        <ListBoxItem>关于</ListBoxItem>
-                    </ListBox>
-                </StackPanel>
-            </SplitView.Pane>
-        </SplitView>-->
+        <Button Name="RefreshButton" Tapped="Refresh_Tapped" IsEnabled="False" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,10" Background="Transparent" Foreground="#FFFF3366">
+            <FontIcon  FontFamily="Segoe MDL2 Assets" FontSize="20" Glyph="&#xE72C;"/>
+        </Button>
     </Grid>
 
 </Page>

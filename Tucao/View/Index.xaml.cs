@@ -31,26 +31,6 @@ namespace Tucao.View
             });
         }
         /// <summary>
-        /// 点击汉堡菜单
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        //private void TucaoLogo_Tapped(object sender,TappedRoutedEventArgs e)
-        //{
-        //   LeftSplitView.IsPaneOpen = !LeftSplitView.IsPaneOpen;
-        //}
-        /// <summary>
-        /// 点击搜索
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Search_Click(object sender, RoutedEventArgs e)
-        {
-            //打开搜索页面
-            Frame root = Window.Current.Content as Frame;
-            root.Navigate(typeof(Search), null, new DrillInNavigationTransitionInfo());
-        }
-        /// <summary>
         /// 加载内容
         /// </summary>
         /// <param name="page"></param>
@@ -131,18 +111,6 @@ namespace Tucao.View
             p = 1;
             VideoList.ItemsSource = new ObservableCollection<VideoPanel>();
             Task.Run(() => LoadItems(p));
-        }
-
-        private void About_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Frame root = Window.Current.Content as Frame;
-            root.Navigate(typeof(About), null, new DrillInNavigationTransitionInfo());
-        }
-
-        private void DownloadList_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Frame root = Window.Current.Content as Frame;
-            root.Navigate(typeof(DownloadList), null, new DrillInNavigationTransitionInfo());
         }
     }
 }

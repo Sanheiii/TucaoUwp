@@ -37,12 +37,17 @@ namespace Tucao
             //设置桌面模式窗口的最小宽高
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 360, Height = 420 });
             //设置状态栏颜色
-            if (DeviceHelper.IsMobile)
+            if (!DeviceHelper.IsMobile)
+            {
+                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                titleBar.BackgroundColor = titleBar.InactiveBackgroundColor = Color.FromArgb(0xFF, 0xFF, 0x33, 0x66);
+                titleBar.ButtonBackgroundColor = titleBar.ButtonInactiveBackgroundColor = Color.FromArgb(0xFF, 0xFF, 0x33, 0x66);
+            }
+            else
             {
                 StatusBar statusBar = StatusBar.GetForCurrentView();
-                statusBar.BackgroundColor = Colors.Black;
+                statusBar.BackgroundColor = Color.FromArgb(0xFF, 0xFF, 0x33, 0x66);
                 statusBar.ForegroundColor = Colors.White;
-                //statusBar.BackgroundColor = Color.FromArgb(255, 255, 51, 102);
                 statusBar.BackgroundOpacity = 1;
             }
 
@@ -76,7 +81,7 @@ namespace Tucao
                     // 当导航堆栈尚未还原时，导航到第一页，
                     // 并通过将所需信息作为导航参数传入来配置
                     // 参数
-                    rootFrame.Navigate(typeof(View.Index), e.Arguments);
+                    rootFrame.Navigate(typeof(View.Link), e.Arguments);
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();

@@ -99,8 +99,8 @@
     <Compile Include="View\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\BlankPage1.xaml.cs">
-      <DependentUpon>BlankPage1.xaml</DependentUpon>
+    <Compile Include="View\Link.xaml.cs">
+      <DependentUpon>Link.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\DownloadList.xaml.cs">
       <DependentUpon>DownloadList.xaml</DependentUpon>
@@ -115,6 +115,7 @@
     <Compile Include="View\Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
     </Compile>
+    <Content Include="Assets\banner.jpg" />
     <Content Include="Assets\logo.png" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -168,7 +169,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\BlankPage1.xaml">
+    <Page Include="View\Link.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
