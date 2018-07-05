@@ -46,7 +46,7 @@
                                 <TextBlock Name="UP" RelativePanel.RightOf="UserIcon" RelativePanel.AlignVerticalCenterWith="UserIcon" FontSize="12" Foreground="#FFFF3366"/>
                                 <TextBlock Name="Create" RelativePanel.RightOf="UP" RelativePanel.AlignVerticalCenterWith="UserIcon" FontSize="12"/>
                             </RelativePanel>
-                            <toolkit:WrapPanel Grid.Row="1" Name="Description">
+                            <toolkit:WrapPanel Grid.Row="1" x:Name="Description">
                                 <TextBlock Name="DescriptionTextBlock" IsTextSelectionEnabled="True" TextWrapping="WrapWholeWords" FontFamily="Microsoft Sans Serif"/>
                             </toolkit:WrapPanel>
                             <StackPanel Grid.Row="3">
