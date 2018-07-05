@@ -1,6 +1,8 @@
 ﻿更新
+
 1.1.4.0
-把Newtonsoft.Json的链接改到了GitHub防止被应用商店打回
+把Newtonsoft.Json的链接改到了GitHub防止被应用商店打回。。。。。。
+
 1.1.3.0
 修复了列表滚动的
 修复了全屏时按返回直接退出播放的bug
@@ -15,11 +17,36 @@
 添加了视频播放时的键盘操作
   *esc-全屏 space-暂停\播放 enter-显示\隐藏控制栏 左右方向- 前进\后退3s
 
+1.2.6.0
+新的首页
+添加了弹幕功能
+假装修复了一些别的bug
+
+新特性
+修复了键盘跳进度会返回很久之前的bug
+网络走丢的提示
+新的视频详情页面
+支持保存视频封面
+添加了一些动画
+看评论
+
+已知bug
+看视频时返回会触发详情页的动画
+一些地方断网引发报错
+视频详情不播放本地文件
+
+
+将来要实现
+图片弹出保存成功
+发弹幕
+删除视频确认
+mark
+
 VideoInfo中case太多,可以写成dictionary
 
 吐槽粉 #FFFF3366
 
-评论     http://www.tucao.tv/index.php?m=comment&c=index&a=init&commentid=content_11-4075504-1&hot=0&iframe=1
+评论     http://www.tucao.tv/index.php?m=comment&c=index&a=init&commentid=content_<分区id>-<HID>-1&hot=<0:最新,1:最热>&iframe=1&page=<页码>
 
 弹幕信息获得地址<xml>:
 GET http://www.tucao.tv/index.php?m=mukio&c=index&a=init&playerID=11-<hid>-1-<part>

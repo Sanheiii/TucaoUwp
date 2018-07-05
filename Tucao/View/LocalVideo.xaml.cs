@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Data.Json;
 using Windows.Storage;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -152,14 +154,9 @@ namespace Tucao.View
 
         }
         //打开缓存文件夹
-        private void OpenDownloadFolder_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void OpenDownloadFolder_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Windows.System.Launcher.LaunchFolderAsync(ApplicationData.Current.LocalCacheFolder);
-        }
-        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
-        {
-            Frame root = Window.Current.Content as Frame;
-            root.Navigate(typeof(DownloadList), null, new DrillInNavigationTransitionInfo());
+            await Windows.System.Launcher.LaunchFolderAsync(ApplicationData.Current.LocalCacheFolder);
         }
         public class Video
         {

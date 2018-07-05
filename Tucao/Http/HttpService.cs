@@ -98,6 +98,25 @@ namespace Tucao.Http
             var result = await HttpGet("http://www.tucao.tv/index.php", param);
             return await result.Content.ReadAsStringAsync();
         }
+        public static async Task<string> _getComment(string typeid,string hid,int page,Order hot)
+        {
+            Hashtable param = new Hashtable();
+            {
+                param.Add("m", "comment");
+                param.Add("c", "index");
+                param.Add("a", "init");
+                param.Add("commentid", "content_"+typeid+'-'+hid+"-1");
+                param.Add("hot", hot);
+                param.Add("iframe", "1");
+                param.Add("page", page);
+                var result = await HttpGet("http://www.tucao.tv/index.php", param);
+                return await result.Content.ReadAsStringAsync();
+            }
+        }
+        public enum Order
+        {
+            New=0,Hot=1
+        }
         /// <summary>
         /// 整合参数并发出get请求
         /// </summary>

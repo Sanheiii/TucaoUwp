@@ -2,9 +2,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Tucao.Http;
 using Windows.Web.Http;
+using static Tucao.Http.HttpService;
+
 namespace Tucao.Content
 {
     public class Content
@@ -18,12 +21,12 @@ namespace Tucao.Content
         {
             VideoInfo info = new VideoInfo();
             //通过api获取绝大多数信息
-            string message1 = await HttpService._getSubmissionInfo(hid);
+            string message1 = await _getSubmissionInfo(hid);
             var information = Newtonsoft.Json.JsonConvert.DeserializeObject<Hashtable>(message1);
             var result = Newtonsoft.Json.JsonConvert.DeserializeObject<Hashtable>(information["result"].ToString());
             info.Parse(result);
             //解析html得到头像和介绍
-            HttpResponseMessage message2 = await HttpService.HttpGet("http://www.tucao.tv/play/h" + hid);
+            HttpResponseMessage message2 = await HttpGet("http://www.tucao.tv/play/h" + hid);
             string webpage = await message2.Content.ReadAsStringAsync();
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(webpage);
@@ -39,25 +42,25 @@ namespace Tucao.Content
         /// <param name="page">分页选择(默认第一页)</param>
         /// <param name="keywords">关键词</param>
         /// <returns></returns>
-        static public async Task<List<VideoPanel>> Search(int tid, int page, string keywords)
+        static public async Task<List<introduction>> Search(int tid, int page, string keywords)
         {
 
-            string webpage = await HttpService._getsearchresult(tid, page, keywords);
+            string webpage = await _getsearchresult(tid, page, keywords);
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(webpage);
             var list = doc.DocumentNode.SelectNodes(".//div[@class='list']");
-            List<VideoPanel> result = new List<VideoPanel>();
+            List<introduction> result = new List<introduction>();
             if (list == null) return result;
             foreach (var item in list)
             {
-                var v = new VideoPanel();
-                v.img = item.SelectSingleNode(".//div[1]").FirstChild.FirstChild.Attributes["src"].Value;
-                v.link = item.SelectSingleNode(".//div[1]").FirstChild.Attributes["href"].Value;
-                v.title = item.SelectSingleNode(".//div[2]/div[1]").InnerText;
-                v.up = item.SelectSingleNode(".//div[2]/div[2]/ul[1]/li[1]/a[1]").InnerText;
-                v.time = item.SelectSingleNode(".//div[2]/div[2]/ul[1]/li[2]").InnerText.Replace("发布于：", "UP:");
-                v.description = item.SelectSingleNode(".//div[2]/div[3]").InnerText;
-                if (v.description.Trim() == "") v.description += "暂无简介";
+                var v = new introduction();
+                v.Imgurl = item.SelectSingleNode(".//div[1]").FirstChild.FirstChild.Attributes["src"].Value;
+                v.Link = item.SelectSingleNode(".//div[1]").FirstChild.Attributes["href"].Value;
+                v.Title = item.SelectSingleNode(".//div[2]/div[1]").InnerText;
+                v.Up = item.SelectSingleNode(".//div[2]/div[2]/ul[1]/li[1]/a[1]").InnerText;
+                v.Time = item.SelectSingleNode(".//div[2]/div[2]/ul[1]/li[2]").InnerText.Replace("发布于：", "UP:");
+                v.Description = item.SelectSingleNode(".//div[2]/div[3]").InnerText;
+                if (v.Description.Trim() == "") v.Description += "暂无简介";
                 result.Add(v);
             }
             return result;
@@ -68,37 +71,138 @@ namespace Tucao.Content
         /// <param name="tid">分类id</param>
         /// <param name="pagenum">页码</param>
         /// <returns>含有视频信息的列表</returns>
-        static public async Task<List<VideoPanel>> GetSubclassiFication(int tid, int pagenum)
+        static public async Task<List<introduction>> GetSubclassiFication(int tid, int pagenum)
         {
-            var webpage = await HttpService._getsubclassification(tid, pagenum);
+            var webpage = await _getsubclassification(tid, pagenum);
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(webpage);
             var list = doc.DocumentNode.SelectNodes("//div[@class='main']/div[@class='left']/div[@class='box lists_box']/div[@class='list']/ul/li/div[@class='box']");
-            List<VideoPanel> result = new List<VideoPanel>();
+            List<introduction> result = new List<introduction>();
             foreach (var item in list)
             {
-                var v = new VideoPanel();
-                v.img = item.FirstChild.FirstChild.Attributes["src"].Value;
-                v.link = item.FirstChild.Attributes["href"].Value;
-                v.title = item.FirstChild.FirstChild.Attributes["alt"].Value;
-                v.up = item.LastChild.FirstChild.InnerText.Trim();
-                v.time = item.LastChild.LastChild.InnerText.Trim();
-                v.description = item.SelectSingleNode(".//p[@class='description']").InnerText;
-                if (v.description.Trim() == "") v.description += "暂无简介";
-                v.play = item.SelectSingleNode(".//div[1]").FirstChild.InnerText;
+                var v = new introduction();
+                v.Imgurl = item.FirstChild.FirstChild.Attributes["src"].Value;
+                v.Link = item.FirstChild.Attributes["href"].Value;
+                v.Title = item.FirstChild.FirstChild.Attributes["alt"].Value;
+                v.Up = item.LastChild.FirstChild.InnerText.Trim();
+                v.Time = item.LastChild.LastChild.InnerText.Trim();
+                v.Description = item.SelectSingleNode(".//p[@class='description']").InnerText;
+                if (v.Description.Trim() == "") v.Description += "暂无简介";
+                v.Play = item.SelectSingleNode(".//div[1]").FirstChild.InnerText;
                 result.Add(v);
             }
             return result;
         }
+        /// <summary>
+        /// 获取评论区
+        /// </summary>
+        /// <param name="typeid">分类ID</param>
+        /// <param name="hid">HID</param>
+        /// <param name="page">页数</param>
+        /// <param name="hot">Hot:最热 New:最新</param>
+        public static async Task<List<Comment>> GetComment(string typeid, string hid, int page, Order hot)
+        {
+            //获取评论区的html
+            var webpage = await _getComment(typeid, hid, page, hot);
+            //解析html
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(webpage);
+            var list = doc.DocumentNode.SelectNodes("//tr");
+            var result = new List<Comment>();
+            if (list == null)
+                return result;
+            for (int i = 0; i < list.Count; i++)
+            {
+                var c = new Comment();
+                c.ProfilePhoto = list[i].SelectSingleNode(".//img[1]").Attributes["src"].Value;
+                    var p=await HttpGet(c.ProfilePhoto);
+                //if(p.StatusCode==HttpStatusCode.NotFound)
+                //    c.ProfilePhoto = "ms-appx:///Assets/nophoto.gif";
+                c.UserId = list[i].SelectSingleNode(".//a[2]").Attributes["href"].Value.Replace("/", "").Replace("http:www.tucao.tvplayu", "");
+                c.UserName = list[i].SelectSingleNode(".//a[2]").InnerText;
+                c.Level = int.Parse(list[i].SelectSingleNode(".//div[1]").Attributes["class"].Value.Replace("lv lv", "")) - 1;
+                if (c.Level == 27) c.Level -= 7;
+                c.Content = list[i].SelectSingleNode(".//td[2]").InnerText;
+                c.Content=WebUtility.HtmlDecode(c.Content);
+                i++;
+                c.Lch = list[i].SelectSingleNode(".//em[@class='lch']").InnerText.Replace('楼','\0');
+                c.Time = list[i].SelectSingleNode(".//em[@class='time']").InnerText;
+                c.DiggCount = int.Parse(list[i].SelectSingleNode(".//a[@class='digg']").SelectSingleNode(".//em").InnerText);
+                result.Add(c);
+            }
+            return result;
+        }
     }
-    public class VideoPanel
+    /// <summary>
+    /// 分区和搜索里的每一块视频的必要信息
+    /// </summary>
+    public class introduction
     {
-        public string img { get; set; }
-        public string link { get; set; }
-        public string title { get; set; }
-        public string time { get; set; }
-        public string up { get; set; }
-        public string description { get; set; }
-        public string play { get; set; }
+        /// <summary>
+        /// 封面地址
+        /// </summary>
+        public string Imgurl { get; set; }
+        /// <summary>
+        /// 视频链接
+        /// </summary>
+        public string Link { get; set; }
+        /// <summary>
+        /// 视频标题
+        /// </summary>
+        public string Title { get; set; }
+        /// <summary>
+        /// 投稿时间
+        /// </summary>
+        public string Time { get; set; }
+        /// <summary>
+        /// up主
+        /// </summary>
+        public string Up { get; set; }
+        /// <summary>
+        /// 介绍
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
+        /// 播放数
+        /// </summary>
+        public string Play { get; set; }
+    }
+    /// <summary>
+    /// 一个评论的必要信息
+    /// </summary>
+    public class Comment
+    {
+        /// <summary>
+        /// 头像
+        /// </summary>
+        public string ProfilePhoto { get; set; }
+        /// <summary>
+        /// 用户id
+        /// </summary>
+        public string UserId { get; set; }
+        /// <summary>
+        /// 用户名
+        /// </summary>
+        public string UserName { get; set; }
+        /// <summary>
+        /// 等级
+        /// </summary>
+        public int Level { get; set; }
+        /// <summary>
+        /// 评论内容
+        /// </summary>
+        public string Content { get; set; }
+        /// <summary>
+        /// 第几楼
+        /// </summary>
+        public string Lch { get; set; }
+        /// <summary>
+        /// 发布时间
+        /// </summary>
+        public string Time { get; set; }
+        /// <summary>
+        /// 赞数
+        /// </summary>
+        public int DiggCount { get; set; }
     }
 }

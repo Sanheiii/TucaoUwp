@@ -31,10 +31,10 @@ namespace Tucao.View
         {
             this.InitializeComponent();
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.List.ItemsSource = transfers;
-            DiscoverDownloadsAsync();
+            await DiscoverDownloadsAsync();
         }
         /// <summary>
         /// 加载下载任务
@@ -130,9 +130,9 @@ namespace Tucao.View
                 Helpers.ErrorHelper.PopUp(e.Message);
             }
         }
-        private void OpenDownloadFolder_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void OpenDownloadFolder_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Windows.System.Launcher.LaunchFolderAsync(ApplicationData.Current.LocalCacheFolder);
+            await Windows.System.Launcher.LaunchFolderAsync(ApplicationData.Current.LocalCacheFolder);
         }
 
         private async void List_ItemClick(object sender, ItemClickEventArgs e)
@@ -186,16 +186,6 @@ namespace Tucao.View
                     catch { };
                 }
             }
-        }
-        /// <summary>
-        /// 点击已完成跳转到本地视频页面
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void HyperlinkButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Frame root = Window.Current.Content as Frame;
-            root.Navigate(typeof(LocalVideo), null, new DrillInNavigationTransitionInfo());
         }
     }
 }

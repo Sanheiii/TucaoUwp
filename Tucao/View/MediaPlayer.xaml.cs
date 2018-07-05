@@ -20,7 +20,7 @@ namespace Tucao.View
     /// </summary>
     public sealed partial class MediaPlayer : Page
     {
-        public static bool isfullwindow = false;
+        public static MediaPlayer CurrentPlayer;
         MediaPlayerSource param = new MediaPlayerSource();
         public MediaPlayer()
         {
@@ -34,6 +34,7 @@ namespace Tucao.View
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            CurrentPlayer = this;
             param = e.Parameter as MediaPlayerSource;
             PlayerTitle.Text = param.title;
             Media.LoadDanmaku(param.hid, SkylarkWsp.DanmakuEngine.DanmakuSource.Tucao);
@@ -153,32 +154,27 @@ namespace Tucao.View
             ApplicationView view = ApplicationView.GetForCurrentView();
             if (view.IsFullScreenMode)
             {
-                //做个标记以便mainpage判断是否需要隐藏其他控件
-                isfullwindow = false;
                 view.ExitFullScreenMode();
                 //和下面都是反着的
                 FullWindowSymbol.Symbol = Symbol.FullScreen;
                 InvertScreen.Visibility = Visibility.Collapsed;
-                FullWindowBackButton.Visibility = Visibility.Collapsed;
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
                 //返回恢复原来的功能
                 SystemNavigationManager.GetForCurrentView().BackRequested -= MediaPlayer_BackRequested;
-                SystemNavigationManager.GetForCurrentView().BackRequested += App.OnBackrequested;
+                SystemNavigationManager.GetForCurrentView().BackRequested += Link.OnBackrequested;
             }
             else
             {
-                isfullwindow = true;
                 view.TryEnterFullScreenMode();
                 //修改按钮图标
                 FullWindowSymbol.Symbol = Symbol.BackToWindow;
                 //显示翻转屏幕按钮
                 if (DeviceHelper.IsMobile) InvertScreen.Visibility = Visibility.Visible;
                 //显示返回键
-                FullWindowBackButton.Visibility = Visibility.Visible;
                 //横过来
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
                 //使得返回变成退出全屏
-                SystemNavigationManager.GetForCurrentView().BackRequested -= App.OnBackrequested;
+                SystemNavigationManager.GetForCurrentView().BackRequested -= Link.OnBackrequested;
                 SystemNavigationManager.GetForCurrentView().BackRequested += MediaPlayer_BackRequested;
             }
         }
@@ -290,7 +286,6 @@ namespace Tucao.View
 
         private void Page_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            e.Handled = true;
             switch (e.Key)
             {
                 case VirtualKey.Space:
@@ -310,15 +305,24 @@ namespace Tucao.View
                     break;
                 case VirtualKey.Left:
                     {
-                        Media.Position -= new TimeSpan(30000000);
+                        ProgressSlider.Value -= 3;
                     }
                     break;
                 case VirtualKey.Right:
                     {
-                        Media.Position += new TimeSpan(30000000);
+
+                        ProgressSlider.Value += 3;
                     }
                     break;
             }
+            e.Handled = true;
+        }
+        private void DanmakuSwitch_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (Media.Danmaku.Visibility == Visibility.Collapsed)
+                Media.Danmaku.Visibility = Visibility.Visible;
+            else
+                Media.Danmaku.Visibility = Visibility.Collapsed;
         }
     }
 }

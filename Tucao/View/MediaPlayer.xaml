@@ -59,15 +59,6 @@
                                 Style="{StaticResource CommandBarStyle}">
                     <CommandBar.Content>
                         <StackPanel Orientation="Horizontal" Height="48">
-                            <AppBarButton x:Name="FullWindowBackButton" 
-                                              MediaTransportControlsHelper.DropoutOrder="17" 
-                                              Style="{StaticResource AppBarButtonStyle}"
-                                              Visibility="Collapsed"
-                                              Click="FullWindowButton_Click">
-                                <AppBarButton.Icon>
-                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE76B;"/>
-                                </AppBarButton.Icon>
-                            </AppBarButton>
                             <TextBlock Name="PlayerTitle" 
                                            Margin="20,0,0,0" 
                                            FontSize="18"
@@ -76,6 +67,14 @@
                         </StackPanel>
                     </CommandBar.Content>
                     <CommandBar.PrimaryCommands>
+                        <AppBarButton x:Name="DanmakuSwitch" 
+                                              MediaTransportControlsHelper.DropoutOrder="17" 
+                                              Style="{StaticResource AppBarButtonStyle}"
+                                              Tapped="DanmakuSwitch_Tapped">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71D;"/>
+                            </AppBarButton.Icon>
+                        </AppBarButton>
                         <AppBarButton x:Name="InvertScreen"
                                           Label="旋转屏幕" 
                                           Click="InvertScreen_Click"

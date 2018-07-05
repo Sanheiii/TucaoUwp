@@ -9,7 +9,7 @@
     NavigationCacheMode="Enabled">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <SplitView Name="HamburgerMenu" PaneBackground="#FFAAAAAA" IsPaneOpen="False" OpenPaneLength="256" CompactPaneLength="0" DisplayMode="Overlay">
+        <SplitView Name="HamburgerMenu" PaneBackground="#FFAAAAAA" IsPaneOpen="False" OpenPaneLength="300" CompactPaneLength="0" DisplayMode="CompactOverlay" PaneClosing="HamburgerMenu_PaneClosing">
             <SplitView.Pane>
                 <Grid VerticalAlignment="Stretch" Margin="0,0,1,2">
                     <Grid.RowDefinitions>
@@ -20,8 +20,8 @@
                     <Grid>
                         <Image Source="ms-appx:///Assets/banner.jpg" HorizontalAlignment="Right" Stretch="UniformToFill"/>
                     </Grid>
-                    <ListView x:Name="NavLinksList" Background="White" SelectionMode="None" Grid.Row="1" VerticalAlignment="Stretch" IsItemClickEnabled="True">
-                        <ListViewItem Tapped="Hamburger_Tapped">
+                    <ListView x:Name="NavLinksList" Background="White" SelectionMode="None" Grid.Row="1" VerticalAlignment="Stretch" IsItemClickEnabled="True" ItemClick="NavLinksList_ItemClick">
+                        <ListViewItem Tapped="Index_Tapped">
                             <StackPanel Orientation="Horizontal" Margin="3,0,0,0" >
                                 <SymbolIcon Symbol="Home" />
                                 <TextBlock Text="首页" Margin="24,0,0,0" VerticalAlignment="Center"/>
@@ -49,8 +49,7 @@
                     </ListViewItem>
                 </Grid>
             </SplitView.Pane>
-
-            <Grid>
+            <Grid Name="PageContent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -70,7 +69,7 @@
                             Margin="0,0,0,0">
                         <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="18" Glyph="&#xE700;" FontWeight="Bold"/>
                     </Button>
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Foreground="#FFFFFFFF">首页</TextBlock>
+                    <TextBlock Name="Title" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Foreground="#FFFFFFFF">首页</TextBlock>
                     <Button Background="#FFFF3366"
                             Grid.Column="2"
                             Foreground="#FFFFFFFF"
@@ -81,7 +80,7 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="15" Glyph="&#xE721;" FontWeight="Bold"/>
                     </Button>
                 </Grid>
-                <Frame Grid.Row="1" Name="Content"/>
+                <Frame Grid.Row="1" Name="Rua"/>
 
             </Grid>
         </SplitView>

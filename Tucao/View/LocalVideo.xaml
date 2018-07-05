@@ -18,13 +18,11 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="48"/>
         </Grid.RowDefinitions>
         <TextBlock Text="本地视频" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="10,10,0,0"/>
-        <HyperlinkButton Grid.Row="1" Content="下载中" FontSize="13" Margin="10,0,0,0" Click="HyperlinkButton_Click"/>
-        <ListView Name="Videos" Grid.Row="2" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Videos_ItemClick">
+        <ListView Name="Videos" Grid.Row="1" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Videos_ItemClick">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -60,7 +58,7 @@
             </ListView.ItemContainerStyle>
         </ListView>
 
-        <CommandBar VerticalAlignment="Bottom" Grid.RowSpan="4" RequestedTheme="Dark">
+        <CommandBar VerticalAlignment="Bottom" Grid.RowSpan="3" RequestedTheme="Dark">
             <AppBarButton Label="下载目录" Name="OpenDownloadFolder" Tapped="OpenDownloadFolder_Tapped">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8DE;"/>
             </AppBarButton>

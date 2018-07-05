@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Threading;
@@ -12,12 +14,19 @@ namespace Tucao.Helpers
     class DownloadHelper
     {
         //下载hid和分P
-        static public async void Download(VideoInfo info, int part)
+        static public async void Download(VideoInfo info, int partNumber)
         {
             try
             {
                 //获取视频地址
-                var url_list = await info.GetPlayUrl(part);
+                List<string> url_list = new List<string>();
+                Hashtable part = info.Video[partNumber - 1];
+                if (part["type"].ToString() == "video")
+                    url_list.Add(part["file"].ToString());
+                else
+                {
+                    url_list = await VideoInfo.GetPlayUrl(part);
+                }
                 if (url_list.Count == 0)
                 {
                     return;
@@ -59,13 +68,13 @@ namespace Tucao.Helpers
                         {
                             DownloadOperation d = await DownloadHelper.DownloadFile(url, i.ToString(), folder);
                             //开始下载
-                            d.StartAsync();
+                            await d.StartAsync();
                             i++;
                         }
                         StorageFile file = await folder.CreateFileAsync("part.json", CreationCollisionOption.OpenIfExists);
                         JsonObject json = new JsonObject
                         {
-                            { "title",JsonValue.CreateStringValue(info.Video[part-1]["title"].ToString())},
+                            { "title",JsonValue.CreateStringValue(info.Video[partNumber-1]["title"].ToString())},
                             { "filecount",JsonValue.CreateNumberValue(url_list.Count) }
                         };
                         //打开文件
@@ -174,22 +183,22 @@ namespace Tucao.Helpers
                         status = "已暂停";
                         break;
                     case BackgroundTransferStatus.PausedCostedNetwork:
-                        status = "因网络暂停";
+                        status = "检测到计费网络";
                         break;
                     case BackgroundTransferStatus.PausedNoNetwork:
-                        status = "没有连接至网络";
+                        status = "来到了没有网络的世界";
                         break;
                     case BackgroundTransferStatus.Completed:
-                        status = "完成";
+                        status = "已完成";
                         break;
                     case BackgroundTransferStatus.Canceled:
-                        status = "取消";
+                        status = "已取消";
                         break;
                     case BackgroundTransferStatus.Error:
                         status = "下载错误";
                         break;
                     case BackgroundTransferStatus.PausedSystemPolicy:
-                        status = "因系统问题暂停";
+                        status = "受到系统限制";
                         break;
                     default:
                         status = "未知";

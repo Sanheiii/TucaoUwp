@@ -121,14 +121,15 @@ namespace Tucao.Content
         /// <summary>
         /// 获取视频地址
         /// </summary>
-        /// <param name="partnumber">分p编号</param>
+        /// <param name="vid">vid</param>
         /// <returns></returns>
-        public async Task<List<string>> GetPlayUrl(int partnumber)
+        public static async Task<List<string>> GetPlayUrl(Hashtable part)
         {
             List<string> url = new List<string>();
-            Hashtable part = Video[partnumber - 1];
             if (part["type"].ToString() == "video")
+            {
                 url.Add(part["file"].ToString());
+            }
             else
             {
                 await HttpService._getIndex();

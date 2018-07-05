@@ -26,10 +26,7 @@ namespace Tucao.View
         public Search()
         {
             this.InitializeComponent();
-            VideoList.ItemsSource = new ObservableCollection<VideoPanel>();
-        }
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
+            VideoList.ItemsSource = new ObservableCollection<introduction>();
         }
         /// <summary>
         /// 点击打开视频
@@ -38,12 +35,12 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void VideoList_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var v=e.ClickedItem as VideoPanel;
-            var id = v.link.Replace("http://www.tucao.tv/play/", "").Replace("/", "");
+            var v=e.ClickedItem as introduction;
+            var id = v.Link.Replace("http://www.tucao.tv/play/", "").Replace("/", "");
             Frame root = Window.Current.Content as Frame;
             if (id.First() == 'h')
             {
-                root.Navigate(typeof(MainPage), id.Remove(0, 1), new DrillInNavigationTransitionInfo());
+                App.Link.Navigate(typeof(Details), id.Remove(0, 1), new DrillInNavigationTransitionInfo());
             }
         }
         /// <summary>
@@ -54,14 +51,14 @@ namespace Tucao.View
         private void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             p = 1;
-            VideoList.ItemsSource = new ObservableCollection<VideoPanel>();
+            VideoList.ItemsSource = new ObservableCollection<introduction>();
             var q = args.QueryText;
             //如果搜索框的文本由数字组成(前面可以有h)就直接跳到视频页
             if (Regex.IsMatch(q, @"^h?\d+$"))
             {
                 //去掉h
                 q = q.Replace("h","");
-                Frame.Navigate(typeof(MainPage), q, new DrillInNavigationTransitionInfo());
+                Frame.Navigate(typeof(Details), q, new DrillInNavigationTransitionInfo());
             }
             else
             {
@@ -77,7 +74,7 @@ namespace Tucao.View
         /// <param name="q">关键字</param>
         private async void LoadItems(int page, string q)
         {
-            List<VideoPanel> r;
+            List<introduction> r=new List<introduction>();
             try
             {
                 for (int i = 1; i >= 0; i--)
@@ -92,7 +89,7 @@ namespace Tucao.View
                     {
                         await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                         {
-                            ((ObservableCollection<VideoPanel>)VideoList.ItemsSource).Add(r[j]);
+                            ((ObservableCollection<introduction>)VideoList.ItemsSource).Add(r[j]);
                         });
                         await Task.Delay(10);
                     }
@@ -105,12 +102,12 @@ namespace Tucao.View
             }
             await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
-                if (((ObservableCollection<VideoPanel>)VideoList.ItemsSource).Count == 0)
+                if (((ObservableCollection<introduction>)VideoList.ItemsSource).Count == 0)
                 {
                     BottomText.Text = "没有找到结果";
                     BottomText.Tapped -= BottomText_Tapped;
                 }
-                else if (((ObservableCollection<VideoPanel>)VideoList.ItemsSource).Count % 24 == 0)
+                else if (((ObservableCollection<introduction>)VideoList.ItemsSource).Count % 24 == 0&&r.Count!=0)
                 {
                     BottomText.Text = "加载下一页";
                     BottomText.Tapped += BottomText_Tapped;

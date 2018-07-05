@@ -8,7 +8,7 @@
     xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    NavigationCacheMode="Enabled">
+    NavigationCacheMode="Required">
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition x:Name="navigationTransition">
@@ -23,17 +23,21 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                <StackPanel Name="ExceptionMessage" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
+                    <Image Source="ms-appx:///Assets/bg_y_png24.png" Stretch="None"/>
+                    <TextBlock HorizontalAlignment="Center" FontFamily="Segoe UI Black">网络走丢了</TextBlock>
+                </StackPanel>
                 <toolkit:AdaptiveGridView Name="VideoList"
                                    OneRowModeEnabled="False"
                                    ItemHeight="120"
                                           ScrollViewer.VerticalScrollMode="Disabled"
                                    DesiredWidth="400"
                                           IsItemClickEnabled="True"
-                                          ItemClick="VideoList_ItemClick"
                                           SelectionMode="None" 
                                   HorizontalContentAlignment="Left" 
                                   Padding="10,0,10,0"
-                                          Grid.Row="0">
+                                          Grid.Row="0"
+                                          ItemClick="VideoList_ItemClick">
                     <toolkit:AdaptiveGridView.ItemTemplate>
                         <DataTemplate>
                             <Grid Background="#FFEEEEEE">
@@ -50,18 +54,18 @@
                     HorizontalAlignment="Stretch"
                                  VerticalAlignment="Top">
                                     <Image.Source>
-                                        <BitmapImage UriSource="{Binding img}"/>
+                                        <BitmapImage UriSource="{Binding Imgurl}"/>
                                     </Image.Source>
                                 </Image>
                                 <Grid Grid.Column="1">
-                                    <TextBlock Text="{Binding title}" FontSize="13" Height="52" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,0,0"/>
-                                    <TextBlock Text="{Binding play}" FontSize="10" VerticalAlignment="Bottom" Margin="8,0,0,2"/>
+                                    <TextBlock Text="{Binding Title}" FontSize="13" Height="52" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,0,0"/>
+                                    <TextBlock Text="{Binding Play}" FontSize="10" VerticalAlignment="Bottom" Margin="8,0,0,2"/>
                                 </Grid>
                                 <StackPanel Grid.ColumnSpan="2" Grid.Row="1">
-                                    <TextBlock Text="{Binding description}" TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis"/>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding up}" Foreground="#FFFF3366"/>
-                                        <TextBlock Text="{Binding time}" FontSize="12" Margin="5,3,0,0"/>
+                                        <TextBlock Text="{Binding Up}" Foreground="#FFFF3366"/>
+                                        <TextBlock Text="{Binding Time}" FontSize="12" Margin="5,3,0,0"/>
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>
@@ -70,11 +74,14 @@
                 </toolkit:AdaptiveGridView>
                 <Grid Grid.Row="1" VerticalAlignment="Top" Height="30" HorizontalAlignment="Stretch">
                     <ProgressBar VerticalAlignment="Top" Height="35" Name="LoadingProgress" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
-                    <TextBlock Name="BottomText" HorizontalAlignment="Center" Tapped="BottomText_Tapped" Text="加载下一页"/>
+                    <TextBlock Name="BottomText" Foreground="#BB000000" HorizontalAlignment="Center" Tapped="BottomText_Tapped" Text="加载下一页"/>
                 </Grid>
             </Grid>
         </ScrollViewer>
         <Button Name="RefreshButton" Tapped="Refresh_Tapped" IsEnabled="False" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,10" Background="Transparent" Foreground="#FFFF3366">
+            <Button.Resources>
+                <SolidColorBrush x:Key="ButtonBackgroundPointerOver">#00000000</SolidColorBrush>
+            </Button.Resources>
             <FontIcon  FontFamily="Segoe MDL2 Assets" FontSize="20" Glyph="&#xE72C;"/>
         </Button>
     </Grid>

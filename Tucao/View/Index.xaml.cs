@@ -10,6 +10,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -24,7 +25,7 @@ namespace Tucao.View
         public Index()
         {
             this.InitializeComponent();
-            VideoList.ItemsSource = new ObservableCollection<VideoPanel>();
+            VideoList.ItemsSource = new ObservableCollection<introduction>();
             Task.Run(() =>
             {
                 if (p == 0) LoadItems(++p);
@@ -37,18 +38,42 @@ namespace Tucao.View
         private async void LoadItems(int page)
         {
             //显示正在加载
+            List<introduction> r;
             await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
+                ExceptionMessage.Visibility = Visibility.Collapsed;
                 BottomText.Visibility = Visibility.Collapsed;
                 LoadingProgress.Visibility = Visibility.Visible;
             });
-            var r = await GetList(page);
+            try
+            {
+                r = await GetList(page);
+            }
+            catch
+            {
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                {
+                    if (page == 1)
+                    {
+                        ExceptionMessage.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        Helpers.ErrorHelper.PopUp("网络出现问题");
+                        BottomText.Visibility = Visibility.Visible;
+                    }
+                    RefreshButton.IsEnabled = true;
+                    LoadingProgress.Visibility = Visibility.Collapsed;
+                });
+                p--;
+                return;
+            }
             //把信息添加到items
             for (int i = 0; i < r.Count; i++)
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                 {
-                ((ObservableCollection<VideoPanel>)VideoList.ItemsSource).Add(r[i]);
+                    ((ObservableCollection<introduction>)VideoList.ItemsSource).Add(r[i]);
                 });
                 await Task.Delay(10);
             }
@@ -61,17 +86,17 @@ namespace Tucao.View
             });
 
         }
-        private async Task<List<VideoPanel>> GetList(int page)
+        private async Task<List<introduction>> GetList(int page)
         {
-            List<VideoPanel> r = new List<VideoPanel>();
+            List<introduction> r = new List<introduction>();
             //获取信息
             try
             {
                 r = await Tucao.Content.Content.GetSubclassiFication(11, page);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ErrorHelper.PopUp(e.Message);
+                throw ex;
             }
             return r;
         }
@@ -83,12 +108,13 @@ namespace Tucao.View
         private void VideoList_ItemClick(object sender, ItemClickEventArgs e)
         {
             //提取出h号
-            var v=e.ClickedItem as VideoPanel;
-            var id = v.link.Replace("http://www.tucao.tv/play/", "").Replace("/", "");
+            var v = e.ClickedItem as introduction;
+            var id = v.Link.Replace("http://www.tucao.tv/play/", "").Replace("/", "");
             //打开视频页面
-            Frame root = Window.Current.Content as Frame;
             if (id.First() == 'h')
-                root.Navigate(typeof(MainPage), id.Remove(0, 1), new DrillInNavigationTransitionInfo());
+            {
+                App.Link.Navigate(typeof(Details), id.Remove(0, 1), new DrillInNavigationTransitionInfo());
+            }
         }
         /// <summary>
         /// 点击加载下一页
@@ -98,7 +124,7 @@ namespace Tucao.View
         private void BottomText_Tapped(object sender, TappedRoutedEventArgs e)
         {
             RefreshButton.IsEnabled = false;
-            Task.Run(()=>LoadItems(++p));
+            Task.Run(() => LoadItems(++p));
         }
         /// <summary>
         /// 点击刷新
@@ -109,7 +135,7 @@ namespace Tucao.View
         {
             RefreshButton.IsEnabled = false;
             p = 1;
-            VideoList.ItemsSource = new ObservableCollection<VideoPanel>();
+            VideoList.ItemsSource = new ObservableCollection<introduction>();
             Task.Run(() => LoadItems(p));
         }
     }

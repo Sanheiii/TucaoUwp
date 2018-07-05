@@ -22,7 +22,7 @@ namespace Tucao.View
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        VideoInfo info = new VideoInfo();
+        public static VideoInfo info = new VideoInfo();
 
         /// <summary>
         /// 加载页面时调用
@@ -42,7 +42,6 @@ namespace Tucao.View
             }
             //获取视频信息
             ViewInfo();
-
         }
         public MainPage()
         {
@@ -78,7 +77,7 @@ namespace Tucao.View
                 Parts.Children.Add(btn);
                 try
                 {
-                    btn.Tag = await info.GetPlayUrl(i + 1);
+                    //btn.Tag = await info.GetPlayUrl(i + 1);
                     if (((List<string>)btn.Tag).Count == 0) throw new Exception();
                     btn.Background = new SolidColorBrush(Color.FromArgb(255, 255, 51, 102));
                 }
@@ -117,7 +116,7 @@ namespace Tucao.View
                 {
                     try
                     {
-                        play_list = await info.GetPlayUrl(part);
+                       // play_list = await info.GetPlayUrl(part);
                         if (play_list.Count == 0) throw new Exception();
                         button.Tag = play_list;
                         button.Background = new SolidColorBrush(Color.FromArgb(255, 255, 51, 102));
