@@ -60,8 +60,7 @@ namespace Tucao.View
             int i = 0;
             string hid = (string)e.Parameter;
             Link.FrameTitle.Text = 'h' + hid;
-            if (e.NavigationMode == NavigationMode.New) App.ResetPageCache();
-            else if (hid == info.Hid) return;
+            if (hid == info.Hid) return;
             try
             {
                 info = await Tucao.Content.Content.GetVideoInfo(hid);

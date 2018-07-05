@@ -113,7 +113,7 @@ namespace Tucao.View
             //打开视频页面
             if (id.First() == 'h')
             {
-                App.Link.Navigate(typeof(Details), id.Remove(0, 1), new DrillInNavigationTransitionInfo());
+                App.OpenVideo(id.Remove(0, 1));
             }
         }
         /// <summary>

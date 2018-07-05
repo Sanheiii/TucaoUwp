@@ -8,6 +8,7 @@ using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 namespace Tucao
@@ -17,7 +18,7 @@ namespace Tucao
     /// </summary>
     sealed partial class App : Application
     {
-        public static Frame Link=new Frame();
+        public static Frame Link = new Frame();
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
         /// 已执行，逻辑上等同于 main() 或 WinMain()。
@@ -128,10 +129,10 @@ namespace Tucao
         }
         private static bool CanGoBack()
         {
-            if (Link != null && Link.CurrentSourcePageType!= typeof(View.Index) && Link.CanGoBack)
+            if (Link != null && Link.CurrentSourcePageType != typeof(View.Index) && Link.CanGoBack)
                 return true;
             Frame rootFrame = Window.Current.Content as Frame;
-            if (rootFrame!=null&&rootFrame.CurrentSourcePageType!=typeof(View.Link) && rootFrame.CanGoBack)
+            if (rootFrame != null && rootFrame.CurrentSourcePageType != typeof(View.Link) && rootFrame.CanGoBack)
                 return true;
             return false;
         }
@@ -140,6 +141,11 @@ namespace Tucao
             var cacheSize = Link.CacheSize;
             Link.CacheSize = 0;
             Link.CacheSize = cacheSize;
+        }
+        public static void OpenVideo(string hid)
+        {
+            App.ResetPageCache();
+            Link.Navigate(typeof(View.Details), hid, new DrillInNavigationTransitionInfo());
         }
     }
 }

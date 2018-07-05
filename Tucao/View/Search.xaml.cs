@@ -40,7 +40,7 @@ namespace Tucao.View
             Frame root = Window.Current.Content as Frame;
             if (id.First() == 'h')
             {
-                App.Link.Navigate(typeof(Details), id.Remove(0, 1), new DrillInNavigationTransitionInfo());
+                App.OpenVideo(id.Remove(0, 1));
             }
         }
         /// <summary>
@@ -58,7 +58,7 @@ namespace Tucao.View
             {
                 //去掉h
                 q = q.Replace("h","");
-                Frame.Navigate(typeof(Details), q, new DrillInNavigationTransitionInfo());
+                App.OpenVideo(q);
             }
             else
             {

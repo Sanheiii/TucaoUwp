@@ -31,12 +31,16 @@
                 <TextBlock Text="如果侵犯了您的合法权益" HorizontalAlignment="Center" Margin="0,3,0,0"/>
                 <TextBlock Text="请联系作者(QQ:953934508)" HorizontalAlignment="Center" Margin="0,3,0,0"/>
                 <TextBlock Text="将会在第一时间修改或删除" HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                <TextBlock Text="如有任何建议可以加QQ" HorizontalAlignment="Center" Margin="0,3,0,0" Foreground="#FFFF3366"/>
+                <TextBlock Text="或在应用商店进行评论" HorizontalAlignment="Center" Margin="0,3,0,0" Foreground="#FFFF3366"/>
+                <TextBlock Text="每一条留言都会认真阅读" HorizontalAlignment="Center" Margin="0,3,0,0" Foreground="#FFFF3366"/>
                 <TextBlock Text="引用" HorizontalAlignment="Center" FontSize="20" Margin="0,10,0,0"/>
                 <HyperlinkButton Content="ShanYe MediaFoundation Engine" NavigateUri="https://github.com/amamiya/SYEngine" HorizontalAlignment="Center" FontSize="20" Margin="0,0,0,0"/>
                 <HyperlinkButton Content="NewtonSoft.Json" NavigateUri="https://github.com/JamesNK/Newtonsoft.Json" HorizontalAlignment="Center" FontSize="20" Margin="0,0,0,0"/>
                 <HyperlinkButton Content="UWPCommunityToolkit" NavigateUri="https://github.com/Microsoft/UWPCommunityToolkit/" HorizontalAlignment="Center" FontSize="20" Margin="0,0,0,0"/>
                 <HyperlinkButton Content="XMLParser" NavigateUri="http://dev.grumpyferret.com/unity/" HorizontalAlignment="Center" FontSize="20" Margin="0,0,0,0"/>
                 <HyperlinkButton Content="HtmlAgilityPack" NavigateUri="http://html-agility-pack.net/" HorizontalAlignment="Center" FontSize="20" Margin="0,0,0,0"/>
+                <HyperlinkButton Content="SkylarkWsp.DanmakuEngine" NavigateUri="https://github.com/SkylarkWorkshop/SkylarkWsp.DanmakuEngine" HorizontalAlignment="Center" FontSize="20" Margin="0,0,0,0"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>

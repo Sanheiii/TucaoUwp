@@ -109,8 +109,7 @@ namespace Tucao.View
         {
             if (Delete.IsChecked == false)
             {
-                Frame root = Window.Current.Content as Frame;
-                root.Navigate(typeof(MainPage), (e.ClickedItem as Video).hid, new DrillInNavigationTransitionInfo());
+                App.OpenVideo((e.ClickedItem as Video).hid);
             }
             else
             {

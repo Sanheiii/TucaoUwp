@@ -7,6 +7,7 @@ using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -20,7 +21,6 @@ namespace Tucao.View
     /// </summary>
     public sealed partial class MediaPlayer : Page
     {
-        public static MediaPlayer CurrentPlayer;
         MediaPlayerSource param = new MediaPlayerSource();
         public MediaPlayer()
         {
@@ -34,7 +34,6 @@ namespace Tucao.View
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            CurrentPlayer = this;
             param = e.Parameter as MediaPlayerSource;
             PlayerTitle.Text = param.title;
             Media.LoadDanmaku(param.hid, SkylarkWsp.DanmakuEngine.DanmakuSource.Tucao);
@@ -323,6 +322,36 @@ namespace Tucao.View
                 Media.Danmaku.Visibility = Visibility.Visible;
             else
                 Media.Danmaku.Visibility = Visibility.Collapsed;
+        }
+    }
+    /// <summary>
+    /// 播放时间-进度条
+    /// </summary>
+    class MediaConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return ((TimeSpan)value).TotalSeconds;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return TimeSpan.FromSeconds((double)value);
+        }
+    }
+    /// <summary>
+    ///进度条-显示的时间
+    /// </summary>
+    class TimeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return ((int)(double)value / 60).ToString("d2") + ":" + ((int)(double)value % 60).ToString("d2");
+        }
+        //下面的用不到,瞎jb写了个
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
         }
     }
 }
