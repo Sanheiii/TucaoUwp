@@ -213,6 +213,11 @@ namespace Tucao.View
             //获取视频地址
             Hashtable part = info.Video[clickedItem.PartNumber - 1];
             url = await VideoInfo.GetPlayUrl(part);
+            if(url.Count<1)
+            {
+                ErrorHelper.PopUp("获取视频播放地址失败,请稍后再试");
+                return;
+            }
             //打开播放器
             var param = new MediaPlayer.MediaPlayerSource();
             param.hid = info.Hid;

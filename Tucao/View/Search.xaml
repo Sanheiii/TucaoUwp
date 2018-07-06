@@ -20,38 +20,28 @@
         <DataTemplate x:Key="VideoTemplate">
             <Grid Background="#FFEEEEEE">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" MinWidth="150"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="75"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Image Grid.Column="0"
-                    Stretch="UniformToFill"
-                    HorizontalAlignment="Stretch"
-                                 VerticalAlignment="Top">
+                <Image Grid.Column="0" Grid.RowSpan="2" Stretch="UniformToFill" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5,5,5,5">
                     <Image.Source>
                         <BitmapImage UriSource="{Binding Imgurl}"/>
                     </Image.Source>
                 </Image>
-                <Grid Grid.Column="1">
-                    <TextBlock Text="{Binding Title}" FontSize="13" Height="52" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,0,0"/>
-                    <TextBlock Text="{Binding Play}" FontSize="10" VerticalAlignment="Bottom" Margin="8,0,0,2"/>
-                </Grid>
-                <StackPanel Grid.ColumnSpan="2" Grid.Row="1">
-                    <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis"/>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Up}" Foreground="#FFFF3366"/>
-                        <TextBlock Text="{Binding Time}" FontSize="12" Margin="5,3,0,0"/>
-                    </StackPanel>
-
+                <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="15" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,5,0" Foreground="#FFFF3366"/>
+                <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="0,0,0,5">
+                    <TextBlock Text="{Binding Up}" Foreground="Red"/>
+                    <TextBlock Text="{Binding Time}" FontSize="13" Margin="5,3,0,0"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
     </Page.Resources>
 
-    <Grid Background="#55DDDDDD">
+    <Grid Background="#FFEEEEEE">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -60,9 +50,9 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MaxWidth="500"/>
             </Grid.ColumnDefinitions>
-            <AutoSuggestBox Name="SearchBox" QueryIcon="Find" PlaceholderText="搜索关键字 HID" Margin="5,10,5,5" QuerySubmitted="SearchBox_QuerySubmitted"/>
+            <AutoSuggestBox Name="SearchBox" QueryIcon="Find" PlaceholderText="搜索关键字 HID" Margin="5,10,5,5" Loaded="SearchBox_Loaded" QuerySubmitted="SearchBox_QuerySubmitted"/>
         </Grid>
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="1" ViewChanged="ScrollViewer_ViewChanged">
             <ScrollViewer.Content>
                 <Grid ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <Grid.RowDefinitions>
@@ -71,8 +61,8 @@
                     </Grid.RowDefinitions>
                     <toolkit:AdaptiveGridView Name="VideoList"
                                    OneRowModeEnabled="False"
-                                   ItemHeight="120"
-                                   DesiredWidth="400"
+                                   ItemHeight="90"
+                                   DesiredWidth="450"
                                           ScrollViewer.VerticalScrollMode="Disabled"
                                   IsItemClickEnabled="True" 
                                               SelectionMode="None" 

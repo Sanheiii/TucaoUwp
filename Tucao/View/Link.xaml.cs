@@ -147,6 +147,5 @@ namespace Tucao.View
             }
             e.Handled = true;
         }
-
     }
 }

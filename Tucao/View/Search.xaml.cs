@@ -26,7 +26,7 @@ namespace Tucao.View
         public Search()
         {
             this.InitializeComponent();
-            VideoList.ItemsSource = new ObservableCollection<introduction>();
+            VideoList.ItemsSource = new ObservableCollection<Introduction>();
         }
         /// <summary>
         /// 点击打开视频
@@ -35,7 +35,7 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void VideoList_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var v=e.ClickedItem as introduction;
+            var v=e.ClickedItem as Introduction;
             var id = v.Link.Replace("http://www.tucao.tv/play/", "").Replace("/", "");
             Frame root = Window.Current.Content as Frame;
             if (id.First() == 'h')
@@ -51,7 +51,7 @@ namespace Tucao.View
         private void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             p = 1;
-            VideoList.ItemsSource = new ObservableCollection<introduction>();
+            VideoList.ItemsSource = new ObservableCollection<Introduction>();
             var q = args.QueryText;
             //如果搜索框的文本由数字组成(前面可以有h)就直接跳到视频页
             if (Regex.IsMatch(q, @"^h?\d+$"))
@@ -74,7 +74,7 @@ namespace Tucao.View
         /// <param name="q">关键字</param>
         private async void LoadItems(int page, string q)
         {
-            List<introduction> r=new List<introduction>();
+            List<Introduction> r=new List<Introduction>();
             try
             {
                 for (int i = 1; i >= 0; i--)
@@ -89,7 +89,7 @@ namespace Tucao.View
                     {
                         await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                         {
-                            ((ObservableCollection<introduction>)VideoList.ItemsSource).Add(r[j]);
+                            ((ObservableCollection<Introduction>)VideoList.ItemsSource).Add(r[j]);
                         });
                         await Task.Delay(10);
                     }
@@ -102,12 +102,11 @@ namespace Tucao.View
             }
             await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
-                if (((ObservableCollection<introduction>)VideoList.ItemsSource).Count == 0)
+                if (((ObservableCollection<Introduction>)VideoList.ItemsSource).Count == 0)
                 {
                     BottomText.Text = "没有找到结果";
-                    BottomText.Tapped -= BottomText_Tapped;
                 }
-                else if (((ObservableCollection<introduction>)VideoList.ItemsSource).Count % 24 == 0&&r.Count!=0)
+                else if (((ObservableCollection<Introduction>)VideoList.ItemsSource).Count % 24 == 0&&r.Count!=0)
                 {
                     BottomText.Text = "加载下一页";
                     BottomText.Tapped += BottomText_Tapped;
@@ -115,19 +114,45 @@ namespace Tucao.View
                 else
                 {
                     BottomText.Text = "到底了";
-                    BottomText.Tapped -= BottomText_Tapped;
                 }
                 BottomText.Visibility = Visibility.Visible;
                 LoadingProgress.Visibility = Visibility.Collapsed;
             });
         }
-        //点击加载下一页
+        /// <summary>
+        /// 点击加载下一页
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BottomText_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            BottomText.Tapped -= BottomText_Tapped;
             BottomText.Visibility = Visibility.Collapsed;
             LoadingProgress.Visibility = Visibility.Visible;
             string q = SearchBox.Text;
             Task.Run(() => LoadItems(++p, q));
+        }
+        /// <summary>
+        /// 搜索框加载完成后获得焦点
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SearchBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            (sender as AutoSuggestBox).Focus(FocusState.Programmatic);
+        }
+        /// <summary>
+        /// 滚到底加载下一页
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            var scrollViewer = (sender as ScrollViewer);
+            if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight&&BottomText.Text=="加载下一页")
+            {
+                BottomText_Tapped(BottomText, new TappedRoutedEventArgs());
+            }
         }
     }
 }

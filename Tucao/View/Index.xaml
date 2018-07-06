@@ -16,8 +16,8 @@
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
-    <Grid>
-        <ScrollViewer>
+    <Grid Background="#FFEEEEEE">
+        <ScrollViewer ViewChanged="ScrollViewer_ViewChanged">
             <Grid ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Enabled">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -25,13 +25,12 @@
                 </Grid.RowDefinitions>
                 <StackPanel Name="ExceptionMessage" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
                     <Image Source="ms-appx:///Assets/bg_y_png24.png" Stretch="None"/>
-                    <TextBlock HorizontalAlignment="Center" FontFamily="Segoe UI Black">网络走丢了</TextBlock>
                 </StackPanel>
                 <toolkit:AdaptiveGridView x:Name="VideoList"
                                    OneRowModeEnabled="False"
-                                   ItemHeight="120"
+                                   ItemHeight="90"
                                           ScrollViewer.VerticalScrollMode="Disabled"
-                                   DesiredWidth="400"
+                                   DesiredWidth="450"
                                           IsItemClickEnabled="True"
                                           SelectionMode="None" 
                                   HorizontalContentAlignment="Left" 
@@ -42,31 +41,25 @@
                         <DataTemplate>
                             <Grid Background="#FFEEEEEE">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="2*" MinWidth="150"/>
+                                    <ColumnDefinition Width="160"/>
                                     <ColumnDefinition Width="3*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="75"/>
                                     <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Image Grid.Column="0"
-                    Stretch="UniformToFill"
-                    HorizontalAlignment="Stretch"
-                                 VerticalAlignment="Top">
+                                <Image Grid.Column="0" Grid.RowSpan="2" Stretch="UniformToFill" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5,5,5,5">
                                     <Image.Source>
                                         <BitmapImage UriSource="{Binding Imgurl}"/>
                                     </Image.Source>
                                 </Image>
-                                <Grid Grid.Column="1">
-                                    <TextBlock Text="{Binding Title}" FontSize="13" Height="52" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,0,0"/>
-                                    <TextBlock Text="{Binding Play}" FontSize="10" VerticalAlignment="Bottom" Margin="8,0,0,2"/>
-                                </Grid>
-                                <StackPanel Grid.ColumnSpan="2" Grid.Row="1">
-                                    <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis"/>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Up}" Foreground="#FFFF3366"/>
-                                        <TextBlock Text="{Binding Time}" FontSize="12" Margin="5,3,0,0"/>
-                                    </StackPanel>
+                                <Border Background="#88000000" Grid.Row="1" HorizontalAlignment="Left" Margin="5,-5,5,5">
+                                    <TextBlock Text="{Binding Play}" VerticalAlignment="Center" FontSize="11" Foreground="#FFFFFFFF" Margin="3,0,3,0"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="15" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,5,0" Foreground="#FFFF3366"/>
+                                <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="0,0,0,5">
+                                    <TextBlock Text="{Binding Up}" Foreground="Red"/>
+                                    <TextBlock Text="{Binding Time}" FontSize="13" Margin="5,3,0,0"/>
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>
@@ -78,9 +71,10 @@
                 </Grid>
             </Grid>
         </ScrollViewer>
-        <Button Name="RefreshButton" Tapped="Refresh_Tapped" IsEnabled="False" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,10" Background="Transparent" Foreground="#FFFF3366">
+        <Button Name="RefreshButton" BorderThickness="0" Tapped="Refresh_Tapped" IsEnabled="False" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,10" Background="Transparent" Foreground="#FFFF3366">
             <Button.Resources>
                 <SolidColorBrush x:Key="ButtonBackgroundPointerOver">#00000000</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundDisabled">#00000000</SolidColorBrush>
             </Button.Resources>
             <FontIcon  FontFamily="Segoe MDL2 Assets" FontSize="20" Glyph="&#xE72C;"/>
         </Button>

@@ -42,25 +42,23 @@ namespace Tucao.Content
         /// <param name="page">分页选择(默认第一页)</param>
         /// <param name="keywords">关键词</param>
         /// <returns></returns>
-        static public async Task<List<introduction>> Search(int tid, int page, string keywords)
+        static public async Task<List<Introduction>> Search(int tid, int page, string keywords)
         {
 
             string webpage = await _getsearchresult(tid, page, keywords);
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(webpage);
             var list = doc.DocumentNode.SelectNodes(".//div[@class='list']");
-            List<introduction> result = new List<introduction>();
+            List<Introduction> result = new List<Introduction>();
             if (list == null) return result;
             foreach (var item in list)
             {
-                var v = new introduction();
+                var v = new Introduction();
                 v.Imgurl = item.SelectSingleNode(".//div[1]").FirstChild.FirstChild.Attributes["src"].Value;
                 v.Link = item.SelectSingleNode(".//div[1]").FirstChild.Attributes["href"].Value;
                 v.Title = item.SelectSingleNode(".//div[2]/div[1]").InnerText;
                 v.Up = item.SelectSingleNode(".//div[2]/div[2]/ul[1]/li[1]/a[1]").InnerText;
-                v.Time = item.SelectSingleNode(".//div[2]/div[2]/ul[1]/li[2]").InnerText.Replace("发布于：", "UP:");
-                v.Description = item.SelectSingleNode(".//div[2]/div[3]").InnerText;
-                if (v.Description.Trim() == "") v.Description += "暂无简介";
+                v.Time = item.SelectSingleNode(".//div[2]/div[2]/ul[1]/li[2]").InnerText.Replace("发布于：", "");
                 result.Add(v);
             }
             return result;
@@ -71,23 +69,21 @@ namespace Tucao.Content
         /// <param name="tid">分类id</param>
         /// <param name="pagenum">页码</param>
         /// <returns>含有视频信息的列表</returns>
-        static public async Task<List<introduction>> GetSubclassiFication(int tid, int pagenum)
+        static public async Task<List<Introduction>> GetSubclassiFication(int tid, int pagenum)
         {
             var webpage = await _getsubclassification(tid, pagenum);
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(webpage);
             var list = doc.DocumentNode.SelectNodes("//div[@class='main']/div[@class='left']/div[@class='box lists_box']/div[@class='list']/ul/li/div[@class='box']");
-            List<introduction> result = new List<introduction>();
+            List<Introduction> result = new List<Introduction>();
             foreach (var item in list)
             {
-                var v = new introduction();
+                var v = new Introduction();
                 v.Imgurl = item.FirstChild.FirstChild.Attributes["src"].Value;
                 v.Link = item.FirstChild.Attributes["href"].Value;
                 v.Title = item.FirstChild.FirstChild.Attributes["alt"].Value;
                 v.Up = item.LastChild.FirstChild.InnerText.Trim();
-                v.Time = item.LastChild.LastChild.InnerText.Trim();
-                v.Description = item.SelectSingleNode(".//p[@class='description']").InnerText;
-                if (v.Description.Trim() == "") v.Description += "暂无简介";
+                v.Time = item.LastChild.LastChild.InnerText.Trim().Replace("UP:","");
                 v.Play = item.SelectSingleNode(".//div[1]").FirstChild.InnerText;
                 result.Add(v);
             }
@@ -136,7 +132,7 @@ namespace Tucao.Content
     /// <summary>
     /// 分区和搜索里的每一块视频的必要信息
     /// </summary>
-    public class introduction
+    public class Introduction
     {
         /// <summary>
         /// 封面地址

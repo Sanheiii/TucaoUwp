@@ -25,7 +25,7 @@ namespace Tucao.View
         public Index()
         {
             this.InitializeComponent();
-            VideoList.ItemsSource = new ObservableCollection<introduction>();
+            VideoList.ItemsSource = new ObservableCollection<Introduction>();
             Task.Run(() =>
             {
                 if (p == 0) LoadItems(++p);
@@ -38,7 +38,7 @@ namespace Tucao.View
         private async void LoadItems(int page)
         {
             //显示正在加载
-            List<introduction> r;
+            List<Introduction> r;
             await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 ExceptionMessage.Visibility = Visibility.Collapsed;
@@ -73,7 +73,7 @@ namespace Tucao.View
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                 {
-                    ((ObservableCollection<introduction>)VideoList.ItemsSource).Add(r[i]);
+                    ((ObservableCollection<Introduction>)VideoList.ItemsSource).Add(r[i]);
                 });
                 await Task.Delay(10);
             }
@@ -86,9 +86,9 @@ namespace Tucao.View
             });
 
         }
-        private async Task<List<introduction>> GetList(int page)
+        private async Task<List<Introduction>> GetList(int page)
         {
-            List<introduction> r = new List<introduction>();
+            List<Introduction> r = new List<Introduction>();
             //获取信息
             try
             {
@@ -108,7 +108,7 @@ namespace Tucao.View
         private void VideoList_ItemClick(object sender, ItemClickEventArgs e)
         {
             //提取出h号
-            var v = e.ClickedItem as introduction;
+            var v = e.ClickedItem as Introduction;
             var id = v.Link.Replace("http://www.tucao.tv/play/", "").Replace("/", "");
             //打开视频页面
             if (id.First() == 'h')
@@ -135,8 +135,21 @@ namespace Tucao.View
         {
             RefreshButton.IsEnabled = false;
             p = 1;
-            VideoList.ItemsSource = new ObservableCollection<introduction>();
+            VideoList.ItemsSource = new ObservableCollection<Introduction>();
             Task.Run(() => LoadItems(p));
+        }
+        /// <summary>
+        /// 滚到底加载下一页
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            var scrollViewer = (sender as ScrollViewer);
+            if(scrollViewer.VerticalOffset==scrollViewer.ScrollableHeight)
+            {
+                BottomText_Tapped(BottomText, new TappedRoutedEventArgs());
+            }
         }
     }
 }

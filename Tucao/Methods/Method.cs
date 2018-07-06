@@ -28,8 +28,24 @@ namespace Tucao
             date = start.AddSeconds(unixDate).ToLocalTime();
             return date.ToString("yyyy-MM-dd HH:mm");
         }
-        //public static string MillisecondToMinute()
+        ///// <summary>
+        ///// 时间字符串转xxx前
+        ///// </summary>
+        ///// <param name="time"></param>
+        ///// <returns></returns>
+        //public static string TimeToAgo(string timeString)
+        //{
+        //    DateTime datetime = Convert.ToDateTime(timeString.Replace("UP:", ""));
+        //    TimeSpan timespan = DateTime.Now.Subtract(datetime);
+        //    DateTime time = new DateTime(timespan.Ticks);
+        //    if (time.Year >= 2) return (time.Year - 1).ToString() + "年前";
+        //    if (time.Month >= 2)   return (time.Month-1).ToString() + "月前";
+        //    if (time.Day >= 2) return (time.Day - 1).ToString() + "天前";
+        //    if (time.Hour>= 1) return time.Hour + "小时前";
+        //    if (time.Minute >= 1) return time.Minute.ToString() + "分钟前";
+        //    return "刚刚";
 
+        //}
     }
 
 }
