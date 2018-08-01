@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Threading.Tasks;
+using Windows.UI;
+using Windows.Web.Http;
+
 namespace Tucao
 {
-    class Method
+    static class Method
     {
         /// <summary>
         /// 获取unix时间戳
@@ -27,6 +32,44 @@ namespace Tucao
             start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             date = start.AddSeconds(unixDate).ToLocalTime();
             return date.ToString("yyyy-MM-dd HH:mm");
+        }
+        /// <summary>
+        /// 颜色转int
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public static int ToInt(this Color color)
+        {
+            var hex = "0x" + color.ToString().Remove(0, 3);
+            int i = Convert.ToInt32(hex, 16);
+            return i;
+        }
+
+
+        static HttpClient client = new HttpClient();
+        /// <summary>
+        /// 整合参数并发出get请求
+        /// </summary>
+        /// <param name="url">请求地址</param>
+        /// <param name="param">参数</param>
+        /// <returns></returns>
+        static public async Task<HttpResponseMessage> HttpGet(string url, Hashtable param)
+        {
+            if (param != null)
+            {
+                url += '?';
+                foreach (DictionaryEntry kv in param)
+                {
+                    url += (kv.Key + "=" + kv.Value + "&");
+                }
+                url = url.Remove(url.Length - 1, 1);
+            }
+            var response = await client.GetAsync(new Uri(url));
+            return response;
+        }
+        static public async Task<HttpResponseMessage> HttpGet(string url)
+        {
+            return await HttpGet(url, null);
         }
         ///// <summary>
         ///// 时间字符串转xxx前

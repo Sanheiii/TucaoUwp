@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using Tucao.Helpers;
 using Windows.Graphics.Display;
 using Windows.System;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
@@ -21,22 +23,103 @@ namespace Tucao.View
     /// </summary>
     public sealed partial class MediaPlayer : Page
     {
+        bool isTapped = false;
         MediaPlayerSource param = new MediaPlayerSource();
         public MediaPlayer()
         {
             this.InitializeComponent();
+            //这两个东西有最小值,加载会出发ValueChanged事件,这里等它加载完再添加委托
+            DanmakuSizeSlider.Loaded += ((sender, e) => DanmakuSizeSlider.ValueChanged += DanmakuSizeSlider_ValueChanged);
+            DanmakuSpeedSlider.Loaded += ((sender, e) => DanmakuSpeedSlider.ValueChanged += DanmakuSpeedSlider_ValueChanged);
             Media.Stop();
             Media.Tapped -= Media_Tapped;
             ControlPanelGrid.Visibility = Visibility.Collapsed;
             StatusText.Text = "";
             Status.Visibility = Visibility.Visible;
+            SetValues();
         }
+        /// <summary>
+        /// 设置一些控件的状态
+        /// </summary>
+        private void SetValues()
+        {
+            IsShowDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowDanmaku") ?? true;
+            IsShowScrollableDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowScrollableDanmaku") ?? true;
+            IsShowTopDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowTopDanmaku") ?? true;
+            IsShowBottomDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowBottomDanmaku") ?? true;
+            DanmakuSizeSlider.Value = (double?)SettingHelper.GetValue("DanmakuSize") ?? 0.7;
+            DanmakuSpeedSlider.Value = (double?)SettingHelper.GetValue("DanmakuSpeed") ?? 0.6;
+            DanmakuOpacitySlider.Value = (double?)SettingHelper.GetValue("DanmakuOpacity") ?? 1;
+        }
+
+        private void IsShowDanmaku_Checked(object sender, RoutedEventArgs e)
+        {
+            SettingHelper.SetValue("IsShowDanmaku", true);
+        }
+        private void IsShowDanmaku_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SettingHelper.SetValue("IsShowDanmaku", false);
+        }
+        private void IsShowScrollableDanmaku_Checked(object sender, RoutedEventArgs e)
+        {
+            SettingHelper.SetValue("IsShowScrollableDanmaku", true);
+            HideScrollableDanmaku.Opacity = 1;
+        }
+        private void IsShowScrollableDanmaku_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SettingHelper.SetValue("IsShowScrollableDanmaku", false);
+            HideScrollableDanmaku.Opacity = 0.3;
+        }
+        private void HideScrollableDanmaku_Click(object sender, RoutedEventArgs e)
+        {
+            IsShowScrollableDanmaku.IsChecked = !IsShowScrollableDanmaku.IsChecked;
+        }
+        private void IsShowTopDanmaku_Checked(object sender, RoutedEventArgs e)
+        {
+            SettingHelper.SetValue("IsShowTopDanmaku", true);
+            HideTopDanmaku.Opacity = 1;
+        }
+        private void IsShowTopDanmaku_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SettingHelper.SetValue("IsShowTopDanmaku", false);
+            HideTopDanmaku.Opacity = 0.3;
+        }
+        private void HideTopDanmaku_Click(object sender, RoutedEventArgs e)
+        {
+            IsShowTopDanmaku.IsChecked = !IsShowTopDanmaku.IsChecked;
+        }
+        private void IsShowBottomDanmaku_Checked(object sender, RoutedEventArgs e)
+        {
+            SettingHelper.SetValue("IsShowBottomDanmaku", true);
+            HideBottomDanmaku.Opacity = 1;
+        }
+        private void IsShowBottomDanmaku_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SettingHelper.SetValue("IsShowBottomDanmaku", false);
+            HideBottomDanmaku.Opacity = 0.3;
+        }
+        private void HideBottomDanmaku_Click(object sender, RoutedEventArgs e)
+        {
+            IsShowBottomDanmaku.IsChecked = !IsShowBottomDanmaku.IsChecked;
+        }
+        private void DanmakuSizeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            SettingHelper.SetValue("DanmakuSize", e.NewValue);
+        }
+        private void DanmakuSpeedSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            SettingHelper.SetValue("DanmakuSpeed", e.NewValue);
+        }
+        private void DanmakuOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            SettingHelper.SetValue("DanmakuOpacity", e.NewValue);
+        }
+
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             param = e.Parameter as MediaPlayerSource;
             PlayerTitle.Text = param.title;
-            Media.LoadDanmaku(param.hid, SkylarkWsp.DanmakuEngine.DanmakuSource.Tucao);
             Play(param.play_list);
         }
         /// <summary>
@@ -74,7 +157,8 @@ namespace Tucao.View
             }
             catch (Exception ex)
             {
-                ErrorHelper.PopUp(ex.Message);
+                var msgDialog = new Windows.UI.Popups.MessageDialog(ex.Message);
+                msgDialog.ShowAsync();
             }
 
             StatusText.Text += "    [成功]";
@@ -97,19 +181,10 @@ namespace Tucao.View
             ControlPanelGrid.Visibility = Visibility.Visible;
             //使点击显示控制栏
             Media.Tapped += Media_Tapped;
-            //双击可以开始/暂停播放
-            Media.DoubleTapped += PlayPauseButton_Click;
+            Media.DoubleTapped += Media_DoubleTapped;
             Player.Focus(FocusState.Programmatic);
         }
-        /// <summary>
-        /// 播放器失去焦点后立即重新获取焦点
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Player_LostFocus(object sender, RoutedEventArgs e)
-        {
-            Player.Focus(FocusState.Programmatic);
-        }
+
 
         /// <summary>
         /// 视频错误时候发生
@@ -119,10 +194,11 @@ namespace Tucao.View
         private void Media_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
             //回退打开视频进行的操作
-            ErrorHelper.PopUp("加载视频失败,暂时无法播放该视频", "");
+            var msgDialog = new Windows.UI.Popups.MessageDialog("加载视频失败,暂时无法播放该视频");
+            msgDialog.ShowAsync();
             ControlPanelGrid.Visibility = Visibility.Collapsed;
             Media.Tapped -= Media_Tapped;
-            Media.DoubleTapped -= PlayPauseButton_Click;
+            Media.DoubleTapped -= Media_DoubleTapped;
         }
 
         /// <summary>
@@ -132,7 +208,7 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void PlayPauseButton_Click(object sender, RoutedEventArgs e)
         {
-            var i = Media.Media.CurrentState;
+            var i = Media.CurrentState;
             if (i == MediaElementState.Playing)
             {
                 //暂停
@@ -184,16 +260,42 @@ namespace Tucao.View
         }
 
         /// <summary>
-        /// 隐藏/显示控制栏
+        /// 点击视频画面
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Media_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (ControlPanelGrid.Visibility == Visibility.Collapsed)
-                ControlPanelGrid.Visibility = Visibility.Visible;
-            else
-                ControlPanelGrid.Visibility = Visibility.Collapsed;
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(200);
+            timer.Tick += ((s, ea) =>
+            {
+                if (isTapped)
+                {
+                    isTapped = false;
+                    if (ControlPanelGrid.Visibility == Visibility.Collapsed)
+                        ControlPanelGrid.Visibility = Visibility.Visible;
+                    else
+                        ControlPanelGrid.Visibility = Visibility.Collapsed;
+                }
+                timer.Stop();
+            });
+            isTapped = true;
+            timer.Start();
+        }
+        /// <summary>
+        /// 连续点击视频时
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Media_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            if (isTapped)
+            {
+                isTapped = false;
+                PlayPauseButton_Click(PlayPauseButton, new RoutedEventArgs());
+            }
+            else Media_Tapped(Media, new TappedRoutedEventArgs());
         }
         /// <summary>
         /// 转屏
@@ -225,7 +327,7 @@ namespace Tucao.View
         }
         private void Media_CurrentStateChanged(object sender, RoutedEventArgs e)
         {
-            var i = Media.Media.CurrentState;
+            var i = Media.CurrentState;
             switch (i)
             {
                 case MediaElementState.Playing:
@@ -262,11 +364,11 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void Media_BufferingProgressChanged(object sender, RoutedEventArgs e)
         {
-            if (Media.Media.BufferingProgress < 1 && Media.Media.BufferingProgress > 0)
+            if (Media.BufferingProgress < 1 && Media.BufferingProgress > 0)
             {
                 Status.Visibility = Visibility.Visible;
                 BufferingProgress.Visibility = Visibility.Visible;
-                BufferingProgress.Text = ((int)(Media.Media.BufferingProgress * 100)).ToString() + "%";
+                BufferingProgress.Text = ((int)(Media.BufferingProgress * 100)).ToString() + "%";
             }
             else
             {
@@ -316,14 +418,41 @@ namespace Tucao.View
             }
             e.Handled = true;
         }
-        private void DanmakuSwitch_Tapped(object sender, TappedRoutedEventArgs e)
+        /// <summary>
+        /// 弹幕颜色改变时
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RGB_ValueChanged(object sender, TextChangedEventArgs e)
         {
-            if (Media.Danmaku.Visibility == Visibility.Collapsed)
-                Media.Danmaku.Visibility = Visibility.Visible;
-            else
-                Media.Danmaku.Visibility = Visibility.Collapsed;
+
         }
+
+        private void RGB_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
+        {
+            try
+            {
+                int value = int.Parse(sender.Text);
+                if (value >= 0 && value <= 255)
+                {
+                    ColorPreview.Fill = new SolidColorBrush(Color.FromArgb(255, byte.Parse(R.Text), byte.Parse(G.Text), byte.Parse(B.Text)));
+                    sender.Tag = sender.Text;
+                    return;
+                }
+                throw new Exception();
+            }
+            catch
+            {
+                sender.Text = (string)sender.Tag;
+                sender.SelectionStart = ((string)sender.Tag).Length;
+            }
+        }
+
     }
+
+
+
+
     /// <summary>
     /// 播放时间-进度条
     /// </summary>

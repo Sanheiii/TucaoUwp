@@ -41,7 +41,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid Background="#FFEEEEEE">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>

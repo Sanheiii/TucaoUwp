@@ -1,8 +1,8 @@
-﻿using System;
-using Tucao.Helpers;
+﻿#define DEBUG
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
+using Windows.ApplicationModel.Core;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
@@ -10,7 +10,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-
 namespace Tucao
 {
     /// <summary>
@@ -36,23 +35,17 @@ namespace Tucao
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+#if DEBUG
+            Content.Content.GetDanmakus("4077071", 0);
+#endif
             //设置桌面模式窗口的最小宽高
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 360, Height = 420 });
-            //设置状态栏颜色
-            if (!DeviceHelper.IsMobile)
-            {
-                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-                titleBar.BackgroundColor = titleBar.InactiveBackgroundColor = Color.FromArgb(0xFF, 0xFF, 0x33, 0x66);
-                titleBar.ButtonBackgroundColor = titleBar.ButtonInactiveBackgroundColor = Color.FromArgb(0xFF, 0xFF, 0x33, 0x66);
-            }
-            else
-            {
-                StatusBar statusBar = StatusBar.GetForCurrentView();
-                statusBar.BackgroundColor = Color.FromArgb(0xFF, 0xFF, 0x33, 0x66);
-                statusBar.ForegroundColor = Colors.White;
-                statusBar.BackgroundOpacity = 1;
-            }
             Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated += Dispatcher_AcceleratorKeyActivated;
+            //换掉原来的标题栏
+            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            titleBar.ButtonBackgroundColor = Colors.Transparent;
+            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+
             Frame rootFrame = Window.Current.Content as Frame;
             // 不要在窗口已包含内容时重复应用程序初始化，
             // 只需确保窗口处于活动状态
@@ -61,7 +54,6 @@ namespace Tucao
                 // 创建要充当导航上下文的框架，并导航到第一页
                 rootFrame = new Frame();
                 rootFrame.NavigationFailed += OnNavigationFailed;
-                rootFrame.Navigated += OnNavigated;
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: 从之前挂起的应用程序加载状态
@@ -122,12 +114,7 @@ namespace Tucao
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
         }
-        public static void OnNavigated(object sender, NavigationEventArgs e)
-        {
-            //根据页面是否可以返回，在窗口显示返回按钮
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = CanGoBack() ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
-        }
-        private static bool CanGoBack()
+        public static bool CanGoBack()
         {
             if (Link != null && Link.CurrentSourcePageType != typeof(View.Index) && Link.CanGoBack)
                 return true;

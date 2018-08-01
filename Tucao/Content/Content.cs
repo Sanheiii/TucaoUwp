@@ -3,15 +3,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Tucao.Http;
 using Windows.Web.Http;
-using static Tucao.Http.HttpService;
 
 namespace Tucao.Content
 {
     public class Content
     {
+        static string apikey = "25tids8f1ew1821ed";
         /// <summary>
         /// 获取视频信息
         /// </summary>
@@ -21,12 +21,19 @@ namespace Tucao.Content
         {
             VideoInfo info = new VideoInfo();
             //通过api获取绝大多数信息
-            string message1 = await _getSubmissionInfo(hid);
+            Hashtable param = new Hashtable();
+            {
+                param.Add("hid", hid);
+                param.Add("apikey", apikey);
+                param.Add("type", "json");
+            }
+            var str = await Method.HttpGet("http://www.tucao.tv/api_v2/view.php", param);
+            string message1 = await str.Content.ReadAsStringAsync();
             var information = Newtonsoft.Json.JsonConvert.DeserializeObject<Hashtable>(message1);
             var result = Newtonsoft.Json.JsonConvert.DeserializeObject<Hashtable>(information["result"].ToString());
             info.Parse(result);
             //解析html得到头像和介绍
-            HttpResponseMessage message2 = await HttpGet("http://www.tucao.tv/play/h" + hid);
+            HttpResponseMessage message2 = await Method.HttpGet("http://www.tucao.tv/play/h" + hid);
             string webpage = await message2.Content.ReadAsStringAsync();
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(webpage);
@@ -44,10 +51,23 @@ namespace Tucao.Content
         /// <returns></returns>
         static public async Task<List<Introduction>> Search(int tid, int page, string keywords)
         {
-
-            string webpage = await _getsearchresult(tid, page, keywords);
+            Hashtable param = new Hashtable();
+            {
+                param.Add("m", "search");
+                param.Add("c", "index");
+                param.Add("a", "init2");
+                param.Add("catid", tid);
+                param.Add("time", "all");
+                param.Add("order", "inputtime");
+                param.Add("username", "");
+                param.Add("tag", "");
+                param.Add("q", keywords);
+                param.Add("page", page);
+            }
+            var webpage = await Method.HttpGet("http://www.tucao.tv/index.php", param);
+            string htmlstring = await webpage.Content.ReadAsStringAsync();
             HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml(webpage);
+            doc.LoadHtml(htmlstring);
             var list = doc.DocumentNode.SelectNodes(".//div[@class='list']");
             List<Introduction> result = new List<Introduction>();
             if (list == null) return result;
@@ -71,9 +91,10 @@ namespace Tucao.Content
         /// <returns>含有视频信息的列表</returns>
         static public async Task<List<Introduction>> GetSubclassiFication(int tid, int pagenum)
         {
-            var webpage = await _getsubclassification(tid, pagenum);
+            var webpage = await Method.HttpGet("http://www.tucao.tv/list/" + tid + "/index_" + pagenum + ".html");
+            var htmlstring = await webpage.Content.ReadAsStringAsync();
             HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml(webpage);
+            doc.LoadHtml(htmlstring);
             var list = doc.DocumentNode.SelectNodes("//div[@class='main']/div[@class='left']/div[@class='box lists_box']/div[@class='list']/ul/li/div[@class='box']");
             List<Introduction> result = new List<Introduction>();
             foreach (var item in list)
@@ -83,11 +104,18 @@ namespace Tucao.Content
                 v.Link = item.FirstChild.Attributes["href"].Value;
                 v.Title = item.FirstChild.FirstChild.Attributes["alt"].Value;
                 v.Up = item.LastChild.FirstChild.InnerText.Trim();
-                v.Time = item.LastChild.LastChild.InnerText.Trim().Replace("UP:","");
+                v.Time = item.LastChild.LastChild.InnerText.Trim().Replace("UP:", "");
                 v.Play = item.SelectSingleNode(".//div[1]").FirstChild.InnerText;
                 result.Add(v);
             }
             return result;
+        }
+        /// <summary>
+        /// 获取评论的排序方式
+        /// </summary>
+        public enum Order
+        {
+            New = 0, Hot = 1
         }
         /// <summary>
         /// 获取评论区
@@ -99,10 +127,21 @@ namespace Tucao.Content
         public static async Task<List<Comment>> GetComment(string typeid, string hid, int page, Order hot)
         {
             //获取评论区的html
-            var webpage = await _getComment(typeid, hid, page, hot);
+            Hashtable param = new Hashtable();
+            {
+                param.Add("m", "comment");
+                param.Add("c", "index");
+                param.Add("a", "init");
+                param.Add("commentid", "content_" + typeid + '-' + hid + "-1");
+                param.Add("hot", hot);
+                param.Add("iframe", "1");
+                param.Add("page", page);
+            }
+            var webpage = await Method.HttpGet("http://www.tucao.tv/index.php", param);
+            var htmlstring = await webpage.Content.ReadAsStringAsync();
             //解析html
             HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml(webpage);
+            doc.LoadHtml(htmlstring);
             var list = doc.DocumentNode.SelectNodes("//tr");
             var result = new List<Comment>();
             if (list == null)
@@ -111,22 +150,56 @@ namespace Tucao.Content
             {
                 var c = new Comment();
                 c.ProfilePhoto = list[i].SelectSingleNode(".//img[1]").Attributes["src"].Value;
-                    var p=await HttpGet(c.ProfilePhoto);
-                //if(p.StatusCode==HttpStatusCode.NotFound)
-                //    c.ProfilePhoto = "ms-appx:///Assets/nophoto.gif";
                 c.UserId = list[i].SelectSingleNode(".//a[2]").Attributes["href"].Value.Replace("/", "").Replace("http:www.tucao.tvplayu", "");
                 c.UserName = list[i].SelectSingleNode(".//a[2]").InnerText;
                 c.Level = int.Parse(list[i].SelectSingleNode(".//div[1]").Attributes["class"].Value.Replace("lv lv", "")) - 1;
                 if (c.Level == 27) c.Level -= 7;
                 c.Content = list[i].SelectSingleNode(".//td[2]").InnerText;
-                c.Content=WebUtility.HtmlDecode(c.Content);
+                c.Content = WebUtility.HtmlDecode(c.Content);
                 i++;
-                c.Lch = list[i].SelectSingleNode(".//em[@class='lch']").InnerText.Replace('楼','\0');
+                c.Lch = list[i].SelectSingleNode(".//em[@class='lch']").InnerText.Replace('楼', '\0');
                 c.Time = list[i].SelectSingleNode(".//em[@class='time']").InnerText;
                 c.DiggCount = int.Parse(list[i].SelectSingleNode(".//a[@class='digg']").SelectSingleNode(".//em").InnerText);
                 result.Add(c);
             }
             return result;
+        }
+        /// <summary>
+        /// 获取首页
+        /// </summary>
+        /// <returns></returns>
+        static public async Task<string> GetIndex()
+        {
+            Hashtable param = new Hashtable();
+            {
+                param.Add("m", "member");
+                param.Add("c", "index");
+                param.Add("a", "mini");
+                param.Add("forward", "http%3A%2F%2Ftucao.tv%2F");
+                param.Add("siteid", "1");
+            }
+            var result = await Method.HttpGet("http://www.tucao.tv/index.php", param);
+            return await result.Content.ReadAsStringAsync();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hid">HID</param>
+        /// <param name="part">分p号(从0开始)</param>
+        /// <returns></returns>
+        public static async Task<List<Danmaku>> GetDanmakus(string hid, int part)
+        {
+            //http://www.tucao.tv/index.php?m=mukio&c=index&a=init&playerID=11-<hid>-1-<part>
+            Hashtable param = new Hashtable();
+            {
+                param.Add("m", "mukio");
+                param.Add("c", "index");
+                param.Add("a", "init");
+                param.Add("playerID", "11-"+hid+"-1-"+part+"");
+            }
+            var result = await Method.HttpGet("http://www.tucao.tv/index.php", param);
+            string danmakus_xml= await result.Content.ReadAsStringAsync();
+            return Danmaku.ParseDanmakus(danmakus_xml);
         }
     }
     /// <summary>

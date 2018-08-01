@@ -67,7 +67,8 @@ namespace Tucao.View
             }
             catch
             {
-                ErrorHelper.PopUp("无法打开这个投稿");
+                var msgDialog = new Windows.UI.Popups.MessageDialog("无法打开这个投稿");
+                msgDialog.ShowAsync();
                 return;
             }
             SaveThumb.Tag = info.Thumb;
@@ -215,7 +216,8 @@ namespace Tucao.View
             url = await VideoInfo.GetPlayUrl(part);
             if(url.Count<1)
             {
-                ErrorHelper.PopUp("获取视频播放地址失败,请稍后再试");
+                var msgDialog = new Windows.UI.Popups.MessageDialog("获取视频播放地址失败,请稍后再试");
+                msgDialog.ShowAsync();
                 return;
             }
             //打开播放器
@@ -295,7 +297,7 @@ namespace Tucao.View
         /// </summary>
         async void LoadComment()
         {
-            var comments = await Tucao.Content.Content.GetComment(info.TypeId, info.Hid, Commentpage, Http.HttpService.Order.New);
+            var comments = await Tucao.Content.Content.GetComment(info.TypeId, info.Hid, Commentpage,Tucao.Content.Content.Order.New);
             foreach (Comment comment in comments)
             {
                 (Comment.ItemsSource as ObservableCollection<Comment>).Add(comment);

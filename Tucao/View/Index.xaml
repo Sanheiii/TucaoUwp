@@ -16,7 +16,7 @@
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
-    <Grid Background="#FFEEEEEE">
+    <Grid>
         <ScrollViewer ViewChanged="ScrollViewer_ViewChanged">
             <Grid ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Enabled">
                 <Grid.RowDefinitions>
@@ -39,7 +39,7 @@
                                           ItemClick="VideoList_ItemClick">
                     <toolkit:AdaptiveGridView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Background="#FFEEEEEE">
+                            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="160"/>
                                     <ColumnDefinition Width="3*"/>

@@ -79,7 +79,7 @@ namespace Tucao.View
                     reader.Dispose();
                     stream.Dispose();
                     JsonObject json = JsonObject.Parse(str);
-                    p.partTitle = c + ":" + json["title"].GetString();
+                    p.partTitle =json["title"].GetString();
                     ulong size = 0;
                     List<string> playlist = new List<string>();
                     for (i = 0; i < json["filecount"].GetNumber(); i++)
@@ -127,7 +127,7 @@ namespace Tucao.View
                 param.play_list = part.play_list;
                 param.islocalfile = true;
                 Frame root = Window.Current.Content as Frame;
-                root.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
+                App.Link.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
             }
             else
             {

@@ -90,7 +90,8 @@ namespace Tucao.Helpers
             }
             catch (Exception ex)
             {
-                ErrorHelper.PopUp(ex.Message);
+                var msgDialog = new Windows.UI.Popups.MessageDialog(ex.Message);
+                await msgDialog.ShowAsync();
             };
         }
         /// <summary>
@@ -115,7 +116,8 @@ namespace Tucao.Helpers
             }
             catch (Exception ex)
             {
-                ErrorHelper.PopUp(ex.Message);
+                var msgDialog = new Windows.UI.Popups.MessageDialog(ex.Message);
+                await msgDialog.ShowAsync();
                 return null;
             }
         }

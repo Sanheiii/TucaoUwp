@@ -1,8 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tucao.Http;
-
 namespace Tucao.Content
 {
     //定义 投稿 类
@@ -132,10 +131,17 @@ namespace Tucao.Content
             }
             else
             {
-                await HttpService._getIndex();
-                var result = await HttpService._getPlayUrl(part);
+                var unixtimestamp = Method.GetUnixTimestamp();
+                Hashtable param = new Hashtable();
+                {
+                    param.Add("type", part["type"]);
+                    param.Add("vid", part["vid"]);
+                    param.Add("r", (unixtimestamp / 1000).ToString());
+                }
+                var result = await Method.HttpGet("http://api.tucao.tv/api/playurl", param);
+                var xml =await result.Content.ReadAsStringAsync();
                 XMLParser xmlParser = new XMLParser();
-                XMLNode xn = xmlParser.Parse(result);
+                XMLNode xn = xmlParser.Parse(xml);
                 try
                 {
                     int i = 0;
