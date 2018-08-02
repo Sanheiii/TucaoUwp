@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Tucao.Content;
 using Tucao.Helpers;
 using Windows.Graphics.Display;
 using Windows.System;
@@ -25,6 +26,7 @@ namespace Tucao.View
     {
         bool isTapped = false;
         MediaPlayerSource param = new MediaPlayerSource();
+        List<Danmaku> danmakuList = new List<Danmaku>();
         public MediaPlayer()
         {
             this.InitializeComponent();
@@ -43,84 +45,111 @@ namespace Tucao.View
         /// </summary>
         private void SetValues()
         {
-            IsShowDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowDanmaku") ?? true;
-            IsShowScrollableDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowScrollableDanmaku") ?? true;
-            IsShowTopDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowTopDanmaku") ?? true;
-            IsShowBottomDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowBottomDanmaku") ?? true;
+            ShowDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowDanmaku") ?? true;
+            ShowScrollableDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowScrollableDanmaku") ?? true;
+            ShowTopDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowTopDanmaku") ?? true;
+            ShowBottomDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowBottomDanmaku") ?? true;
             DanmakuSizeSlider.Value = (double?)SettingHelper.GetValue("DanmakuSize") ?? 0.7;
             DanmakuSpeedSlider.Value = (double?)SettingHelper.GetValue("DanmakuSpeed") ?? 0.6;
             DanmakuOpacitySlider.Value = (double?)SettingHelper.GetValue("DanmakuOpacity") ?? 1;
+            DanmakuManager.IsShowDanmaku = ShowDanmaku.IsChecked ?? false;
+            DanmakuManager.IsShowScrollableDanmaku = ShowScrollableDanmaku.IsChecked ?? false;
+            DanmakuManager.IsShowBottomDanmaku = ShowBottomDanmaku.IsChecked ?? false;
+            DanmakuManager.IsShowTopDanmaku = ShowTopDanmaku.IsChecked ?? false;
+            DanmakuManager.SizeRatio = DanmakuSizeSlider.Value;
+            DanmakuManager.SpeedRatio = DanmakuSpeedSlider.Value;
+            DanmakuManager.Opacity = DanmakuOpacitySlider.Value;
         }
-
-        private void IsShowDanmaku_Checked(object sender, RoutedEventArgs e)
+        //弹幕设置
+        #region
+        private void ShowDanmaku_Checked(object sender, RoutedEventArgs e)
         {
             SettingHelper.SetValue("IsShowDanmaku", true);
+            DanmakuManager.IsShowDanmaku = true;
         }
-        private void IsShowDanmaku_Unchecked(object sender, RoutedEventArgs e)
+        private void ShowDanmaku_Unchecked(object sender, RoutedEventArgs e)
         {
             SettingHelper.SetValue("IsShowDanmaku", false);
+            DanmakuManager.IsShowDanmaku = false;
         }
-        private void IsShowScrollableDanmaku_Checked(object sender, RoutedEventArgs e)
+        private void ShowScrollableDanmaku_Checked(object sender, RoutedEventArgs e)
         {
             SettingHelper.SetValue("IsShowScrollableDanmaku", true);
             HideScrollableDanmaku.Opacity = 1;
+            DanmakuManager.IsShowScrollableDanmaku = true;
         }
-        private void IsShowScrollableDanmaku_Unchecked(object sender, RoutedEventArgs e)
+        private void ShowScrollableDanmaku_Unchecked(object sender, RoutedEventArgs e)
         {
             SettingHelper.SetValue("IsShowScrollableDanmaku", false);
             HideScrollableDanmaku.Opacity = 0.3;
+            DanmakuManager.IsShowScrollableDanmaku = false;
         }
         private void HideScrollableDanmaku_Click(object sender, RoutedEventArgs e)
         {
-            IsShowScrollableDanmaku.IsChecked = !IsShowScrollableDanmaku.IsChecked;
+            ShowScrollableDanmaku.IsChecked = !ShowScrollableDanmaku.IsChecked;
         }
-        private void IsShowTopDanmaku_Checked(object sender, RoutedEventArgs e)
+        private void ShowTopDanmaku_Checked(object sender, RoutedEventArgs e)
         {
             SettingHelper.SetValue("IsShowTopDanmaku", true);
             HideTopDanmaku.Opacity = 1;
+            DanmakuManager.IsShowTopDanmaku = true;
         }
-        private void IsShowTopDanmaku_Unchecked(object sender, RoutedEventArgs e)
+        private void ShowTopDanmaku_Unchecked(object sender, RoutedEventArgs e)
         {
             SettingHelper.SetValue("IsShowTopDanmaku", false);
             HideTopDanmaku.Opacity = 0.3;
+            DanmakuManager.IsShowTopDanmaku = false;
         }
         private void HideTopDanmaku_Click(object sender, RoutedEventArgs e)
         {
-            IsShowTopDanmaku.IsChecked = !IsShowTopDanmaku.IsChecked;
+            ShowTopDanmaku.IsChecked = !ShowTopDanmaku.IsChecked;
         }
-        private void IsShowBottomDanmaku_Checked(object sender, RoutedEventArgs e)
+        private void ShowBottomDanmaku_Checked(object sender, RoutedEventArgs e)
         {
             SettingHelper.SetValue("IsShowBottomDanmaku", true);
             HideBottomDanmaku.Opacity = 1;
+            DanmakuManager.IsShowBottomDanmaku = true;
         }
-        private void IsShowBottomDanmaku_Unchecked(object sender, RoutedEventArgs e)
+        private void ShowBottomDanmaku_Unchecked(object sender, RoutedEventArgs e)
         {
             SettingHelper.SetValue("IsShowBottomDanmaku", false);
             HideBottomDanmaku.Opacity = 0.3;
+            DanmakuManager.IsShowBottomDanmaku = false;
         }
         private void HideBottomDanmaku_Click(object sender, RoutedEventArgs e)
         {
-            IsShowBottomDanmaku.IsChecked = !IsShowBottomDanmaku.IsChecked;
+            ShowBottomDanmaku.IsChecked = !ShowBottomDanmaku.IsChecked;
         }
         private void DanmakuSizeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             SettingHelper.SetValue("DanmakuSize", e.NewValue);
+            DanmakuManager.SizeRatio = e.NewValue;
         }
         private void DanmakuSpeedSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             SettingHelper.SetValue("DanmakuSpeed", e.NewValue);
+            DanmakuManager.SpeedRatio = e.NewValue;
         }
         private void DanmakuOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             SettingHelper.SetValue("DanmakuOpacity", e.NewValue);
+            DanmakuManager.Opacity = e.NewValue;
         }
-
+        #endregion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             param = e.Parameter as MediaPlayerSource;
-            PlayerTitle.Text = param.title;
-            Play(param.play_list);
+            PlayerTitle.Text = param.Title;
+            LoadDanmaku();
+            Play(param.PlayList);
+        }
+        /// <summary>
+        /// 加载弹幕
+        /// </summary>
+        private async void LoadDanmaku()
+        {
+            danmakuList = await Tucao.Content.Content.GetDanmakus(param.Hid, param.Part);
         }
         /// <summary>
         /// 播放视频
@@ -135,7 +164,7 @@ namespace Tucao.View
 
             //载入播放引擎
             SYEngine.Core.Initialize();
-            var playlist = new SYEngine.Playlist(param.islocalfile ? SYEngine.PlaylistTypes.LocalFile : SYEngine.PlaylistTypes.NetworkHttp);
+            var playlist = new SYEngine.Playlist(param.IsLocalFile ? SYEngine.PlaylistTypes.LocalFile : SYEngine.PlaylistTypes.NetworkHttp);
             //playlist=new SYEngine.Playlist(SYEngine.PlaylistTypes.LocalFile);
             //将分段添加到playlist
             foreach (var url in play_list)
@@ -180,9 +209,8 @@ namespace Tucao.View
             //显示控制栏
             ControlPanelGrid.Visibility = Visibility.Visible;
             //使点击显示控制栏
-            Media.Tapped += Media_Tapped;
-            Media.DoubleTapped += Media_DoubleTapped;
-            Player.Focus(FocusState.Programmatic);
+            Player.Tapped += Media_Tapped;
+            Player.DoubleTapped += Media_DoubleTapped;
         }
 
 
@@ -336,6 +364,7 @@ namespace Tucao.View
                         Status.Visibility = Visibility.Collapsed;
                         PlayPauseSymbol.Symbol = Symbol.Pause;
                         SettingHelper.IsScreenAlwaysOn = true;
+                        DanmakuManager.Resume();
                         break;
                     }
                 case MediaElementState.Paused:
@@ -352,6 +381,7 @@ namespace Tucao.View
                         PlayPauseSymbol.Symbol = Symbol.Play;
                         //取消屏幕常亮
                         SettingHelper.IsScreenAlwaysOn = false;
+                        DanmakuManager.Pause();
                         break;
                     }
             }
@@ -377,12 +407,16 @@ namespace Tucao.View
                 BufferingProgress.Text = "";
             }
         }
+        /// <summary>
+        /// 从外部导航到此界面传递的信息
+        /// </summary>
         public class MediaPlayerSource
         {
-            public string title { get; set; }
-            public string hid { get; set; }
-            public bool islocalfile { get; set; }
-            public List<string> play_list { get; set; }
+            public string Title { get; set; }
+            public string Hid { get; set; }
+            public int Part { get; set; }
+            public bool IsLocalFile { get; set; }
+            public List<string> PlayList { get; set; }
         }
 
         private void Page_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -447,7 +481,67 @@ namespace Tucao.View
                 sender.SelectionStart = ((string)sender.Tag).Length;
             }
         }
+        //划动屏幕跳转进度
+        static double windowWidth;
+        static double positionValue;
+        static string positionText;
+        private void Media_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
+        {
+            positionText = TimeElapsedElement.Text;
+            positionValue = ProgressSlider.Value;
+            windowWidth = this.RenderSize.Width;
+        }
 
+        private void Media_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+            int t = (int)(100 * e.Cumulative.Translation.X / windowWidth);
+            if (t < 1 && t > -1)
+            {
+                SwipingMessage.Text = "取消跳转";
+                return;
+            }
+            if (positionValue+t<0) t = (int)-positionValue;
+            SwipingMessage.Text =positionText+  Convert.ToInt16(t).ToString("+#;-#;+0") + 's';
+            SwipingPopup.Visibility = Visibility.Visible;
+        }
+
+        private void Media_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+            //松手0.5秒后使提示消失
+            DispatcherTimer timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(500) };
+            timer.Tick += ((s, ex) =>
+            {
+                SwipingPopup.Visibility = Visibility.Collapsed;
+                timer.Stop();
+            });
+            timer.Start();
+            int t =(int) (100 * e.Cumulative.Translation.X / windowWidth);
+            if (t < 1 && t > -1)
+            {
+                SwipingPopup.Visibility = Visibility.Collapsed;
+                return;
+            }
+            if (positionValue + t < 0) t =(int) -positionValue;
+            ProgressSlider.Value =(int)positionValue+ t;
+        }
+        /// <summary>
+        /// 检测进度条变化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ProgressSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            if(e.OldValue>e.NewValue||e.NewValue-e.OldValue>1)
+            {
+                DanmakuManager.Clear();
+                return;
+            }
+            var danmakus = danmakuList.FindAll((d) => d.Position >= e.OldValue && d.Position < e.NewValue);
+            foreach (var danmaku in danmakus)
+            {
+                DanmakuManager.AddDanmaku(danmaku.Content, danmaku.TextColor, danmaku.Type);
+            }
+        }
     }
 
 

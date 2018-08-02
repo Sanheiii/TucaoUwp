@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -95,7 +96,7 @@ namespace Tucao.Content
             int type= int.Parse(attitudes[1].Value);
             int color = int.Parse(attitudes[3].Value);
             string content = XML.Replace(p, "");
-            content = content.Remove(content.Length - 4);
+            content = WebUtility.HtmlDecode(content.Remove(content.Length - 4));
             Danmaku danmaku = new Danmaku(position, (DanmakuType)(Enum.IsDefined(DanmakuType.Top.GetType(), type) ? type : 1),color,content);
             return danmaku;
         }

@@ -28,7 +28,7 @@ namespace Controls
         /// <summary>
         /// 弹幕字号
         /// </summary>
-        private double danmakuSize;
+        private double danmakuSize = 25;
         public double SizeRatio
         {
             get
@@ -41,7 +41,7 @@ namespace Controls
                 ComputeLines();
             }
         }
-        private double danmakuSpeed;
+        private double danmakuSpeed = 0.15;
         public double SpeedRatio
         {
             get
@@ -278,6 +278,7 @@ namespace Controls
         /// <param name="content">弹幕内容</param>
         void AddScrollableDanmaku(string content, Color foreground)
         {
+            if (!(IsShowScrollableDanmaku&&IsShowDanmaku)) return;
             //获取轨道
             int line = GetLine(DanmakuType.Scrollable);
             //没有轨道就不绘制弹幕
@@ -344,6 +345,7 @@ namespace Controls
         }
         void AddBottomDanmaku(string content, Color foreground)
         {
+            if (!(IsShowBottomDanmaku && IsShowDanmaku)) return;
             //获取轨道
             int line = GetLine(DanmakuType.Bottom);
             //没有轨道就不绘制弹幕
@@ -378,6 +380,7 @@ namespace Controls
         }
         void AddTopDanmaku(string content, Color foreground)
         {
+            if (!(IsShowTopDanmaku && IsShowDanmaku)) return;
             //获取轨道
             int line = GetLine(DanmakuType.Top);
             //没有轨道就不绘制弹幕
@@ -427,6 +430,20 @@ namespace Controls
             Storyboards.ForEach(s => s.Resume());
             timers.ForEach(t => t.Start());
             IsPaused = false;
+        }
+        public void Clear()
+        {
+            timers.ForEach(t => t.Stop());
+            timers.Clear();
+            Container.Children.Clear();
+            ScrollableDanmakuList.Clear();
+            BottomDanmakuList.Clear();
+            TopDanmakuList.Clear();
+            Storyboards.ForEach(s => s.Stop());
+            Storyboards.Clear();
+            isOccupied_Scrollable = new bool[lines];
+            isOccupied_Bottom = new bool[lines];
+            isOccupied_Top = new bool[lines];
         }
     }
 }

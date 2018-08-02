@@ -123,9 +123,12 @@ namespace Tucao.View
             if (Delete.IsChecked == false)
             {
                 var param = new MediaPlayer.MediaPlayerSource();
-                param.title = part.partTitle;
-                param.play_list = part.play_list;
-                param.islocalfile = true;
+                param.Title = part.partTitle;
+                param.PlayList = part.play_list;
+                param.IsLocalFile = true;
+#warning "这里以后改成本地弹幕"
+                param.Hid = "4077067";
+                param.Part = 0;
                 Frame root = Window.Current.Content as Frame;
                 App.Link.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
             }

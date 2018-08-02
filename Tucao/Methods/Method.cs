@@ -53,7 +53,7 @@ namespace Tucao
         /// <param name="url">请求地址</param>
         /// <param name="param">参数</param>
         /// <returns></returns>
-        static public async Task<HttpResponseMessage> HttpGet(string url, Hashtable param)
+        public static async Task<HttpResponseMessage> HttpGet(string url, Hashtable param)
         {
             if (param != null)
             {
@@ -67,7 +67,7 @@ namespace Tucao
             var response = await client.GetAsync(new Uri(url));
             return response;
         }
-        static public async Task<HttpResponseMessage> HttpGet(string url)
+        public static async Task<HttpResponseMessage> HttpGet(string url)
         {
             return await HttpGet(url, null);
         }

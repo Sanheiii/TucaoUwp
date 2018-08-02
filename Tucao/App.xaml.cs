@@ -1,5 +1,4 @@
-﻿#define DEBUG
-using System;
+﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
@@ -36,7 +35,7 @@ namespace Tucao
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
 #if DEBUG
-            Content.Content.GetDanmakus("4077071", 0);
+            //Content.Content.GetDanmakus("4077067", 0);
 #endif
             //设置桌面模式窗口的最小宽高
             Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated += Dispatcher_AcceleratorKeyActivated;

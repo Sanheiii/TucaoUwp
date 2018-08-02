@@ -222,12 +222,12 @@ namespace Tucao.View
             }
             //打开播放器
             var param = new MediaPlayer.MediaPlayerSource();
-            param.hid = info.Hid;
-            param.title = clickedItem.PartTitle;
-            param.play_list = url;
-            param.islocalfile = false;
-            Frame root = Window.Current.Content as Frame;
-            root.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
+            param.Hid = info.Hid;
+            param.Title = clickedItem.PartTitle;
+            param.PlayList = url;
+            param.IsLocalFile = false;
+            param.Part = clickedItem.PartNumber - 1;
+            App.Link.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
         }
         /// <summary>
         /// 选择下载
