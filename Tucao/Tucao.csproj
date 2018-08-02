@@ -123,7 +123,6 @@
     <Compile Include="View\Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
     </Compile>
-    <Content Include="Assets\banner.jpg" />
     <Content Include="Assets\logo.png" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -150,6 +149,7 @@
   <ItemGroup>
     <Content Include="Assets\bg_y_png24.png" />
     <Content Include="Assets\nophoto.gif" />
+    <Content Include="Notes\Settings.txt" />
     <Content Include="Notes\备忘.txt" />
     <None Include="Package.StoreAssociation.xml" />
     <None Include="Package.xml" />

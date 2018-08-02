@@ -41,6 +41,7 @@
 现在在播放页面双击暂停/继续不会使控制栏弹出/消失
 现在可以划动屏幕跳转进度了
 现在支持弹幕设置了
+修复了搜索不到一页会显示没有结果的bug
 
 这个版本将要实现
 发送弹幕
@@ -64,7 +65,7 @@ VideoInfo中case太多,可以写成dictionary
 
 吐槽粉 #FFFF3366
 
-评论     http://www.tucao.tv/index.php?m=comment&c=index&a=init&commentid=content_<分区id>-<HID>-1&hot=<0:最新,1:最热>&iframe=1&page=<页码>
+获取评论     http://www.tucao.tv/index.php?m=comment&c=index&a=init&commentid=content_<分区id>-<HID>-1&hot=<0:最新,1:最热>&iframe=1&page=<页码>
 
 弹幕信息获得地址<xml>:
 GET http://www.tucao.tv/index.php?m=mukio&c=index&a=init&playerID=11-<hid>-1-<part>
@@ -78,11 +79,4 @@ GET http://www.tucao.tv/index.php?m=mukio&c=index&a=init&playerID=11-<hid>-1-<pa
 POST http://www.tucao.tv/index.php?m=mukio&c=index&a=post&playerID=<分类>-<HID>-1-<part>
 stime=<发送到视频的时间>&message=<文本>&color=<颜色>&cid=<分类ID>%2D<HID>%2D1%2D<part>&mode=<1滚动4底部5顶部>&user=test&size=<字号 默认25>
 
-键                            值                         注释
-IsShowDanmaku	              bool                       是否显示弹幕
-IsShowScrollableDanmaku       bool                       是否显示滚动弹幕
-IsShowTopDanmaku              bool                       是否显示顶部弹幕
-IsShowBottomDanmaku           bool                       是否显示底部弹幕
-DanmakuSize                   double                     弹幕大小倍率,值为1时Fontsize=15
-DanmakuSpeed                  double                     滚动弹幕的速度倍率
-DanmakuOpacity                double                     弹幕的不透明度(0-1)
+

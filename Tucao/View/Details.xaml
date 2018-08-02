@@ -11,12 +11,12 @@
       mc:Ignorable="d"
       NavigationCacheMode="Enabled">
 
-    <Grid Background="#11000000">
-        <Rectangle Name="HeaderBackground" Fill="#FFFF3366" Height="48" Margin="0,0,0,0" VerticalAlignment="Top"/>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Rectangle Name="HeaderBackground" Fill="Transparent" Height="48" Margin="0,0,0,0" VerticalAlignment="Top"/>
         <Pivot PivotItemLoading="Pivot_PivotItemLoading">
             <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock Foreground="White">简介</TextBlock>
+                    <TextBlock>简介</TextBlock>
                 </PivotItem.Header>
                 <Grid>
                     <ScrollViewer>
@@ -77,7 +77,7 @@
             </PivotItem>
             <PivotItem >
                 <PivotItem.Header>
-                    <TextBlock Foreground="White">评论</TextBlock>
+                    <TextBlock>评论</TextBlock>
                 </PivotItem.Header>
                 <ScrollViewer>
                     <Grid>
@@ -85,7 +85,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <ListView Name="Comment" SelectionMode="None" IsItemClickEnabled="False">
+                        <ListView Name="Comment" ScrollViewer.VerticalScrollMode="Disabled" SelectionMode="None" IsItemClickEnabled="False" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Margin="0,10,0,0">

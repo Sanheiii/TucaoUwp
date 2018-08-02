@@ -26,17 +26,8 @@
                 <StackPanel Name="ExceptionMessage" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
                     <Image Source="ms-appx:///Assets/bg_y_png24.png" Stretch="None"/>
                 </StackPanel>
-                <toolkit:AdaptiveGridView x:Name="VideoList"
-                                   OneRowModeEnabled="False"
-                                   ItemHeight="90"
-                                          ScrollViewer.VerticalScrollMode="Disabled"
-                                   DesiredWidth="450"
-                                          IsItemClickEnabled="True"
-                                          SelectionMode="None" 
-                                  HorizontalContentAlignment="Left" 
-                                  Padding="10,0,10,0"
-                                          Grid.Row="0"
-                                          ItemClick="VideoList_ItemClick">
+                <toolkit:AdaptiveGridView x:Name="VideoList" OneRowModeEnabled="False" ItemHeight="90" ScrollViewer.VerticalScrollMode="Disabled" DesiredWidth="450"
+                                          IsItemClickEnabled="True" SelectionMode="None" HorizontalContentAlignment="Left" Padding="10,0,10,0" Grid.Row="0" ItemClick="VideoList_ItemClick">
                     <toolkit:AdaptiveGridView.ItemTemplate>
                         <DataTemplate>
                             <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">

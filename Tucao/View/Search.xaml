@@ -18,7 +18,7 @@
     </Page.Transitions>
     <Page.Resources>
         <DataTemplate x:Key="VideoTemplate">
-            <Grid Background="#FFEEEEEE">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="160"/>
                     <ColumnDefinition Width="*"/>

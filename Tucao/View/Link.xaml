@@ -42,9 +42,9 @@
                                 <TextBlock Text="首页" Margin="15,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Microsoft YaHei UI"/>
                             </StackPanel>
                         </ListViewItem>
-                        <Grid>
-                            <AutoSuggestBox Width="275" QueryIcon="Find" PlaceholderText="搜索关键字 HID"/>
-                        </Grid>
+                        <!--<Grid>
+                           <AutoSuggestBox Width="275" QueryIcon="Find" PlaceholderText="搜索关键字 HID"/>
+                        </Grid>-->
                         <ListViewItem>
                             <StackPanel Orientation="Horizontal" Margin="3,0,0,0" >
                                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8C0;" FontSize="18"/>

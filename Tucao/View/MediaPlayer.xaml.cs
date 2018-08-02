@@ -149,6 +149,7 @@ namespace Tucao.View
         /// </summary>
         private async void LoadDanmaku()
         {
+            if(!param.IsLocalFile)
             danmakuList = await Tucao.Content.Content.GetDanmakus(param.Hid, param.Part);
         }
         /// <summary>
@@ -236,7 +237,7 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void PlayPauseButton_Click(object sender, RoutedEventArgs e)
         {
-            var i = Media.CurrentState;
+        var i = Media.CurrentState;
             if (i == MediaElementState.Playing)
             {
                 //暂停
