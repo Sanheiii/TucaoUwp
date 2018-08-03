@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 
-namespace Tucao.Content
+namespace Tucao
 {
     public class Content
     {
@@ -27,13 +27,13 @@ namespace Tucao.Content
                 param.Add("apikey", apikey);
                 param.Add("type", "json");
             }
-            var str = await Method.HttpGet("http://www.tucao.tv/api_v2/view.php", param);
+            var str = await Methods.HttpGetAsync("http://www.tucao.tv/api_v2/view.php", param);
             string message1 = await str.Content.ReadAsStringAsync();
             var information = Newtonsoft.Json.JsonConvert.DeserializeObject<Hashtable>(message1);
             var result = Newtonsoft.Json.JsonConvert.DeserializeObject<Hashtable>(information["result"].ToString());
             info.Parse(result);
             //解析html得到头像和介绍
-            HttpResponseMessage message2 = await Method.HttpGet("http://www.tucao.tv/play/h" + hid);
+            HttpResponseMessage message2 = await Methods.HttpGetAsync("http://www.tucao.tv/play/h" + hid);
             string webpage = await message2.Content.ReadAsStringAsync();
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(webpage);
@@ -64,7 +64,7 @@ namespace Tucao.Content
                 param.Add("q", keywords);
                 param.Add("page", page);
             }
-            var webpage = await Method.HttpGet("http://www.tucao.tv/index.php", param);
+            var webpage = await Methods.HttpGetAsync("http://www.tucao.tv/index.php", param);
             string htmlstring = await webpage.Content.ReadAsStringAsync();
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(htmlstring);
@@ -91,7 +91,7 @@ namespace Tucao.Content
         /// <returns>含有视频信息的列表</returns>
         static public async Task<List<Introduction>> GetSubclassiFication(int tid, int pagenum)
         {
-            var webpage = await Method.HttpGet("http://www.tucao.tv/list/" + tid + "/index_" + pagenum + ".html");
+            var webpage = await Methods.HttpGetAsync("http://www.tucao.tv/list/" + tid + "/index_" + pagenum + ".html");
             var htmlstring = await webpage.Content.ReadAsStringAsync();
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(htmlstring);
@@ -137,7 +137,7 @@ namespace Tucao.Content
                 param.Add("iframe", "1");
                 param.Add("page", page);
             }
-            var webpage = await Method.HttpGet("http://www.tucao.tv/index.php", param);
+            var webpage = await Methods.HttpGetAsync("http://www.tucao.tv/index.php", param);
             var htmlstring = await webpage.Content.ReadAsStringAsync();
             //解析html
             HtmlDocument doc = new HtmlDocument();
@@ -178,7 +178,7 @@ namespace Tucao.Content
                 param.Add("forward", "http%3A%2F%2Ftucao.tv%2F");
                 param.Add("siteid", "1");
             }
-            var result = await Method.HttpGet("http://www.tucao.tv/index.php", param);
+            var result = await Methods.HttpGetAsync("http://www.tucao.tv/index.php", param);
             return await result.Content.ReadAsStringAsync();
         }
         /// <summary>
@@ -197,7 +197,7 @@ namespace Tucao.Content
                 param.Add("a", "init");
                 param.Add("playerID", "11-"+hid+"-1-"+part+"");
             }
-            var result = await Method.HttpGet("http://www.tucao.tv/index.php", param);
+            var result = await Methods.HttpGetAsync("http://www.tucao.tv/index.php", param);
             string danmakus_xml= await result.Content.ReadAsStringAsync();
             return Danmaku.ParseDanmakus(danmakus_xml);
         }

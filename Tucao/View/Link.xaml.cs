@@ -94,9 +94,11 @@ namespace Tucao.View
                 case "Index": { PageName.Text = "首页"; ShowTopBar = true; break; }
                 case "DownloadList": { PageName.Text = "下载队列"; ShowTopBar = true; break; }
                 case "LocalVideo": { PageName.Text = "本地视频"; ShowTopBar = true; break; }
-                case "About": { PageName.Text = "关于"; ShowTopBar = true; break; }
                 case "Search": { PageName.Text = "搜索"; ShowTopBar = true; break; }
+                case "Setting": { PageName.Text = "设置"; ShowTopBar = true; break; }
+                case "Details": { ShowTopBar = true; break; }
                 case "MediaPlayer": { ShowTopBar=false; break; }
+                default: { ShowTopBar = true; break; }
             }
         }
         /// <summary>
@@ -163,9 +165,9 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void Setting_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (Rua.CurrentSourcePageType != typeof(About))
+            if (Rua.CurrentSourcePageType != typeof(Setting))
                 HamburgerMenu.IsPaneOpen = !HamburgerMenu.IsPaneOpen;
-            Rua.Navigate(typeof(About), null, new DrillInNavigationTransitionInfo());
+            Rua.Navigate(typeof(Setting), null, new DrillInNavigationTransitionInfo());
         }
         /// <summary>
         /// 点击菜单项目后收起汉堡菜单

@@ -53,6 +53,7 @@ namespace Tucao.View
                         tasks.Add(HandleDownloadAsync(download));
                     }
                 }
+                //什么也不做
                 else
                 {
 
@@ -71,7 +72,7 @@ namespace Tucao.View
                 string name;
                 string path = download.ResultFile.Path;
                 var folderpath = path.Remove(path.LastIndexOf('\\'));
-                var folder=await StorageFolder.GetFolderFromPathAsync(folderpath);
+                var folder = await StorageFolder.GetFolderFromPathAsync(folderpath);
                 if (await folder.TryGetItemAsync("part.json") != null)
                 {
                     StorageFile jsonfile = await folder.GetFileAsync("part.json");
@@ -81,7 +82,7 @@ namespace Tucao.View
                     reader.Dispose();
                     stream.Dispose();
                     JsonObject json = JsonObject.Parse(str);
-                    name = json["title"].GetString()+ "-"+download.ResultFile.Name;
+                    name = json["title"].GetString() + "-" + download.ResultFile.Name;
                 }
                 else
                 {
@@ -160,7 +161,7 @@ namespace Tucao.View
                     await folder.DeleteAsync();
                     //父文件夹没有文件夹时删除它
                     int count = (await parent.GetFoldersAsync()).Count;
-                    if (count==0)
+                    if (count == 0)
                     {
                         await parent.DeleteAsync();
                     }

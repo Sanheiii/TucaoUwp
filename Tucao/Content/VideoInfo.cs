@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-namespace Tucao.Content
+namespace Tucao
 {
     //定义 投稿 类
     public class VideoInfo
@@ -131,14 +131,14 @@ namespace Tucao.Content
             }
             else
             {
-                var unixtimestamp = Method.GetUnixTimestamp();
+                var unixtimestamp = Methods.GetUnixTimestamp();
                 Hashtable param = new Hashtable();
                 {
                     param.Add("type", part["type"]);
                     param.Add("vid", part["vid"]);
                     param.Add("r", (unixtimestamp / 1000).ToString());
                 }
-                var result = await Method.HttpGet("http://api.tucao.tv/api/playurl", param);
+                var result = await Methods.HttpGetAsync("http://api.tucao.tv/api/playurl", param);
                 var xml =await result.Content.ReadAsStringAsync();
                 XMLParser xmlParser = new XMLParser();
                 XMLNode xn = xmlParser.Parse(xml);
@@ -168,7 +168,7 @@ namespace Tucao.Content
         {
             Hid = result["hid"].ToString();
             TypeId = result["typeid"].ToString();
-            Create = Method.LongDateTimeToDateTimeString(result["create"].ToString());
+            Create = Methods.LongDateTimeToDateTimeString(result["create"].ToString());
             Mukio = result["mukio"].ToString();
             TypeName = result["typename"].ToString();
             Title = result["title"].ToString();

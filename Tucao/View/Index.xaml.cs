@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Tucao.Content;
-using Tucao.Helpers;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -93,7 +89,7 @@ namespace Tucao.View
             //获取信息
             try
             {
-                r = await Tucao.Content.Content.GetSubclassiFication(11, page);
+                r = await Tucao.Content.GetSubclassiFication(11, page);
             }
             catch (Exception ex)
             {

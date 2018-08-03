@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Windows.UI;
 using static Controls.DanmakuManager;
 
-namespace Tucao.Content
+namespace Tucao
 {
     public class Danmaku:IComparable<Danmaku>
     {

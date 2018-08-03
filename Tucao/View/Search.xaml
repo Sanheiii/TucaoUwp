@@ -59,7 +59,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <toolkit:AdaptiveGridView Name="VideoList"
+                    <toolkit:AdaptiveGridView x:Name="VideoList"
                                    OneRowModeEnabled="False"
                                    ItemHeight="90"
                                    DesiredWidth="450"

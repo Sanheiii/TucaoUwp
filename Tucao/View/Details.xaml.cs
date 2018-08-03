@@ -7,9 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
-using Tucao.Content;
 using Tucao.Helpers;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
@@ -63,7 +61,7 @@ namespace Tucao.View
             if (hid == info.Hid) return;
             try
             {
-                info = await Tucao.Content.Content.GetVideoInfo(hid);
+                info = await Tucao.Content.GetVideoInfo(hid);
             }
             catch
             {
@@ -101,7 +99,6 @@ namespace Tucao.View
                     img.MaxWidth = 200;
                     img.Margin = new Thickness(10, 10, 10, 10);
                     img.Source = new BitmapImage(new Uri(url));
-                    img.RequestedTheme = ElementTheme.Dark;
                     MenuFlyout flyoutmenu = new MenuFlyout();
                     MenuFlyoutItem item = new MenuFlyoutItem();
                     item.Text = "保存图片";
@@ -227,6 +224,7 @@ namespace Tucao.View
             param.PlayList = url;
             param.IsLocalFile = false;
             param.Part = clickedItem.PartNumber - 1;
+            param.Tid = info.TypeId;
             App.Link.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
         }
         /// <summary>
@@ -242,7 +240,7 @@ namespace Tucao.View
             DownloadCommandBar.Visibility = Visibility.Visible;
         }
         /// <summary>
-        /// 取消下载
+        /// 关闭下载菜单
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -259,12 +257,12 @@ namespace Tucao.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OK_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void OK_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var items = PartList.SelectedItems;
             foreach (PartInfo item in items)
             {
-                DownloadHelper.Download(info, item.PartNumber);
+                await DownloadHelper.Download(info, item.PartNumber);
             }
             Cancel_Tapped(sender, e);
         }
@@ -297,7 +295,7 @@ namespace Tucao.View
         /// </summary>
         async void LoadComment()
         {
-            var comments = await Tucao.Content.Content.GetComment(info.TypeId, info.Hid, Commentpage,Tucao.Content.Content.Order.New);
+            var comments = await Tucao.Content.GetComment(info.TypeId, info.Hid, Commentpage,Tucao.Content.Order.New);
             foreach (Comment comment in comments)
             {
                 (Comment.ItemsSource as ObservableCollection<Comment>).Add(comment);

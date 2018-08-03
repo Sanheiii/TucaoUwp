@@ -130,34 +130,13 @@
                             </Flyout>
                         </Button.Flyout>
                     </Button>
-                    <ComboBox Grid.Column="2" VerticalAlignment="Center" RequestedTheme="Dark">
+                    <ComboBox Name="Mode" Grid.Column="2" VerticalAlignment="Center" RequestedTheme="Dark">
                         <ComboBoxItem IsSelected="True">滚动</ComboBoxItem>
                         <ComboBoxItem>顶部</ComboBoxItem>
                         <ComboBoxItem>底部</ComboBoxItem>
                     </ComboBox>
-                    <AutoSuggestBox QueryIcon="Forward" Grid.Column="3" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                    <AutoSuggestBox Name="DanmakuSender" PlaceholderText="发送弹幕不需要登陆" QueryIcon="Forward" Grid.Column="3" VerticalAlignment="Center" Margin="5,0,0,0" QuerySubmitted="DanmakuSender_QuerySubmitted"/>
                 </Grid>
-                <CommandBar Name="TopControls" Visibility="Collapsed"
-                                IsDynamicOverflowEnabled="False"
-                                Margin="0,0" 
-                                RequestedTheme="Dark"
-                                Style="{StaticResource CommandBarStyle}">
-                    <CommandBar.Content>
-                        <StackPanel Orientation="Horizontal" Height="48">
-                        </StackPanel>
-                    </CommandBar.Content>
-                    <CommandBar.PrimaryCommands>
-                        <AppBarButton x:Name="InvertScreen"
-                                          Label="旋转屏幕" 
-                                          Click="InvertScreen_Click"
-                                      Visibility="Visible"
-                                      IsTabStop="False">
-                            <AppBarButton.Icon>
-                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE845;"/>
-                            </AppBarButton.Icon>
-                        </AppBarButton>
-                    </CommandBar.PrimaryCommands>
-                </CommandBar>
             </Grid>
             <!--下面的控制栏-->
             <Grid Background="#99000000"

@@ -123,17 +123,19 @@
     <Compile Include="View\Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Setting.xaml.cs">
+      <DependentUpon>Setting.xaml</DependentUpon>
+    </Compile>
     <Content Include="Assets\logo.png" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\DeviceHelper.cs" />
     <Compile Include="Helpers\SettingHelper.cs" />
     <Compile Include="Content\Content.cs" />
     <Compile Include="View\Index.xaml.cs">
       <DependentUpon>Index.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Methods\Method.cs" />
+    <Compile Include="Methods\Methods.cs" />
     <Compile Include="Methods\XMLParser.cs" />
     <Compile Include="Content\VideoInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -213,6 +215,10 @@
     <Page Include="Resource\Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Setting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

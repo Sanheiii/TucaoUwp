@@ -1,0 +1,83 @@
+﻿<Page
+    x:Class="Tucao.View.Setting"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Tucao.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Pivot>
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock FontSize="18" FontWeight="Bold">弹幕</TextBlock>
+                </PivotItem.Header>
+                <ScrollViewer>
+                    <StackPanel>
+                        <!-- Grid item = new Grid() { Margin = new Thickness(0, GetY_axis(line), 0, 0), HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x33, 0x66)), BorderThickness = new Thickness(borderThickness) };
+            TextBlock textBlock = new TextBlock() { Text = content, Foreground = new SolidColorBrush(foreground), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
+            TextBlock shadow = new TextBlock() { Text = content, Margin = new Thickness(2, 1, 0, 0), Foreground = new SolidColorBrush(GetShadowColor(foreground)), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };-->
+                        <Grid Background="Gray" Width="270" Height="40" HorizontalAlignment="Left">
+                            <TextBlock Name="ShadowTest" Text="一条弹幕ABCabc123" Foreground="Black" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,1,0,0"/>
+                            <TextBlock Name="DanmakuTest" Text="一条弹幕ABCabc123" Foreground="White" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <TextBlock VerticalAlignment="Center" Margin="0,10,10,0" FontWeight="Bold" FontSize="15">弹幕字号</TextBlock>
+                        <Slider Name="DanmakuSizeSlider" Maximum="2" Minimum="0.4" StepFrequency="0.05" HorizontalAlignment="Left" Width="270"/>
+
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold" FontSize="15">滚动速度</TextBlock>
+                        <Slider Name="DanmakuSpeedSlider" Maximum="2" Minimum="0.3" StepFrequency="0.1" HorizontalAlignment="Left" Width="270"/>
+
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold" FontSize="15">不透明度</TextBlock>
+                        <Slider Name="DanmakuOpacitySlider" Maximum="1" StepFrequency="0.1" HorizontalAlignment="Left" Width="270"/>
+                        <Button>恢复默认</Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock FontSize="18" FontWeight="Bold">关于</TextBlock>
+                </PivotItem.Header>
+                <ScrollViewer>
+                    <StackPanel>
+                        <Grid>
+                            <TextBlock Text="软件名称" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock Text="TucaoUwp" HorizontalAlignment="Right" FontSize="18" Margin="0,5,0,0"/>
+                        </Grid>
+                        <Grid>
+                            <TextBlock Text="版本" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock HorizontalAlignment="Right" Margin="0,5,0,0" FontSize="18" Text="1.3.7"/>
+                        </Grid>
+                        <Grid>
+                            <TextBlock Text="作者" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock Text="Sanhei" HorizontalAlignment="Right" FontSize="18" Margin="0,5,0,0"/>
+                        </Grid>
+                        <TextBlock Text="声明" HorizontalAlignment="Left" FontSize="22" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <TextBlock Text="本程序是吐槽弹幕网非官方客户端,一个兴趣使然的个人开发者所写,本软件仅供学习交流使用,如果侵犯了您的合法权益,请联系本人以及时进行修改或删除" Margin="10,5,10,0" TextWrapping="WrapWholeWords"/>
+
+                        <TextBlock Text="引用开源项目" HorizontalAlignment="Left" FontSize="22" FontWeight="Bold" Margin="0,5,0,0"/>
+                        <HyperlinkButton Content="ShanYe MediaFoundation Engine" NavigateUri="https://github.com/amamiya/SYEngine" FontSize="15" FontWeight="Bold"/>
+                        <HyperlinkButton Content="NewtonSoft.Json" NavigateUri="https://github.com/JamesNK/Newtonsoft.Json" FontSize="15" FontWeight="Bold"/>
+                        <HyperlinkButton Content="UWPCommunityToolkit" NavigateUri="https://github.com/Microsoft/UWPCommunityToolkit/" FontSize="15" FontWeight="Bold"/>
+                        <HyperlinkButton Content="XMLParser" NavigateUri="http://dev.grumpyferret.com/unity/" HorizontalAlignment="Left" FontSize="15" FontWeight="Bold"/>
+                        <HyperlinkButton Content="HtmlAgilityPack" NavigateUri="http://html-agility-pack.net/" HorizontalAlignment="Left" FontSize="15" FontWeight="Bold"/>
+                        <HyperlinkButton Content="SkylarkWsp.DanmakuEngine" NavigateUri="https://github.com/SkylarkWorkshop/SkylarkWsp.DanmakuEngine" HorizontalAlignment="Left" FontSize="15" FontWeight="Bold"/>
+                        <TextBlock Text="支持开发者" HorizontalAlignment="Left" FontSize="22" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <HyperlinkButton Content="提出建议" Grid.Column="0" NavigateUri="https://github.com/amamiya/SYEngine" FontSize="15" FontWeight="Bold"/>
+                            <HyperlinkButton Content="回报bug" Grid.Column="1" NavigateUri="https://github.com/amamiya/SYEngine" FontSize="15" FontWeight="Bold"/>
+                            <HyperlinkButton Content="五星好评" Grid.Column="2" NavigateUri="https://github.com/amamiya/SYEngine" FontSize="15" FontWeight="Bold"/>
+                            <HyperlinkButton Content="捐赠" Grid.Column="3" NavigateUri="https://github.com/amamiya/SYEngine" FontSize="15" FontWeight="Bold"/>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+</Page>

@@ -68,7 +68,7 @@
                     <ListViewItem Grid.Row="2" Tapped="Setting_Tapped">
                         <StackPanel Orientation="Horizontal" Margin="3,5,0,5">
                             <SymbolIcon Symbol="Setting" />
-                            <TextBlock Text="关于" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="设置" Margin="24,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </ListViewItem>
                 </Grid>

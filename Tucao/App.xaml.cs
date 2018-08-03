@@ -35,7 +35,6 @@ namespace Tucao
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
 #if DEBUG
-            //Content.Content.GetDanmakus("4077067", 0);
 #endif
             //设置桌面模式窗口的最小宽高
             Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated += Dispatcher_AcceleratorKeyActivated;

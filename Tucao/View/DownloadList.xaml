@@ -52,7 +52,7 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
-        <CommandBar VerticalAlignment="Bottom" Grid.RowSpan="2" RequestedTheme="Dark">
+        <CommandBar VerticalAlignment="Bottom" Grid.RowSpan="2">
             <AppBarButton Label="下载目录" Name="OpenDownloadFolder" Tapped="OpenDownloadFolder_Tapped">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8DE;"/>
             </AppBarButton>

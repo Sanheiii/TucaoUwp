@@ -4,14 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Tucao.Content;
-using Tucao.Helpers;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -80,7 +76,7 @@ namespace Tucao.View
                 for (int i = 1; i >= 0; i--)
                 {
                     //获取一页
-                    r = await Tucao.Content.Content.Search(0, page * 2 - i, q);
+                    r = await Tucao.Content.Search(0, page * 2 - i, q);
                     //添加到控件中
                     for (int j = 0; j < r.Count; j++)
                     {

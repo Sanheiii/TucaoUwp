@@ -1,19 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using Tucao;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
 
@@ -127,7 +121,7 @@ namespace Controls
         //每条轨道的高度
         public int LineHeight
         {
-            get { return (int)(danmakuSize + 5); }
+            get { return (int)(danmakuSize + 10); }
         }
 
         //弹幕轨道数,在控件改变大小时会重新计算
@@ -262,13 +256,13 @@ namespace Controls
         /// <param name="content">弹幕内容</param>
         /// <param name="foreground">颜色</param>
         /// <param name="type">弹幕类型</param>
-        public void AddDanmaku(string content, Color foreground, DanmakuType type)
+        public void AddDanmaku(string content, Color foreground, DanmakuType type,int borderThickness=0)
         {
             switch (type)
             {
-                case DanmakuType.Scrollable: AddScrollableDanmaku(content, foreground); break;
-                case DanmakuType.Bottom: AddBottomDanmaku(content, foreground); break;
-                case DanmakuType.Top: AddTopDanmaku(content, foreground); break;
+                case DanmakuType.Scrollable: AddScrollableDanmaku(content, foreground, borderThickness); break;
+                case DanmakuType.Bottom: AddBottomDanmaku(content, foreground, borderThickness); break;
+                case DanmakuType.Top: AddTopDanmaku(content, foreground, borderThickness); break;
                 default: return;
             }
         }
@@ -276,15 +270,17 @@ namespace Controls
         /// 在屏幕中中添加一条滚动弹幕
         /// </summary>
         /// <param name="content">弹幕内容</param>
-        void AddScrollableDanmaku(string content, Color foreground)
+        /// <param name="foreground">弹幕颜色</param>
+        /// <param name="borderThickness">边框粗细</param>
+        void AddScrollableDanmaku(string content, Color foreground, int borderThickness)
         {
-            if (!(IsShowScrollableDanmaku&&IsShowDanmaku)) return;
+            if (!(IsShowScrollableDanmaku && IsShowDanmaku)) return;
             //获取轨道
             int line = GetLine(DanmakuType.Scrollable);
             //没有轨道就不绘制弹幕
             if (line == -1) return;
             //创建弹幕块
-            Grid item = new Grid() { Margin = new Thickness(0, GetY_axis(line), 0, 0) };
+            Grid item = new Grid() { Margin = new Thickness(0, GetY_axis(line), 0, 0), HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x33, 0x66)), BorderThickness = new Thickness(borderThickness) };
             TextBlock textBlock = new TextBlock() { Text = content, Foreground = new SolidColorBrush(foreground), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
             TextBlock shadow = new TextBlock() { Text = content, Margin = new Thickness(2, 1, 0, 0), Foreground = new SolidColorBrush(GetShadowColor(foreground)), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
             item.Children.Add(shadow);
@@ -343,7 +339,7 @@ namespace Controls
                 }
             };
         }
-        void AddBottomDanmaku(string content, Color foreground)
+        void AddBottomDanmaku(string content, Color foreground, int borderThickness)
         {
             if (!(IsShowBottomDanmaku && IsShowDanmaku)) return;
             //获取轨道
@@ -351,7 +347,7 @@ namespace Controls
             //没有轨道就不绘制弹幕
             if (line == -1) return;
             //创建弹幕块
-            Grid item = new Grid() { Margin = new Thickness(0, Container.ActualHeight - GetY_axis(line) - LineHeight, 0, 0), HorizontalAlignment = HorizontalAlignment.Center };
+            Grid item = new Grid() { Margin = new Thickness(0, Container.ActualHeight - GetY_axis(line) - LineHeight, 0, 0), HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Top, BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x33, 0x66)), BorderThickness = new Thickness(borderThickness) };
             TextBlock textBlock = new TextBlock() { Text = content, Foreground = new SolidColorBrush(foreground), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
             TextBlock shadow = new TextBlock() { Text = content, Margin = new Thickness(2, 1, 0, 0), Foreground = new SolidColorBrush(GetShadowColor(foreground)), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
             item.Children.Add(shadow);
@@ -378,7 +374,7 @@ namespace Controls
             timers.Add(timer);
             timer.Start();
         }
-        void AddTopDanmaku(string content, Color foreground)
+        void AddTopDanmaku(string content, Color foreground, int borderThickness)
         {
             if (!(IsShowTopDanmaku && IsShowDanmaku)) return;
             //获取轨道
@@ -386,7 +382,7 @@ namespace Controls
             //没有轨道就不绘制弹幕
             if (line == -1) return;
             //创建弹幕块
-            Grid item = new Grid() { Margin = new Thickness(0, GetY_axis(line), 0, 0), HorizontalAlignment = HorizontalAlignment.Center };
+            Grid item = new Grid() { Margin = new Thickness(0, GetY_axis(line), 0, 0), HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Top, BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x33, 0x66)), BorderThickness = new Thickness(borderThickness) };
             TextBlock textBlock = new TextBlock() { Text = content, Foreground = new SolidColorBrush(foreground), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
             TextBlock shadow = new TextBlock() { Text = content, Margin = new Thickness(2, 1, 0, 0), Foreground = new SolidColorBrush(GetShadowColor(foreground)), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
             item.Children.Add(shadow);
@@ -431,6 +427,9 @@ namespace Controls
             timers.ForEach(t => t.Start());
             IsPaused = false;
         }
+        /// <summary>
+        /// 清空弹幕池
+        /// </summary>
         public void Clear()
         {
             timers.ForEach(t => t.Stop());
@@ -444,6 +443,42 @@ namespace Controls
             isOccupied_Scrollable = new bool[lines];
             isOccupied_Bottom = new bool[lines];
             isOccupied_Top = new bool[lines];
+        }
+        /// <summary>
+        /// 发送弹幕
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="color"></param>
+        /// <param name="position"></param>
+        /// <param name="cid"></param>
+        /// <param name="mode"></param>
+        public void SendDanmaku(string content,Color color,double position,string cid,DanmakuType mode)
+        {
+            string url = "http://www.tucao.tv/index.php";
+            //message=敌台全是圣光&color=16777215&stime=13.413373&addtime=1533297826&token=demo&cid=11-4077158-1-0&mode=1&size=25&user=test&datatype=send&
+            var body = new List<KeyValuePair<string, string>>
+                    {
+                        new KeyValuePair<string,string>("message", content),
+                        new KeyValuePair<string,string>("color", color.ToInt().ToString()),
+                        new KeyValuePair<string,string>("stime", position.ToString()),
+                        new KeyValuePair<string,string>("addtime", Methods.GetUnixTimestamp().ToString()),
+                        new KeyValuePair<string,string>("token", "demo"),
+                        new KeyValuePair<string,string>("cid", cid),
+                        new KeyValuePair<string,string>("mode", ((int)mode).ToString()),
+                        new KeyValuePair<string,string>("size", "25"),
+                        new KeyValuePair<string,string>("user", "test"),
+                        new KeyValuePair<string,string>("datatype", "send")
+                    };
+            //POST http://www.tucao.tv/index.php?m=mukio&c=index&a=post&playerID=11-4077158-1-0 
+            Hashtable queries = new Hashtable();
+            {
+                queries.Add("m", "mukio");
+                queries.Add("c", "index");
+                queries.Add("a", "post");
+                queries.Add("playerID", cid);
+            }
+            Methods.HttpPostAsync(url, body, queries);
+            AddDanmaku(content, color, mode, 2);
         }
     }
 }

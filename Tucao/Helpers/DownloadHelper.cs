@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Tucao.Content;
 using Windows.Data.Json;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
@@ -14,7 +13,7 @@ namespace Tucao.Helpers
     class DownloadHelper
     {
         //下载hid和分P
-        static public async void Download(VideoInfo info, int partNumber)
+        static public async Task Download(VideoInfo info, int partNumber)
         {
             try
             {
@@ -56,20 +55,31 @@ namespace Tucao.Helpers
                     }
                 }
                 //上面那个文件夹\分p号
-                StorageFolder folder = await localfolder.CreateFolderAsync(part.ToString(), CreationCollisionOption.OpenIfExists);
+                StorageFolder folder = await localfolder.CreateFolderAsync(partNumber.ToString(), CreationCollisionOption.OpenIfExists);
                 //保存分P信息
                 {
-                    //如果有part.json说明下载过了
-                    if (await folder.TryGetItemAsync("part.json") == null)
+                    int fileCount=0;
+                    while (fileCount < url_list.Count)
                     {
-                        int i = 0;
-                        //下载
-                        foreach (var url in url_list)
+                        var file = await folder.TryGetItemAsync(fileCount.ToString());
+                        if (file == null) break;
+                        var properties = await file.GetBasicPropertiesAsync();
+                        if (properties.Size == 0)
                         {
-                            DownloadOperation d = await DownloadHelper.DownloadFile(url, i.ToString(), folder);
+                            break;
+                        }
+                        fileCount++;
+                    }
+                    //如果文件数正确说明下载过了
+                    if (fileCount<url_list.Count)
+                    {
+                        //下载
+                        while(fileCount<url_list.Count)
+                        {
+                            DownloadOperation d = await DownloadFile(url_list[fileCount], fileCount.ToString(), folder);
                             //开始下载
-                            await d.StartAsync();
-                            i++;
+                            d.StartAsync();
+                            fileCount++;
                         }
                         StorageFile file = await folder.CreateFileAsync("part.json", CreationCollisionOption.OpenIfExists);
                         JsonObject json = new JsonObject

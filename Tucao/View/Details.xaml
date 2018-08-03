@@ -30,7 +30,7 @@
                             </Grid.RowDefinitions>
                             <RelativePanel Grid.Row="0">
                                 <Rectangle Fill="#FFCCCCCC" Height="110" Width="176" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,5,5"/>
-                                <Image Name="Thumb" Height="110" Width="176" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,5,5" Stretch="UniformToFill" RequestedTheme="Dark">
+                                <Image Name="Thumb" Height="110" Width="176" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,5,5" Stretch="UniformToFill">
                                     <Image.ContextFlyout>
                                         <MenuFlyout>
                                             <MenuFlyoutItem Name="SaveThumb" Text="保存图片" Click="SaveImg_Click"/>
@@ -136,13 +136,7 @@
             </PivotItem>
         </Pivot>
         <Grid Name="CommandBars">
-            <CommandBar Name="DetailCommandBar" VerticalAlignment="Bottom" Margin="0,0,0,0" RequestedTheme="Dark">
-                <!--<AppBarButton Label="收藏" IsTabStop="False" Name="Favorite" Grid.Column="0" HorizontalAlignment="Center">
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE734;"/>
-                </AppBarButton>
-                <AppBarButton Label="稍后再看" IsTabStop="False" Name="Mark" Grid.Column="1" HorizontalAlignment="Center">
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8A4;"/>
-                </AppBarButton>-->
+            <CommandBar Name="DetailCommandBar" VerticalAlignment="Bottom" Margin="0,0,0,0">
                 <AppBarButton Label="分享" IsTabStop="False" Name="Share" Grid.Column="2" HorizontalAlignment="Center" Tapped="Share_Tapped">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;"/>
                 </AppBarButton>
@@ -150,7 +144,7 @@
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE896;"/>
                 </AppBarButton>
             </CommandBar>
-            <CommandBar Name="DownloadCommandBar" VerticalAlignment="Bottom" Margin="0,0,0,0" RequestedTheme="Dark" Visibility="Collapsed">
+            <CommandBar Name="DownloadCommandBar" VerticalAlignment="Bottom" Margin="0,0,0,0" Visibility="Collapsed">
                 <AppBarButton Label="取消" IsTabStop="False" Name="Cancel" Grid.Column="0" HorizontalAlignment="Center" Tapped="Cancel_Tapped">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE711;"/>
                 </AppBarButton>

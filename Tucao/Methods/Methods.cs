@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.UI;
 using Windows.Web.Http;
 
 namespace Tucao
 {
-    static class Method
+    static class Methods
     {
         /// <summary>
         /// 获取unix时间戳
@@ -37,7 +38,7 @@ namespace Tucao
         /// 颜色转int
         /// </summary>
         /// <param name="color"></param>
-        /// <returns></returns>
+        /// <returns>十进制RGB颜色值(没有A)</returns>
         public static int ToInt(this Color color)
         {
             var hex = "0x" + color.ToString().Remove(0, 3);
@@ -53,12 +54,12 @@ namespace Tucao
         /// <param name="url">请求地址</param>
         /// <param name="param">参数</param>
         /// <returns></returns>
-        public static async Task<HttpResponseMessage> HttpGet(string url, Hashtable param)
+        public static async Task<HttpResponseMessage> HttpGetAsync(string url, Hashtable queries = null)
         {
-            if (param != null)
+            if (queries != null)
             {
                 url += '?';
-                foreach (DictionaryEntry kv in param)
+                foreach (DictionaryEntry kv in queries)
                 {
                     url += (kv.Key + "=" + kv.Value + "&");
                 }
@@ -67,9 +68,19 @@ namespace Tucao
             var response = await client.GetAsync(new Uri(url));
             return response;
         }
-        public static async Task<HttpResponseMessage> HttpGet(string url)
+        public static async Task<HttpResponseMessage> HttpPostAsync(string url, List<KeyValuePair<string, string>> body, Hashtable queries = null)
         {
-            return await HttpGet(url, null);
+            if (queries != null)
+            {
+                url += '?';
+                foreach (DictionaryEntry kv in queries)
+                {
+                    url += (kv.Key + "=" + kv.Value + "&");
+                }
+                url = url.Remove(url.Length - 1, 1);
+            }
+            var response = await client.PostAsync(new Uri(url),new HttpFormUrlEncodedContent(body));
+            return response;
         }
         ///// <summary>
         ///// 时间字符串转xxx前

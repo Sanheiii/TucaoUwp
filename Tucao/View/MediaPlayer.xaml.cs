@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Controls;
+using System;
 using System.Collections.Generic;
-using Tucao.Content;
 using Tucao.Helpers;
 using Windows.Graphics.Display;
 using Windows.System;
@@ -150,7 +150,7 @@ namespace Tucao.View
         private async void LoadDanmaku()
         {
             if(!param.IsLocalFile)
-            danmakuList = await Tucao.Content.Content.GetDanmakus(param.Hid, param.Part);
+            danmakuList = await Tucao.Content.GetDanmakus(param.Hid, param.Part);
         }
         /// <summary>
         /// 播放视频
@@ -261,7 +261,6 @@ namespace Tucao.View
                 view.ExitFullScreenMode();
                 //和下面都是反着的
                 FullWindowSymbol.Symbol = Symbol.FullScreen;
-                InvertScreen.Visibility = Visibility.Collapsed;
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
                 //返回恢复原来的功能
                 SystemNavigationManager.GetForCurrentView().BackRequested -= MediaPlayer_BackRequested;
@@ -272,8 +271,6 @@ namespace Tucao.View
                 view.TryEnterFullScreenMode();
                 //修改按钮图标
                 FullWindowSymbol.Symbol = Symbol.BackToWindow;
-                //显示翻转屏幕按钮
-                if (DeviceHelper.IsMobile) InvertScreen.Visibility = Visibility.Visible;
                 //显示返回键
                 //横过来
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
@@ -413,11 +410,12 @@ namespace Tucao.View
         /// </summary>
         public class MediaPlayerSource
         {
-            public string Title { get; set; }
-            public string Hid { get; set; }
-            public int Part { get; set; }
-            public bool IsLocalFile { get; set; }
-            public List<string> PlayList { get; set; }
+            public string Title;
+            public string Hid;
+            public int Part;
+            public string Tid;
+            public bool IsLocalFile;
+            public List<string> PlayList;
         }
 
         private void Page_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -540,8 +538,29 @@ namespace Tucao.View
             var danmakus = danmakuList.FindAll((d) => d.Position >= e.OldValue && d.Position < e.NewValue);
             foreach (var danmaku in danmakus)
             {
-                DanmakuManager.AddDanmaku(danmaku.Content, danmaku.TextColor, danmaku.Type);
+                DanmakuManager.AddDanmaku(danmaku.Content.Trim(), danmaku.TextColor, danmaku.Type);
             }
+        }
+        /// <summary>
+        /// 发送弹幕
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void DanmakuSender_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            string content = args.QueryText.Trim();
+            if (content.Length == 0) return;
+            string cid = param.Tid + '-' + param.Hid + "-1-" + param.Part;
+            DanmakuManager.DanmakuType type;
+            switch(Mode.SelectedIndex)
+            {
+                case 1:type = DanmakuManager.DanmakuType.Scrollable;break;
+                case 2:type = DanmakuManager.DanmakuType.Top;break;
+                case 3:type = DanmakuManager.DanmakuType.Bottom;break;
+                default: type = DanmakuManager.DanmakuType.Scrollable;break;
+            }
+            DanmakuManager.SendDanmaku(content,((SolidColorBrush)ColorPreview.Fill).Color,ProgressSlider.Value,cid,type);
+            (sender as AutoSuggestBox).Text = "";
         }
     }
 
