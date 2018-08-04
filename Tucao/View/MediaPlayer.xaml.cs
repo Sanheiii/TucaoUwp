@@ -181,19 +181,19 @@ namespace Tucao.View
             cfgs.DownloadRetryOnFail = true;
             cfgs.DetectDurationForParts = true;
             playlist.NetworkConfigs = cfgs;
+            StatusText.Text += "    [成功]";
+            //开始播放
+            StatusText.Text += Environment.NewLine + "开始缓冲视频...";
             try
             {
                 Media.Source = await playlist.SaveAndGetFileUriAsync();
             }
             catch (Exception ex)
             {
-                var msgDialog = new Windows.UI.Popups.MessageDialog(ex.Message);
-                msgDialog.ShowAsync();
+                StatusText.Text += "    [失败]";
+                Link.ShowToast(ex.Message);
             }
 
-            StatusText.Text += "    [成功]";
-            //开始播放
-            StatusText.Text += Environment.NewLine + "开始缓冲视频...";
         }
 
         /// <summary>
@@ -223,8 +223,8 @@ namespace Tucao.View
         private void Media_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
             //回退打开视频进行的操作
-            var msgDialog = new Windows.UI.Popups.MessageDialog("加载视频失败,暂时无法播放该视频");
-            msgDialog.ShowAsync();
+            StatusText.Text += "    [失败]";
+            Link.ShowToast("视频加载失败,暂时无法播放该视频");
             ControlPanelGrid.Visibility = Visibility.Collapsed;
             Media.Tapped -= Media_Tapped;
             Media.DoubleTapped -= Media_DoubleTapped;

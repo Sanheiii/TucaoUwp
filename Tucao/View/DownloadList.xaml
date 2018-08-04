@@ -14,7 +14,7 @@
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="48"/>

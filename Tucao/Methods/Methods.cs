@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.Web.Http;
 
 namespace Tucao
@@ -68,6 +71,13 @@ namespace Tucao
             var response = await client.GetAsync(new Uri(url));
             return response;
         }
+        /// <summary>
+        /// POST
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="body"></param>
+        /// <param name="queries"></param>
+        /// <returns></returns>
         public static async Task<HttpResponseMessage> HttpPostAsync(string url, List<KeyValuePair<string, string>> body, Hashtable queries = null)
         {
             if (queries != null)
@@ -79,7 +89,7 @@ namespace Tucao
                 }
                 url = url.Remove(url.Length - 1, 1);
             }
-            var response = await client.PostAsync(new Uri(url),new HttpFormUrlEncodedContent(body));
+            var response = await client.PostAsync(new Uri(url), new HttpFormUrlEncodedContent(body));
             return response;
         }
         ///// <summary>

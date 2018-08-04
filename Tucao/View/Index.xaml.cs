@@ -55,8 +55,7 @@ namespace Tucao.View
                     }
                     else
                     {
-                        var msgDialog = new Windows.UI.Popups.MessageDialog("网络出现问题");
-                        msgDialog.ShowAsync();
+                        Link.ShowToast("加载失败");
                         BottomText.Visibility = Visibility.Visible;
                     }
                     RefreshButton.IsEnabled = true;

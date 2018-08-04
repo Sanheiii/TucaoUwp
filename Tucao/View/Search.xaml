@@ -18,7 +18,8 @@
     </Page.Transitions>
     <Page.Resources>
         <DataTemplate x:Key="VideoTemplate">
-            <Grid>
+            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                <Grid Background="#22DDDDDD">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="160"/>
                     <ColumnDefinition Width="*"/>
@@ -37,11 +38,12 @@
                     <TextBlock Text="{Binding Up}" Foreground="Red"/>
                     <TextBlock Text="{Binding Time}" FontSize="13" Margin="5,3,0,0"/>
                 </StackPanel>
+                </Grid>
             </Grid>
         </DataTemplate>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>

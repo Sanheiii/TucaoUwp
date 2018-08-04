@@ -15,7 +15,7 @@
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="48"/>
@@ -23,7 +23,8 @@
         <ListView Name="Videos" Grid.Row="0" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Videos_ItemClick">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="-12,0,-12,0">
+                        <Grid Background="#22DDDDDD" Padding="6,0,6,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
@@ -45,6 +46,7 @@
                                 </Style>
                             </ListView.ItemContainerStyle>
                         </ListView>
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

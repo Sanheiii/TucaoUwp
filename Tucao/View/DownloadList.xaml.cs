@@ -59,10 +59,9 @@ namespace Tucao.View
 
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                var msgDialog = new Windows.UI.Popups.MessageDialog(e.Message);
-                msgDialog.ShowAsync();
+                Link.ShowToast(ex.Message);
             }
         }
         private async Task HandleDownloadAsync(DownloadOperation download)
@@ -103,8 +102,7 @@ namespace Tucao.View
             }
             catch (TaskCanceledException)
             {
-                var msgDialog = new Windows.UI.Popups.MessageDialog("取消： " + download.Guid);
-                msgDialog.ShowAsync();
+                Link.ShowToast("取消： " + download.Guid);
             }
         }
 
@@ -128,10 +126,9 @@ namespace Tucao.View
                     transfers.Remove(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                var msgDialog = new Windows.UI.Popups.MessageDialog(e.Message);
-                msgDialog.ShowAsync();
+                Link.ShowToast(ex.Message);
             }
         }
         private async void OpenDownloadFolder_Tapped(object sender, TappedRoutedEventArgs e)
@@ -168,8 +165,7 @@ namespace Tucao.View
                 }
                 catch (Exception ex)
                 {
-                    var msgDialog = new Windows.UI.Popups.MessageDialog(ex.Message);
-                    msgDialog.ShowAsync();
+                    Link.ShowToast(ex.Message);
                 }
             }
             else

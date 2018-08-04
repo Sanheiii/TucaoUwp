@@ -42,12 +42,6 @@ namespace Tucao.View
             PartList.ItemsSource = new ObservableCollection<PartInfo>();
             Comment.ItemsSource = new ObservableCollection<Comment>();
             Commentpage = 0;
-            //上面的框向下拉遮住pivot的header的动画
-            ScaleAnimation scale = new ScaleAnimation();
-            scale.From = "1,0,1";
-            scale.To = "1,1,1";
-            scale.Duration = new TimeSpan(5000000);
-            scale.StartAnimation(HeaderBackground);
         }
         /// <summary>
         /// 加载页面时调用
@@ -57,7 +51,7 @@ namespace Tucao.View
         {
             int i = 0;
             string hid = (string)e.Parameter;
-            Link.FrameTitle.Text = 'h' + hid;
+            Link.frameTitle.Text = 'h' + hid;
             if (hid == info.Hid) return;
             try
             {
@@ -65,8 +59,7 @@ namespace Tucao.View
             }
             catch
             {
-                var msgDialog = new Windows.UI.Popups.MessageDialog("无法打开这个投稿");
-                msgDialog.ShowAsync();
+                Link.ShowToast("无法打开这个投稿");
                 return;
             }
             SaveThumb.Tag = info.Thumb;
@@ -213,8 +206,7 @@ namespace Tucao.View
             url = await VideoInfo.GetPlayUrl(part);
             if(url.Count<1)
             {
-                var msgDialog = new Windows.UI.Popups.MessageDialog("获取视频播放地址失败,请稍后再试");
-                msgDialog.ShowAsync();
+                Link.ShowToast("获取视频播放地址失败,请稍后再试");
                 return;
             }
             //打开播放器
@@ -346,7 +338,7 @@ namespace Tucao.View
             {
                 PartNumber = partNumber;
                 PartTitle = partTitle;
-                LinkDetectorColor = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x00, 0x00));
+                LinkDetectorColor =null;
             }
             public int PartNumber { get; set; }
             public string PartTitle { get; set; }

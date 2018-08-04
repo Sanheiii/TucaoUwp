@@ -1,10 +1,14 @@
-﻿using Windows.ApplicationModel.Core;
+﻿using Microsoft.Toolkit.Uwp.UI.Animations;
+using Windows.ApplicationModel.Core;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -15,7 +19,8 @@ namespace Tucao.View
     /// </summary>
     public sealed partial class Link : Page
     {
-        public static TextBlock FrameTitle = new TextBlock();
+        public static TextBlock frameTitle = new TextBlock();
+        static Grid toastArea=new Grid();
         public Link()
         {
             this.InitializeComponent();
@@ -30,7 +35,8 @@ namespace Tucao.View
             Rua.NavigationFailed += App.OnNavigationFailed;
             Rua.Navigate(typeof(Index), null, new DrillInNavigationTransitionInfo());
             App.Link = Rua;
-            FrameTitle = PageName;
+            frameTitle = PageName;
+            toastArea = ToastArea;
         }
         /// <summary>
         /// 点击标题栏的返回
@@ -97,7 +103,7 @@ namespace Tucao.View
                 case "Search": { PageName.Text = "搜索"; ShowTopBar = true; break; }
                 case "Setting": { PageName.Text = "设置"; ShowTopBar = true; break; }
                 case "Details": { ShowTopBar = true; break; }
-                case "MediaPlayer": { ShowTopBar=false; break; }
+                case "MediaPlayer": { ShowTopBar = false; break; }
                 default: { ShowTopBar = true; break; }
             }
         }
@@ -110,14 +116,6 @@ namespace Tucao.View
         {
             //打开或关闭汉堡菜单
             HamburgerMenu.IsPaneOpen = !HamburgerMenu.IsPaneOpen; ;
-        }
-        /// <summary>
-        /// 关闭汉堡菜单取消模糊
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void HamburgerMenu_PaneClosing(SplitView sender, SplitViewPaneClosingEventArgs args)
-        {
         }
         /// <summary>
         /// 点击搜索
@@ -137,6 +135,10 @@ namespace Tucao.View
                 App.Link.BackStack.Clear();
                 Rua.Navigate(typeof(Index), null, new DrillInNavigationTransitionInfo());
             }
+        }
+        private void XFListTapped(object sender, TappedRoutedEventArgs e)
+        {
+            ShowToast("怎么实现我不管,这个需求很简单");
         }
         /// <summary>
         /// 点击下载队列
@@ -159,15 +161,17 @@ namespace Tucao.View
                 Rua.Navigate(typeof(LocalVideo), null, new DrillInNavigationTransitionInfo());
         }
         /// <summary>
-        /// 点击关于，以后可能做成设置按钮
+        /// 点击设置
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Setting_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            HamburgerMenu.IsPaneOpen = !HamburgerMenu.IsPaneOpen;
             if (Rua.CurrentSourcePageType != typeof(Setting))
-                HamburgerMenu.IsPaneOpen = !HamburgerMenu.IsPaneOpen;
-            Rua.Navigate(typeof(Setting), null, new DrillInNavigationTransitionInfo());
+            {
+                Rua.Navigate(typeof(Setting), null, new DrillInNavigationTransitionInfo());
+            }
         }
         /// <summary>
         /// 点击菜单项目后收起汉堡菜单
@@ -185,5 +189,31 @@ namespace Tucao.View
                 TopBar.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
             }
         }
+        /// <summary>
+        /// 显示提示
+        /// </summary>
+        /// <param name="message"></param>
+        public static void ShowToast(string message)
+        {
+            Grid item = new Grid() { Opacity = 0 ,MaxWidth=App.Link.ActualWidth,MinWidth=200};
+            Rectangle rectangle = new Rectangle() { Fill = new SolidColorBrush(Color.FromArgb(0xCC, 0x66, 0x66, 0x66)), RadiusX = 4, RadiusY = 4 };
+            TextBlock textBlock = new TextBlock { TextWrapping= TextWrapping.WrapWholeWords,Foreground=new SolidColorBrush(Color.FromArgb(0xCC,0xFF,0xFF,0xFF)),Margin=new Thickness(20,10,20,10),HorizontalAlignment=HorizontalAlignment.Center ,Text=message};
+            item.Children.Add(rectangle);
+            item.Children.Add(textBlock);
+            toastArea.Children.Add(item);
+            var s = item.Fade(1, 300, 0, EasingType.Default, EasingMode.EaseOut);
+            s.Completed += (ssender, se) =>
+            {
+                var h = item.Fade(0, 300, 3000 ,EasingType.Default, EasingMode.EaseIn);
+                h.Completed += (hsender, he) =>
+                {
+                    toastArea.Children.Remove(item);
+                };
+                h.Start();
+            };
+            s.Start();
+        }
+
+
     }
 }

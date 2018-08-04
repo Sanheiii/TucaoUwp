@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Tucao.View;
 using Windows.Data.Json;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
@@ -100,8 +101,7 @@ namespace Tucao.Helpers
             }
             catch (Exception ex)
             {
-                var msgDialog = new Windows.UI.Popups.MessageDialog(ex.Message);
-                await msgDialog.ShowAsync();
+                Link.ShowToast(ex.Message);
             };
         }
         /// <summary>
@@ -126,8 +126,7 @@ namespace Tucao.Helpers
             }
             catch (Exception ex)
             {
-                var msgDialog = new Windows.UI.Popups.MessageDialog(ex.Message);
-                await msgDialog.ShowAsync();
+                Link.ShowToast(ex.Message);
                 return null;
             }
         }

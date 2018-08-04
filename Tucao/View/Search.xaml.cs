@@ -91,10 +91,9 @@ namespace Tucao.View
                         break;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                var msgDialog = new Windows.UI.Popups.MessageDialog(e.Message);
-                await msgDialog.ShowAsync();
+                Link.ShowToast(ex.Message);
                 return;
             }
             await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>

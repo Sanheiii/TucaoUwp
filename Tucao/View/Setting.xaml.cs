@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using Windows.ApplicationModel.Email;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -24,7 +27,29 @@ namespace Tucao.View
     {
         public Setting()
         {
+            string appVersion = string.Format("Ver {0}.{1}.{2}.{3}",
+                       Package.Current.Id.Version.Major,
+                       Package.Current.Id.Version.Minor,
+                       Package.Current.Id.Version.Build,
+                       Package.Current.Id.Version.Revision);
             this.InitializeComponent();
+            Version.Text = appVersion;
+        }
+
+        private void Reward_Click(object sender, RoutedEventArgs e)
+        {
+            RewardImage.ShowAt(sender as HyperlinkButton);
+        }
+        private void SendEmail_Click(object sender, RoutedEventArgs e)
+        {
+            ComposeEmail();
+        }
+        private async Task ComposeEmail()
+        {
+            var emailMessage = new EmailMessage();
+            emailMessage.To.Add(new EmailRecipient("w953934508@outlook.com", "三黑"));
+            await EmailManager.ShowComposeNewEmailAsync(emailMessage);
+
         }
     }
 }

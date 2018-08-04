@@ -5,6 +5,7 @@
     xmlns:local="using:Tucao.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -12,7 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Name="AppTitleBar" Height="32">
+        <Grid Name="AppTitleBar" Height="32" Background="#3CBFBFBF">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
@@ -24,9 +25,9 @@
                 <TextBlock Name="TitleText" FontSize="13" Margin="12,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Tucao"></TextBlock>
             </Border>
         </Grid>
-        <SplitView Name="HamburgerMenu" Grid.Row="1" IsPaneOpen="False" OpenPaneLength="300" CompactPaneLength="0" DisplayMode="CompactOverlay" PaneClosing="HamburgerMenu_PaneClosing">
+        <SplitView Name="HamburgerMenu" Grid.Row="1" IsPaneOpen="False" OpenPaneLength="300" PaneBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" CompactPaneLength="0" DisplayMode="CompactOverlay">
             <SplitView.Pane>
-                <Grid VerticalAlignment="Stretch">
+                <Grid VerticalAlignment="Stretch" Background="#3CBFBFBF">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="48"/>
                         <RowDefinition Height="*"/>
@@ -45,7 +46,7 @@
                         <!--<Grid>
                            <AutoSuggestBox Width="275" QueryIcon="Find" PlaceholderText="搜索关键字 HID"/>
                         </Grid>-->
-                        <ListViewItem>
+                        <ListViewItem Tapped="XFListTapped">
                             <StackPanel Orientation="Horizontal" Margin="3,0,0,0" >
                                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8C0;" FontSize="18"/>
                                 <TextBlock Text="番组" Margin="15,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Microsoft YaHei UI"/>
@@ -73,7 +74,7 @@
                     </ListViewItem>
                 </Grid>
             </SplitView.Pane>
-            <Grid Name="PageContent">
+            <Grid Name="PageContent" Background="#3CBFBFBF">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -93,8 +94,9 @@
                     </AppBarButton>
                 </Grid>
                 <Frame Grid.Row="1" Name="Rua"/>
-
             </Grid>
         </SplitView>
+        <Grid Name="ToastArea" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,80"/>
+
     </Grid>
 </Page>

@@ -11,8 +11,7 @@
       mc:Ignorable="d"
       NavigationCacheMode="Enabled">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Rectangle Name="HeaderBackground" Fill="Transparent" Height="48" Margin="0,0,0,0" VerticalAlignment="Top"/>
+    <Grid>
         <Pivot PivotItemLoading="Pivot_PivotItemLoading">
             <PivotItem>
                 <PivotItem.Header>
@@ -47,7 +46,7 @@
                                 <TextBlock Name="Create" RelativePanel.RightOf="UP" RelativePanel.AlignVerticalCenterWith="UserIcon" FontSize="12"/>
                             </RelativePanel>
                             <toolkit:WrapPanel Grid.Row="1" x:Name="Description">
-                                <TextBlock Name="DescriptionTextBlock" IsTextSelectionEnabled="True" TextWrapping="WrapWholeWords" FontFamily="Microsoft Sans Serif"/>
+                                <TextBlock Name="DescriptionTextBlock" IsTextSelectionEnabled="True" TextWrapping="WrapWholeWords"/>
                             </toolkit:WrapPanel>
                             <StackPanel Grid.Row="3">
                                 <Rectangle Fill="#FFFF3366" Height="2" Margin="0,5,2,5"/>

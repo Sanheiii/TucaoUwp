@@ -151,6 +151,7 @@
   <ItemGroup>
     <Content Include="Assets\bg_y_png24.png" />
     <Content Include="Assets\nophoto.gif" />
+    <Content Include="Assets\RewardImg.jpg" />
     <Content Include="Notes\Settings.txt" />
     <Content Include="Notes\备忘.txt" />
     <None Include="Package.StoreAssociation.xml" />
