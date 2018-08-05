@@ -19,10 +19,13 @@ namespace Tucao.View
     /// </summary>
     public sealed partial class Link : Page
     {
+
         public static TextBlock frameTitle = new TextBlock();
-        static Grid toastArea=new Grid();
+        public static Link currentObject;
+        static Grid toastArea = new Grid();
         public Link()
         {
+            currentObject = this;
             this.InitializeComponent();
             //设置标题栏
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
@@ -54,6 +57,7 @@ namespace Tucao.View
         /// <param name="e"></param>
         public static void OnBackrequested(object sender, BackRequestedEventArgs e)
         {
+            if (e.Handled) return;
             GoBack();
             e.Handled = true;
         }
@@ -104,6 +108,7 @@ namespace Tucao.View
                 case "Setting": { PageName.Text = "设置"; ShowTopBar = true; break; }
                 case "Details": { ShowTopBar = true; break; }
                 case "MediaPlayer": { ShowTopBar = false; break; }
+                case "H5Player": { ShowTopBar = false; break; }
                 default: { ShowTopBar = true; break; }
             }
         }
@@ -195,23 +200,28 @@ namespace Tucao.View
         /// <param name="message"></param>
         public static void ShowToast(string message)
         {
-            Grid item = new Grid() { Opacity = 0 ,MaxWidth=App.Link.ActualWidth,MinWidth=200};
+            //创建要显示的控件
+            Grid item = new Grid() { Opacity = 0, MaxWidth = App.Link.ActualWidth, MinWidth = 200 };
             Rectangle rectangle = new Rectangle() { Fill = new SolidColorBrush(Color.FromArgb(0xCC, 0x66, 0x66, 0x66)), RadiusX = 4, RadiusY = 4 };
-            TextBlock textBlock = new TextBlock { TextWrapping= TextWrapping.WrapWholeWords,Foreground=new SolidColorBrush(Color.FromArgb(0xCC,0xFF,0xFF,0xFF)),Margin=new Thickness(20,10,20,10),HorizontalAlignment=HorizontalAlignment.Center ,Text=message};
+            TextBlock textBlock = new TextBlock { TextWrapping = TextWrapping.WrapWholeWords, Foreground = new SolidColorBrush(Color.FromArgb(0xCC, 0xFF, 0xFF, 0xFF)), Margin = new Thickness(20, 10, 20, 10), HorizontalAlignment = HorizontalAlignment.Center, Text = message };
             item.Children.Add(rectangle);
             item.Children.Add(textBlock);
-            toastArea.Children.Add(item);
-            var s = item.Fade(1, 300, 0, EasingType.Default, EasingMode.EaseOut);
-            s.Completed += (ssender, se) =>
+            //到ui线程中添加控件
+            var task=currentObject.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
-                var h = item.Fade(0, 300, 3000 ,EasingType.Default, EasingMode.EaseIn);
-                h.Completed += (hsender, he) =>
+                toastArea.Children.Add(item);
+                var s = item.Fade(1, 300, 0, EasingType.Default, EasingMode.EaseOut);
+                s.Completed += (ssender, se) =>
                 {
-                    toastArea.Children.Remove(item);
+                    var h = item.Fade(0, 300, 3000, EasingType.Default, EasingMode.EaseIn);
+                    h.Completed += (hsender, he) =>
+                    {
+                        toastArea.Children.Remove(item);
+                    };
+                    h.Start();
                 };
-                h.Start();
-            };
-            s.Start();
+                s.Start();
+            });
         }
 
 

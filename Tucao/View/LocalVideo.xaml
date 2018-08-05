@@ -20,7 +20,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="48"/>
         </Grid.RowDefinitions>
-        <ListView Name="Videos" Grid.Row="0" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Videos_ItemClick">
+        <ScrollViewer Grid.Row="0">
+        <ListView Name="Videos" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Videos_ItemClick" ScrollViewer.VerticalScrollMode="Disabled">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="-12,0,-12,0">
@@ -30,7 +31,7 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="{Binding title}" Foreground="#FFFF3366" TextWrapping="WrapWholeWords" FontSize="18"  VerticalAlignment="Bottom" Margin="0,10,0,10"/>
-                        <ListView Name="Parts" Grid.Row="1" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Parts_ItemClick" ItemsSource="{Binding parts}">
+                        <ListView Name="Parts" Grid.Row="1" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Parts_ItemClick" ItemsSource="{Binding parts}" ScrollViewer.VerticalScrollMode="Disabled">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Height="Auto" Margin="0,0,0,5">
@@ -57,7 +58,7 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
-
+        </ScrollViewer>
         <CommandBar VerticalAlignment="Bottom" Grid.RowSpan="2">
             <AppBarButton Label="下载目录" Name="OpenDownloadFolder" Tapped="OpenDownloadFolder_Tapped">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8DE;"/>

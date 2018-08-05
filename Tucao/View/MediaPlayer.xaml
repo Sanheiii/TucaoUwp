@@ -14,8 +14,8 @@
         <local:MediaConverter x:Key="cvt1"/>
         <local:TimeConverter x:Key="cvt2"/>
     </Page.Resources>
-    <Grid VerticalAlignment="Top" Background="Black" Grid.Row="1">
-        <Grid Name="Player" ManipulationMode="TranslateX" ManipulationStarted="Media_ManipulationStarted" ManipulationDelta="Media_ManipulationDelta" ManipulationCompleted="Media_ManipulationCompleted">
+    <Grid>
+        <Grid Name="Player" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" Tapped="Media_Tapped" DoubleTapped="Media_DoubleTapped" ManipulationMode="TranslateX" ManipulationStarted="Media_ManipulationStarted" ManipulationDelta="Media_ManipulationDelta" ManipulationCompleted="Media_ManipulationCompleted">
             <MediaElement x:Name="Media" RealTimePlayback="True" MediaOpened="Media_MediaOpened" MediaEnded="Media_MediaEnded" CurrentStateChanged="Media_CurrentStateChanged"
                       MediaFailed="Media_MediaFailed" BufferingProgressChanged="Media_BufferingProgressChanged"/>
             <controls:DanmakuManager x:Name="DanmakuManager"/>

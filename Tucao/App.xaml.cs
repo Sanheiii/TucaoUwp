@@ -121,12 +121,19 @@ namespace Tucao
                 return true;
             return false;
         }
+        /// <summary>
+        /// 重设缓存以清除某些页面
+        /// </summary>
         public static void ResetPageCache()
         {
             var cacheSize = Link.CacheSize;
             Link.CacheSize = 0;
             Link.CacheSize = cacheSize;
         }
+        /// <summary>
+        /// 打开视频详情页
+        /// </summary>
+        /// <param name="hid"></param>
         public static void OpenVideo(string hid)
         {
             App.ResetPageCache();

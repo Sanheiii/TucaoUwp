@@ -5,11 +5,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Tucao.Helpers;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Data.Json;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI;
@@ -105,7 +107,7 @@ namespace Tucao.View
             foreach (var p in info.Video)
             {
                 i++;
-                parts.Add(new PartInfo(i, p["title"].ToString(), p["type"].ToString()));
+                parts.Add(new PartInfo() {PartNumber=i, PartTitle = p["title"].ToString(), SourceType = p["type"].ToString() });
             }
             for (i = 0; i < parts.Count; i++)
             {
@@ -113,7 +115,6 @@ namespace Tucao.View
                 {
                     ((ObservableCollection<PartInfo>)PartList.ItemsSource).Add(parts[i]);
                 });
-                await Task.Delay(10);
             }
             LinkTest();
         }
@@ -125,15 +126,21 @@ namespace Tucao.View
             List<string> url = new List<string>();
             await Dispatcher.RunAsync(CoreDispatcherPriority.Low, async () =>
             {
+
                 var items = PartList.ItemsSource as ObservableCollection<PartInfo>;
-                for (int i = 0; i < items.Count; i++)
+                for (int partNum = 0; partNum < items.Count; partNum++)
                 {
-                    Hashtable part = info.Video[items[i].PartNumber - 1];
-                    url = await VideoInfo.GetPlayUrl(part);
+                    url = await info.GetPlayUrl(partNum);
                     if (url.Count == 0)
-                        items[i].LinkDetectorColor = new SolidColorBrush(Color.FromArgb(0xFF, 0xAA, 0xAA, 0xAA));
+                        items[partNum].LinkDetectorColor = new SolidColorBrush(Color.FromArgb(0xFF, 0xAA, 0xAA, 0xAA));
                     else
-                        items[i].LinkDetectorColor = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x33, 0x66));
+                    {
+                        items[partNum].LinkDetectorColor = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x33, 0x66));
+                        if (!url[0].Contains("/"))
+                        {
+                            items[partNum].SourceType = "已下载";
+                        }
+                    }
                 }
             });
         }
@@ -162,7 +169,6 @@ namespace Tucao.View
 
         private void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
         {
-
             DataRequest request = args.Request;
             Uri uri = new Uri("http://www.tucao.tv/play/h" + info.Hid + "/");
             request.Data.SetWebLink(uri);
@@ -190,6 +196,7 @@ namespace Tucao.View
                     await RandomAccessStream.CopyAndCloseAsync(stream, destinationStream);
                 }
             }
+            Link.ShowToast("图片已保存到"+ KnownFolders.SavedPictures.Path);
         }
         /// <summary>
         /// 点击一个分p时
@@ -201,10 +208,9 @@ namespace Tucao.View
             List<string> url = new List<string>();
             //获取被点击的分p
             PartInfo clickedItem = e.ClickedItem as PartInfo;
-            //获取视频地址
-            Hashtable part = info.Video[clickedItem.PartNumber - 1];
-            url = await VideoInfo.GetPlayUrl(part);
-            if(url.Count<1)
+            //获取视频地址;
+            url = await info.GetPlayUrl(clickedItem.PartNumber - 1);
+            if (url.Count < 1)
             {
                 Link.ShowToast("获取视频播放地址失败,请稍后再试");
                 return;
@@ -214,7 +220,8 @@ namespace Tucao.View
             param.Hid = info.Hid;
             param.Title = clickedItem.PartTitle;
             param.PlayList = url;
-            param.IsLocalFile = false;
+            //本地文件夹禁止有/字符.而网页url绝对有这个字符
+            param.IsLocalFile = !url[0].Contains("/");
             param.Part = clickedItem.PartNumber - 1;
             param.Tid = info.TypeId;
             App.Link.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
@@ -252,11 +259,20 @@ namespace Tucao.View
         private async void OK_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var items = PartList.SelectedItems;
+            int i=0;
             foreach (PartInfo item in items)
             {
+                if (item.SourceType == "已下载") continue;
                 await DownloadHelper.Download(info, item.PartNumber);
+                i++;
             }
-            Cancel_Tapped(sender, e);
+            if (i <1)
+            {
+                Link.ShowToast("未选择任何项");
+                return;
+            }
+            Link.ShowToast("尝试下载" + i + "个视频");
+            Cancel_Tapped(Cancel, new TappedRoutedEventArgs());
         }
         /// <summary>
         /// 评论列表没有的时候尝试获取
@@ -287,7 +303,7 @@ namespace Tucao.View
         /// </summary>
         async void LoadComment()
         {
-            var comments = await Tucao.Content.GetComment(info.TypeId, info.Hid, Commentpage,Tucao.Content.Order.New);
+            var comments = await Tucao.Content.GetComment(info.TypeId, info.Hid, Commentpage, Tucao.Content.Order.New);
             foreach (Comment comment in comments)
             {
                 (Comment.ItemsSource as ObservableCollection<Comment>).Add(comment);
@@ -334,14 +350,21 @@ namespace Tucao.View
         }
         public class PartInfo : INotifyPropertyChanged
         {
-            public PartInfo(int partNumber, string partTitle, string message)
-            {
-                PartNumber = partNumber;
-                PartTitle = partTitle;
-                LinkDetectorColor =null;
-            }
+            public PartInfo() { }
             public int PartNumber { get; set; }
             public string PartTitle { get; set; }
+            string sourceType;
+            public string SourceType {
+                get
+                {
+                    return sourceType;
+                }
+                set
+                {
+                    sourceType = value;
+                    OnPropertyChanged(nameof(SourceType));
+                }
+            }
             SolidColorBrush linkDetectorColor;
             public SolidColorBrush LinkDetectorColor
             {

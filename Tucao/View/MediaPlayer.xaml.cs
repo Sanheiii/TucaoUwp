@@ -34,7 +34,6 @@ namespace Tucao.View
             DanmakuSizeSlider.Loaded += ((sender, e) => DanmakuSizeSlider.ValueChanged += DanmakuSizeSlider_ValueChanged);
             DanmakuSpeedSlider.Loaded += ((sender, e) => DanmakuSpeedSlider.ValueChanged += DanmakuSpeedSlider_ValueChanged);
             Media.Stop();
-            Media.Tapped -= Media_Tapped;
             ControlPanelGrid.Visibility = Visibility.Collapsed;
             StatusText.Text = "";
             Status.Visibility = Visibility.Visible;
@@ -149,8 +148,7 @@ namespace Tucao.View
         /// </summary>
         private async void LoadDanmaku()
         {
-            if(!param.IsLocalFile)
-            danmakuList = await Tucao.Content.GetDanmakus(param.Hid, param.Part);
+            danmakuList = await Tucao.Content.GetDanmakus(param.Hid, param.Part,param.IsLocalFile);
         }
         /// <summary>
         /// 播放视频
@@ -158,15 +156,11 @@ namespace Tucao.View
         /// <param name="part">分P号</param>
         private async void Play(List<string> play_list)
         {
-
             //设置资源
             StatusText.Text += Environment.NewLine + "正在初始化播放器...";
-
-
             //载入播放引擎
             SYEngine.Core.Initialize();
             var playlist = new SYEngine.Playlist(param.IsLocalFile ? SYEngine.PlaylistTypes.LocalFile : SYEngine.PlaylistTypes.NetworkHttp);
-            //playlist=new SYEngine.Playlist(SYEngine.PlaylistTypes.LocalFile);
             //将分段添加到playlist
             foreach (var url in play_list)
             {
@@ -174,7 +168,7 @@ namespace Tucao.View
             }
             //配置引擎
             SYEngine.PlaylistNetworkConfigs cfgs = default(SYEngine.PlaylistNetworkConfigs);
-            cfgs.HttpUserAgent = string.Empty;
+            cfgs.HttpUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
             cfgs.HttpReferer = string.Empty;
             cfgs.HttpCookie = string.Empty;
             cfgs.UniqueId = string.Empty;
@@ -207,11 +201,6 @@ namespace Tucao.View
             var duration = Media.NaturalDuration.TimeSpan.TotalSeconds;
             ProgressSlider.Maximum = duration;
             TimeRemainingElement.Text = ((int)duration / 60).ToString("d2") + ":" + ((int)duration % 60).ToString("d2");
-            //显示控制栏
-            ControlPanelGrid.Visibility = Visibility.Visible;
-            //使点击显示控制栏
-            Player.Tapped += Media_Tapped;
-            Player.DoubleTapped += Media_DoubleTapped;
         }
 
 
@@ -225,9 +214,6 @@ namespace Tucao.View
             //回退打开视频进行的操作
             StatusText.Text += "    [失败]";
             Link.ShowToast("视频加载失败,暂时无法播放该视频");
-            ControlPanelGrid.Visibility = Visibility.Collapsed;
-            Media.Tapped -= Media_Tapped;
-            Media.DoubleTapped -= Media_DoubleTapped;
         }
 
         /// <summary>
@@ -264,7 +250,7 @@ namespace Tucao.View
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
                 //返回恢复原来的功能
                 SystemNavigationManager.GetForCurrentView().BackRequested -= MediaPlayer_BackRequested;
-                SystemNavigationManager.GetForCurrentView().BackRequested += Link.OnBackrequested;
+                //SystemNavigationManager.GetForCurrentView().BackRequested += Link.OnBackrequested;
             }
             else
             {
@@ -275,12 +261,13 @@ namespace Tucao.View
                 //横过来
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
                 //使得返回变成退出全屏
-                SystemNavigationManager.GetForCurrentView().BackRequested -= Link.OnBackrequested;
+                //SystemNavigationManager.GetForCurrentView().BackRequested -= Link.OnBackrequested;
                 SystemNavigationManager.GetForCurrentView().BackRequested += MediaPlayer_BackRequested;
             }
         }
         private void MediaPlayer_BackRequested(object sender, BackRequestedEventArgs e)
         {
+#warning 测试e.Handled
             e.Handled = true;
             FullWindowButton_Click(this, new RoutedEventArgs());
         }
@@ -424,17 +411,17 @@ namespace Tucao.View
             {
                 case VirtualKey.Space:
                     {
-                        PlayPauseButton_Click(PlayPauseButton, null);
+                        PlayPauseButton_Click(PlayPauseButton, new RoutedEventArgs());
                     }
                     break;
                 case VirtualKey.Escape:
                     {
-                        FullWindowButton_Click(FullWindowButton, null);
+                        FullWindowButton_Click(FullWindowButton, new RoutedEventArgs());
                     }
                     break;
                 case VirtualKey.Enter:
                     {
-                        Media_Tapped(Media, null);
+                        Media_Tapped(Media, new TappedRoutedEventArgs());
                     }
                     break;
                 case VirtualKey.Left:

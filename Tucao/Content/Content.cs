@@ -2,9 +2,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.Web.Http;
 
 namespace Tucao
@@ -187,19 +189,40 @@ namespace Tucao
         /// <param name="hid">HID</param>
         /// <param name="part">分p号(从0开始)</param>
         /// <returns></returns>
-        public static async Task<List<Danmaku>> GetDanmakus(string hid, int part)
+        public static async Task<List<Danmaku>> GetDanmakus(string hid, int part,bool isLocalFile)
         {
-            //http://www.tucao.tv/index.php?m=mukio&c=index&a=init&playerID=11-<hid>-1-<part>
-            Hashtable param = new Hashtable();
+            string danmakus_xml = "";
+            if(isLocalFile)
             {
-                param.Add("m", "mukio");
-                param.Add("c", "index");
-                param.Add("a", "init");
-                param.Add("playerID", "11-"+hid+"-1-"+part+"");
+                try
+                {
+                    StorageFolder downloadFolder = await ApplicationData.Current.LocalCacheFolder.GetFolderAsync("Download");
+                    var folder = await downloadFolder.GetFolderAsync(hid);
+                    var partFolder = await folder.GetFolderAsync((part + 1).ToString());
+                    var danmakuFile = await partFolder.GetFileAsync("danmakus.xml");
+                    Stream stream = await danmakuFile.OpenStreamForReadAsync();
+                    StreamReader reader = new StreamReader(stream);
+                    danmakus_xml = await reader.ReadToEndAsync();
+                }
+                catch
+                {
+                    return await GetDanmakus(hid, part, false);
+                }
             }
-            var result = await Methods.HttpGetAsync("http://www.tucao.tv/index.php", param);
-            string danmakus_xml= await result.Content.ReadAsStringAsync();
-            return Danmaku.ParseDanmakus(danmakus_xml);
+            else
+            {
+                //http://www.tucao.tv/index.php?m=mukio&c=index&a=init&playerID=11-<hid>-1-<part>
+                Hashtable param = new Hashtable();
+                {
+                    param.Add("m", "mukio");
+                    param.Add("c", "index");
+                    param.Add("a", "init");
+                    param.Add("playerID", "11-" + hid + "-1-" + part + "");
+                }
+                var result = await Methods.HttpGetAsync("http://www.tucao.tv/index.php", param);
+                danmakus_xml = await result.Content.ReadAsStringAsync();
+            }
+                return Danmaku.ParseDanmakus(danmakus_xml);
         }
     }
     /// <summary>

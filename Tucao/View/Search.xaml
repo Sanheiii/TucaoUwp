@@ -35,8 +35,8 @@
                 </Image>
                 <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="15" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,5,0" Foreground="#FFFF3366"/>
                 <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="0,0,0,5">
-                    <TextBlock Text="{Binding Up}" Foreground="Red"/>
-                    <TextBlock Text="{Binding Time}" FontSize="13" Margin="5,3,0,0"/>
+                        <TextBlock Text="{Binding Up}" Foreground="#FFE70353"/>
+                        <TextBlock Text="{Binding Time}" FontSize="13" Margin="5,3,0,0" Foreground="#999"/>
                 </StackPanel>
                 </Grid>
             </Grid>

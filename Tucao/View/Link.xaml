@@ -13,18 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Name="AppTitleBar" Height="32" Background="#3CBFBFBF">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Button Name="BackButton" Height="32" Width="48" Background="Transparent" BorderThickness="0" Click="BackButton_Click">
-                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72B;" FontSize="12"/>
-            </Button>
-            <Border Grid.Column="1" Name="DraggableArea" Background="Transparent">
-                <TextBlock Name="TitleText" FontSize="13" Margin="12,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Tucao"></TextBlock>
-            </Border>
-        </Grid>
+       
         <SplitView Name="HamburgerMenu" Grid.Row="1" IsPaneOpen="False" OpenPaneLength="300" PaneBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" CompactPaneLength="0" DisplayMode="CompactOverlay">
             <SplitView.Pane>
                 <Grid VerticalAlignment="Stretch" Background="#3CBFBFBF">
@@ -67,9 +56,9 @@
                     </ListView>
 
                     <ListViewItem Grid.Row="2" Tapped="Setting_Tapped">
-                        <StackPanel Orientation="Horizontal" Margin="3,5,0,5">
-                            <SymbolIcon Symbol="Setting" />
-                            <TextBlock Text="设置" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" Margin="3,0,0,0">
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE713;" FontSize="18"/>
+                            <TextBlock Text="设置" Margin="15,0,0,0" VerticalAlignment="Center" FontFamily="Microsoft YaHei UI"/>
                         </StackPanel>
                     </ListViewItem>
                 </Grid>
@@ -79,6 +68,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                <Frame Grid.Row="1" Name="Rua"/>
                 <Grid Height="48" Name="TopBar">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -93,9 +83,20 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="15" Glyph="&#xE721;"/>
                     </AppBarButton>
                 </Grid>
-                <Frame Grid.Row="1" Name="Rua"/>
             </Grid>
         </SplitView>
+        <Grid Name="AppTitleBar" Height="32" Background="#3CBFBFBF">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Name="BackButton" Height="32" Width="48" Background="Transparent" BorderThickness="0" Click="BackButton_Click">
+                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72B;" FontSize="12"/>
+            </Button>
+            <Border Grid.Column="1" Name="DraggableArea" Background="Transparent">
+                <TextBlock Name="TitleText" FontSize="13" Margin="12,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Tucao"></TextBlock>
+            </Border>
+        </Grid>
         <Grid Name="ToastArea" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,80"/>
 
     </Grid>

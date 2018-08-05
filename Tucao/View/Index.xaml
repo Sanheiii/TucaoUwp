@@ -6,6 +6,7 @@
     xmlns:local="using:Tucao.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:content="using:Tucao"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     NavigationCacheMode="Required">
@@ -27,9 +28,10 @@
                     <Image Source="ms-appx:///Assets/bg_y_png24.png" Stretch="None"/>
                 </StackPanel>
                 <toolkit:AdaptiveGridView x:Name="VideoList" OneRowModeEnabled="False" ItemHeight="90" ScrollViewer.VerticalScrollMode="Disabled" DesiredWidth="450"
-                                          IsItemClickEnabled="True" SelectionMode="None" HorizontalContentAlignment="Left" Padding="10,0,10,0" Grid.Row="0" ItemClick="VideoList_ItemClick">
+                                          IsItemClickEnabled="True" SelectionMode="None" HorizontalContentAlignment="Left" Padding="10,0,10,0" Grid.Row="0" ItemClick="VideoList_ItemClick"
+                                          ItemsSource="{x:Bind items}">
                     <toolkit:AdaptiveGridView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="content:Introduction">
                             <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                 <Grid Background="#22DDDDDD">
                                 <Grid.ColumnDefinitions>
@@ -40,18 +42,14 @@
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Image Grid.Column="0" Grid.RowSpan="2" Stretch="UniformToFill" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5,5,5,5">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="{Binding Imgurl}"/>
-                                    </Image.Source>
-                                </Image>
-                                <Border Background="#88000000" Grid.Row="1" HorizontalAlignment="Left" Margin="5,-5,5,5">
-                                    <TextBlock Text="{Binding Play}" VerticalAlignment="Center" FontSize="11" Foreground="#FFFFFFFF" Margin="3,0,3,0"/>
+                                    <Image Source="{x:Bind Imgurl}" Grid.Column="0" Grid.RowSpan="2" Stretch="UniformToFill" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5,5,5,5" x:Phase="4"/>
+                                    <Border Background="#88000000" Grid.Row="1" HorizontalAlignment="Left" Margin="5,-5,5,5">
+                                    <TextBlock Text="{x:Bind Play}" VerticalAlignment="Center" FontSize="11" Foreground="#FFFFFFFF" Margin="3,0,3,0" x:Phase="1"/>
                                 </Border>
                                 <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="15" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,5,0" Foreground="#FFFF3366"/>
                                 <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="0,0,0,5">
-                                    <TextBlock Text="{Binding Up}" Foreground="Red"/>
-                                    <TextBlock Text="{Binding Time}" FontSize="13" Margin="5,3,0,0"/>
+                                    <TextBlock Text="{x:Bind Up}" Foreground="#FFE70353" x:Phase="2"/>
+                                        <TextBlock Text="{x:Bind Time}" Foreground="#999" FontSize="13" Margin="5,3,0,0" x:Phase="3"/>
                                 </StackPanel>
                                 </Grid>
                             </Grid>
@@ -60,7 +58,7 @@
                 </toolkit:AdaptiveGridView>
                 <Grid Grid.Row="1" VerticalAlignment="Top" Height="30" HorizontalAlignment="Stretch">
                     <ProgressBar VerticalAlignment="Top" Height="35" Name="LoadingProgress" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
-                    <TextBlock Name="BottomText" Foreground="#BB000000" HorizontalAlignment="Center" Tapped="BottomText_Tapped" Text="加载下一页"/>
+                    <TextBlock Name="BottomText" HorizontalAlignment="Center" Tapped="BottomText_Tapped" Text="加载下一页"/>
                 </Grid>
             </Grid>
         </ScrollViewer>

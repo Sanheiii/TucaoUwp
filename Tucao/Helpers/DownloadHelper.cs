@@ -25,7 +25,7 @@ namespace Tucao.Helpers
                     url_list.Add(part["file"].ToString());
                 else
                 {
-                    url_list = await VideoInfo.GetPlayUrl(part);
+                    url_list = await info.GetPlayUrl(partNumber - 1);
                 }
                 if (url_list.Count == 0)
                 {
@@ -96,6 +96,25 @@ namespace Tucao.Helpers
                         //关闭文件
                         writer.Dispose();
                         file1.Dispose();
+                        //下载弹幕文件
+                        StorageFile danmakuFile = await folder.CreateFileAsync("danmakus.xml", CreationCollisionOption.OpenIfExists);
+                        Hashtable param = new Hashtable();
+                        {
+                            param.Add("m", "mukio");
+                            param.Add("c", "index");
+                            param.Add("a", "init");
+                            param.Add("playerID", "11-" + info.Hid + "-1-" + (partNumber-1) + "");
+                        }
+                        var result = await Methods.HttpGetAsync("http://www.tucao.tv/index.php", param);
+                        var danmakus =await result.Content.ReadAsStringAsync();
+                        //打开文件
+                        Stream danmakuFileStream = await danmakuFile.OpenStreamForWriteAsync();
+                        StreamWriter danmakuFileWriter = new StreamWriter(danmakuFileStream);
+                        //写入
+                        await danmakuFileWriter.WriteAsync(danmakus);
+                        //关闭文件
+                        danmakuFileWriter.Dispose();
+                        danmakuFileStream.Dispose();
                     }
                 }
             }

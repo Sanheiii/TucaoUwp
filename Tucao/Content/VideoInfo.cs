@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using Windows.Data.Json;
+using Windows.Storage;
+
 namespace Tucao
 {
     //定义 投稿 类
@@ -122,8 +126,43 @@ namespace Tucao
         /// </summary>
         /// <param name="vid">vid</param>
         /// <returns></returns>
-        public static async Task<List<string>> GetPlayUrl(Hashtable part)
+        public async Task<List<string>> GetPlayUrl(int partNum)
         {
+            try
+            {
+                StorageFolder downloadFolder = await ApplicationData.Current.LocalCacheFolder.GetFolderAsync("Download");
+                var folder = await downloadFolder.GetFolderAsync(Hid);
+                var partFolder = await folder.GetFolderAsync((partNum + 1).ToString());
+                //获取文件夹
+                StorageFile jsonfile = await partFolder.GetFileAsync("part.json");
+                Stream stream = await jsonfile.OpenStreamForReadAsync();
+                StreamReader reader = new StreamReader(stream);
+                string str = await reader.ReadToEndAsync();
+                reader.Dispose();
+                stream.Dispose();
+                JsonObject json = JsonObject.Parse(str);
+                int fileCount = (int)json["filecount"].GetNumber();
+                List<string> playList = new List<string>();
+                int j = 0;
+                while (j < fileCount)
+                {
+                    //获取文件
+                    var file = await partFolder.TryGetItemAsync(j.ToString());
+                    if (file == null) break;
+                    //文件大小为0时跳过
+                    var properties = await file.GetBasicPropertiesAsync();
+                    if (properties.Size == 0) break;
+                    playList.Add(file.Path);
+                    j++;
+                }
+                //文件数不对从网络上获取播放地址
+                if (j == fileCount) return playList;
+            }
+            catch
+            {
+                //发生异常则从网络上获取播放地址}
+            }
+            Hashtable part = Video[partNum];
             List<string> url = new List<string>();
             if (part["type"].ToString() == "video")
             {
@@ -139,7 +178,7 @@ namespace Tucao
                     param.Add("r", (unixtimestamp / 1000).ToString());
                 }
                 var result = await Methods.HttpGetAsync("http://api.tucao.tv/api/playurl", param);
-                var xml =await result.Content.ReadAsStringAsync();
+                var xml = await result.Content.ReadAsStringAsync();
                 XMLParser xmlParser = new XMLParser();
                 XMLNode xn = xmlParser.Parse(xml);
                 try

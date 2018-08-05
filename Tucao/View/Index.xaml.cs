@@ -18,14 +18,13 @@ namespace Tucao.View
     public sealed partial class Index : Page
     {
         int p = 0;
+        ObservableCollection<Introduction> items = new ObservableCollection<Introduction>();
         public Index()
         {
             this.InitializeComponent();
-            VideoList.ItemsSource = new ObservableCollection<Introduction>();
-            Task.Run(() =>
-            {
-                if (p == 0) LoadItems(++p);
-            });
+
+            if (p == 0) LoadItems(++p);
+
         }
         /// <summary>
         /// 加载内容
@@ -65,17 +64,13 @@ namespace Tucao.View
                 return;
             }
             //把信息添加到items
-            for (int i = 0; i < r.Count; i++)
-            {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-                {
-                    ((ObservableCollection<Introduction>)VideoList.ItemsSource).Add(r[i]);
-                });
-                await Task.Delay(10);
-            }
-            //显示加载下一页
             await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
+                for (int i = 0; i < r.Count; i++)
+                {
+                    items.Add(r[i]);
+                }
+                //显示加载下一页
                 RefreshButton.IsEnabled = true;
                 BottomText.Visibility = Visibility.Visible;
                 LoadingProgress.Visibility = Visibility.Collapsed;
@@ -120,7 +115,7 @@ namespace Tucao.View
         private void BottomText_Tapped(object sender, TappedRoutedEventArgs e)
         {
             RefreshButton.IsEnabled = false;
-            Task.Run(() => LoadItems(++p));
+            LoadItems(++p);
         }
         /// <summary>
         /// 点击刷新
@@ -131,8 +126,8 @@ namespace Tucao.View
         {
             RefreshButton.IsEnabled = false;
             p = 1;
-            VideoList.ItemsSource = new ObservableCollection<Introduction>();
-            Task.Run(() => LoadItems(p));
+            items.Clear();
+            LoadItems(p);
         }
         /// <summary>
         /// 滚到底加载下一页
@@ -142,7 +137,7 @@ namespace Tucao.View
         private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
             var scrollViewer = (sender as ScrollViewer);
-            if(scrollViewer.VerticalOffset==scrollViewer.ScrollableHeight)
+            if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight && RefreshButton.IsEnabled == true)
             {
                 BottomText_Tapped(BottomText, new TappedRoutedEventArgs());
             }

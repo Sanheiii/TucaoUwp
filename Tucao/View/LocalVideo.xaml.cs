@@ -65,7 +65,7 @@ namespace Tucao.View
         {
             ObservableCollection<Part> parts = new ObservableCollection<Part>();
             var folders = await storage.GetFoldersAsync();
-            int c = 1;
+            int c = 0;
             foreach (StorageFolder folder in folders)
             {
                 if (await folder.TryGetItemAsync("part.json") != null)
@@ -79,6 +79,8 @@ namespace Tucao.View
                     reader.Dispose();
                     stream.Dispose();
                     JsonObject json = JsonObject.Parse(str);
+                    p.hid = storage.Name;
+                    p.partNum = c;
                     p.partTitle =json["title"].GetString();
                     ulong size = 0;
                     List<string> playlist = new List<string>();
@@ -126,9 +128,8 @@ namespace Tucao.View
                 param.Title = part.partTitle;
                 param.PlayList = part.play_list;
                 param.IsLocalFile = true;
-#warning "这里以后改成本地弹幕"
-                param.Hid = "4077067";
-                param.Part = 0;
+                param.Hid = part.hid;
+                param.Part = part.partNum;
                 Frame root = Window.Current.Content as Frame;
                 App.Link.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
             }
@@ -168,6 +169,8 @@ namespace Tucao.View
         }
         public class Part
         {
+            public string hid { get; set; }
+            public int partNum { get; set; }
             public string partTitle { get; set; }
             public string size { get; set; }
             public List<string> play_list { get; set; }
