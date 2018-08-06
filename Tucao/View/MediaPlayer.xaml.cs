@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Tucao.Helpers;
+using Windows.ApplicationModel.Core;
 using Windows.Graphics.Display;
 using Windows.System;
 using Windows.UI;
@@ -249,8 +250,9 @@ namespace Tucao.View
                 FullWindowSymbol.Symbol = Symbol.FullScreen;
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
                 //返回恢复原来的功能
-                SystemNavigationManager.GetForCurrentView().BackRequested -= MediaPlayer_BackRequested;
+                SystemNavigationManager.GetForCurrentView().BackRequested -= MediaPlayer_OnBackRequested;
                 //SystemNavigationManager.GetForCurrentView().BackRequested += Link.OnBackrequested;
+                view.SetDesiredBoundsMode(ApplicationViewBoundsMode.UseVisible);
             }
             else
             {
@@ -262,12 +264,12 @@ namespace Tucao.View
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
                 //使得返回变成退出全屏
                 //SystemNavigationManager.GetForCurrentView().BackRequested -= Link.OnBackrequested;
-                SystemNavigationManager.GetForCurrentView().BackRequested += MediaPlayer_BackRequested;
+                SystemNavigationManager.GetForCurrentView().BackRequested += MediaPlayer_OnBackRequested;
+                view.SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
             }
         }
-        private void MediaPlayer_BackRequested(object sender, BackRequestedEventArgs e)
+        private void MediaPlayer_OnBackRequested(object sender, BackRequestedEventArgs e)
         {
-#warning 测试e.Handled
             e.Handled = true;
             FullWindowButton_Click(this, new RoutedEventArgs());
         }
@@ -548,6 +550,16 @@ namespace Tucao.View
             }
             DanmakuManager.SendDanmaku(content,((SolidColorBrush)ColorPreview.Fill).Color,ProgressSlider.Value,cid,type);
             (sender as AutoSuggestBox).Text = "";
+        }
+        /// <summary>
+        /// 如果窗口没有标题栏就自动全屏
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Media_Loaded(object sender, RoutedEventArgs e)
+        {
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            if (!coreTitleBar.IsVisible) FullWindowButton_Click(FullWindowButton, new RoutedEventArgs());
         }
     }
 

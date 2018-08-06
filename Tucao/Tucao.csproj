@@ -21,8 +21,8 @@
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <PackageCertificateThumbprint>04D11A8114AA2241F201FBA331933CA166285B07</PackageCertificateThumbprint>
-    <AppxBundle>Never</AppxBundle>
-    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+    <AppxBundle>Always</AppxBundle>
+    <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -101,6 +101,9 @@
     <Compile Include="Controls\DanmakuManager.xaml.cs">
       <DependentUpon>DanmakuManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\UpdateLog.xaml.cs">
+      <DependentUpon>UpdateLog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
@@ -175,6 +178,10 @@
     <Page Include="Controls\DanmakuManager.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\UpdateLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\About.xaml">
       <SubType>Designer</SubType>

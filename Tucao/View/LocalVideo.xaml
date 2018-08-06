@@ -17,49 +17,55 @@
     </Page.Transitions>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="48"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0">
-        <ListView Name="Videos" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Videos_ItemClick" ScrollViewer.VerticalScrollMode="Disabled">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="-12,0,-12,0">
-                        <Grid Background="#22DDDDDD" Padding="6,0,6,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="{Binding title}" Foreground="#FFFF3366" TextWrapping="WrapWholeWords" FontSize="18"  VerticalAlignment="Bottom" Margin="0,10,0,10"/>
-                        <ListView Name="Parts" Grid.Row="1" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Parts_ItemClick" ItemsSource="{Binding parts}" ScrollViewer.VerticalScrollMode="Disabled">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Height="Auto" Margin="0,0,0,5">
-                                        <TextBlock TextWrapping="WrapWholeWords" Text="{Binding partTitle}" VerticalAlignment="Center" Margin="0,8,0,0" HorizontalAlignment="Left"/>
-                                    <TextBlock Text="{Binding size}" VerticalAlignment="Bottom" Margin="0,8,0,0" HorizontalAlignment="Right"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="Margin" Value="0,0,0,0"/>
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
+        <ProgressBar Name="LoadProgress" IsIndeterminate="True"/>
+        <ScrollViewer Grid.Row="1">
+            <ListView Name="Videos" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Videos_ItemClick" ScrollViewer.VerticalScrollMode="Disabled">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="-12,0,-12,0">
+                            <Grid Background="#22DDDDDD" Padding="6,0,6,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding title}" Foreground="#FFFF3366" TextWrapping="WrapWholeWords" FontSize="18"  VerticalAlignment="Bottom" Margin="0,10,0,10"/>
+                                <ListView Name="Parts" Grid.Row="1" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Parts_ItemClick" ItemsSource="{Binding parts}" ScrollViewer.VerticalScrollMode="Disabled">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Height="Auto" Margin="0,0,0,5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock TextWrapping="WrapWholeWords" Text="{Binding partTitle}" VerticalAlignment="Center" Margin="0,8,0,0" HorizontalAlignment="Left"/>
+                                                <TextBlock Text="{Binding size}" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,8,0,0" HorizontalAlignment="Right"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Margin" Value="0,0,0,0"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                </ListView>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Margin" Value="0,0,0,0"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-        </ListView>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Margin" Value="0,0,0,0"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
         </ScrollViewer>
-        <CommandBar VerticalAlignment="Bottom" Grid.RowSpan="2">
+        <CommandBar VerticalAlignment="Bottom" Grid.RowSpan="3">
             <AppBarButton Label="下载目录" Name="OpenDownloadFolder" Tapped="OpenDownloadFolder_Tapped">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8DE;"/>
             </AppBarButton>

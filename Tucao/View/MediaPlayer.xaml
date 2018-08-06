@@ -7,8 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Controls"
     mc:Ignorable="d"
-    IsTabStop="True"
-    KeyDown="Page_KeyDown"
     RequestedTheme="Dark">
     <Page.Resources>
         <local:MediaConverter x:Key="cvt1"/>
@@ -17,7 +15,7 @@
     <Grid>
         <Grid Name="Player" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" Tapped="Media_Tapped" DoubleTapped="Media_DoubleTapped" ManipulationMode="TranslateX" ManipulationStarted="Media_ManipulationStarted" ManipulationDelta="Media_ManipulationDelta" ManipulationCompleted="Media_ManipulationCompleted">
             <MediaElement x:Name="Media" RealTimePlayback="True" MediaOpened="Media_MediaOpened" MediaEnded="Media_MediaEnded" CurrentStateChanged="Media_CurrentStateChanged"
-                      MediaFailed="Media_MediaFailed" BufferingProgressChanged="Media_BufferingProgressChanged"/>
+                      MediaFailed="Media_MediaFailed" BufferingProgressChanged="Media_BufferingProgressChanged" Loaded="Media_Loaded"/>
             <controls:DanmakuManager x:Name="DanmakuManager"/>
         </Grid>
         <!--提示-->
@@ -160,37 +158,25 @@
                                 Margin="12,0" 
                                 ValueChanged="ProgressSlider_ValueChanged"
                                 Style="{StaticResource MediaSliderStyle}" 
-                                VerticalAlignment="Top" IsTabStop="False"
+                                VerticalAlignment="Top"
                                 Value="{Binding ElementName=Media,Path=Position,Mode=TwoWay,Converter={StaticResource cvt1}}"/>
                     </Grid>
                 </Border>
                 <!--控制栏的按键-->
                 <Border x:Name="MediaTransportControls_Command_Border"
                             Grid.Row="1">
-                    <CommandBar x:Name="MediaControlsCommandBar"
-                                    IsDynamicOverflowEnabled="False"
-                                    Margin="0,0" 
-                                    RequestedTheme="Dark"
-                                    Style="{StaticResource CommandBarStyle}"
-                                    FontFamily="Segoe UI">
+                    <CommandBar x:Name="MediaControlsCommandBar" IsDynamicOverflowEnabled="False" Margin="0,0" RequestedTheme="Dark" Style="{StaticResource CommandBarStyle}">
                         <CommandBar.PrimaryCommands>
-                            <AppBarButton x:Name="FullWindowButton" 
-                                              MediaTransportControlsHelper.DropoutOrder="17" 
-                                              Style="{StaticResource AppBarButtonStyle}"
-                                              Click="FullWindowButton_Click" IsTabStop="False">
+                            <AppBarButton x:Name="FullWindowButton" MediaTransportControlsHelper.DropoutOrder="17" Style="{StaticResource AppBarButtonStyle}" Click="FullWindowButton_Click">
                                 <AppBarButton.Icon>
-                                    <SymbolIcon x:Name="FullWindowSymbol" 
-                                                    Symbol="FullScreen"/>
+                                    <SymbolIcon x:Name="FullWindowSymbol" Symbol="FullScreen"/>
                                 </AppBarButton.Icon>
                             </AppBarButton>
                         </CommandBar.PrimaryCommands>
                         <CommandBar.Content>
                             <!--开始/暂停-->
                             <StackPanel Orientation="Horizontal">
-                                <AppBarButton x:Name="PlayPauseButton" 
-                                                  MediaTransportControlsHelper.DropoutOrder="23" 
-                                                  Style="{StaticResource AppBarButtonStyle}"
-                                                  Click="PlayPauseButton_Click" IsTabStop="False">
+                                <AppBarButton x:Name="PlayPauseButton" MediaTransportControlsHelper.DropoutOrder="23" Style="{StaticResource AppBarButtonStyle}" Click="PlayPauseButton_Click">
                                     <AppBarButton.Icon>
                                         <SymbolIcon x:Name="PlayPauseSymbol" 
                                                         Symbol="Pause"/>

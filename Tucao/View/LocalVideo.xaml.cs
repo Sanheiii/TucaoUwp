@@ -39,6 +39,7 @@ namespace Tucao.View
             StorageFolder downloadfolder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("Download", CreationCollisionOption.OpenIfExists);
             //获取目录下
             var folders = await downloadfolder.GetFoldersAsync();
+            int count = folders.Count;
             foreach (var folder in folders)
             {
                 if (await folder.TryGetItemAsync("info.json") != null)
@@ -60,6 +61,10 @@ namespace Tucao.View
                     });
                 }
             }
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                    {
+                        LoadProgress.Visibility = Visibility.Collapsed;
+                    });
         }
         private async Task<ObservableCollection<Part>> LoadParts(StorageFolder storage)
         {
@@ -81,7 +86,7 @@ namespace Tucao.View
                     JsonObject json = JsonObject.Parse(str);
                     p.hid = storage.Name;
                     p.partNum = c;
-                    p.partTitle =json["title"].GetString();
+                    p.partTitle = json["title"].GetString();
                     ulong size = 0;
                     List<string> playlist = new List<string>();
                     for (i = 0; i < json["filecount"].GetNumber(); i++)

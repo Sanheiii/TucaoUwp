@@ -1,4 +1,7 @@
 ﻿键                            值                         注释
+
+Version                       string                     上一次打开时的版本号
+
 IsShowDanmaku	              bool                       是否显示弹幕
 IsShowScrollableDanmaku       bool                       是否显示滚动弹幕
 IsShowTopDanmaku              bool                       是否显示顶部弹幕

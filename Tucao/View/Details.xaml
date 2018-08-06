@@ -15,7 +15,7 @@
         <Pivot PivotItemLoading="Pivot_PivotItemLoading">
             <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock>简介</TextBlock>
+                    <TextBlock FontSize="20" FontWeight="Bold">简介</TextBlock>
                 </PivotItem.Header>
                 <Grid>
                     <ScrollViewer>
@@ -75,9 +75,9 @@
                     </ScrollViewer>
                 </Grid>
             </PivotItem>
-            <PivotItem >
+            <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock>评论</TextBlock>
+                    <TextBlock FontSize="20" FontWeight="Bold">评论</TextBlock>
                 </PivotItem.Header>
                 <ScrollViewer>
                     <Grid>
@@ -129,7 +129,7 @@
                         </ListView>
                         <Grid Grid.Row="1" VerticalAlignment="Center" Height="30" HorizontalAlignment="Stretch">
                             <ProgressBar VerticalAlignment="Top" Height="35" Name="LoadingProgress" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
-                            <TextBlock Name="BottomText" Foreground="#AA000000" HorizontalAlignment="Center" VerticalAlignment="Center" Text="加载下一页" Visibility="Collapsed"/>
+                            <TextBlock Name="BottomText" Foreground="#AAAAAAAA" HorizontalAlignment="Center" VerticalAlignment="Center" Text="加载下一页" Visibility="Collapsed"/>
                         </Grid>
                     </Grid>
                 </ScrollViewer>

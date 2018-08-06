@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using Windows.Data.Xml.Dom;
 using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+using Windows.UI.Notifications;
 using Windows.Web.Http;
 
 namespace Tucao
@@ -91,6 +91,24 @@ namespace Tucao
             }
             var response = await client.PostAsync(new Uri(url), new HttpFormUrlEncodedContent(body));
             return response;
+        }
+        public static string GetAppVersion()
+        {
+            return string.Format("Ver {0}.{1}.{2}.{3}",
+                Package.Current.Id.Version.Major,Package.Current.Id.Version.Minor,Package.Current.Id.Version.Build,Package.Current.Id.Version.Revision);
+        }
+        /// <summary>
+        /// 发送一个通知
+        /// </summary>
+        /// <param name="content">内容</param>
+        public static void SendNotification(string content)
+        {
+            ToastTemplateType toastTemplate = ToastTemplateType.ToastText01;
+            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(toastTemplate);
+            XmlNodeList toastTextElements = toastXml.GetElementsByTagName("text");
+            toastTextElements[0].AppendChild(toastXml.CreateTextNode(content));
+            ToastNotification toast = new ToastNotification(toastXml);
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
         }
         ///// <summary>
         ///// 时间字符串转xxx前

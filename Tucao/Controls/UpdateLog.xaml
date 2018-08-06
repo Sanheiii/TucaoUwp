@@ -1,0 +1,31 @@
+﻿<ContentDialog
+    x:Class="Tucao.Controls.UpdateLog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Tucao.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Version"
+    PrimaryButtonText="确定">
+    <ScrollViewer>
+    <StackPanel>
+            <TextBlock TextWrapping="WrapWholeWords" FontWeight="Bold" Margin="0,0,0,5">本次更新内容 2018.8.6</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[新增] 划动屏幕跳转进度</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[新增] 发送弹幕</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[新增] 弹幕的详细设置</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[新增] 下载视频时会一起下载弹幕</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[新增] 在详情页会优先播放本地已下载的视频</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[新增] 下载和保存图片时会弹出提示</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[新增] 手机将会自动全屏</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[修改] 界面变得更加Windows了</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[修改] 在播放页面双击暂停/继续不会使控制栏弹出/消失</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[修复] 搜索不到一页会显示没有结果的bug</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[修复] 不能下载多个分p的bug</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[修复] 取消下载会弹出错误的bug</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">-[修复] 下载出错后重新下载会判定已下载完的bug</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords" Margin="0,10,0,0">如果你觉得本应用不错</TextBlock>
+        <TextBlock TextWrapping="WrapWholeWords">可以在设置页面支持一下作者</TextBlock>
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>

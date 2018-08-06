@@ -40,6 +40,14 @@ namespace Tucao.View
             App.Link = Rua;
             frameTitle = PageName;
             toastArea = ToastArea;
+            //如果第一次打开这个版本则弹出提示
+            string appVersion = Methods.GetAppVersion();
+            if ((string)Helpers.SettingHelper.GetValue("Version") != appVersion)
+            {
+                Controls.UpdateLog dialog = new Controls.UpdateLog();
+                var task = dialog.ShowAsync();
+                Helpers.SettingHelper.SetValue("Version", appVersion);
+            }
         }
         /// <summary>
         /// 点击标题栏的返回
@@ -108,7 +116,6 @@ namespace Tucao.View
                 case "Setting": { PageName.Text = "设置"; ShowTopBar = true; break; }
                 case "Details": { ShowTopBar = true; break; }
                 case "MediaPlayer": { ShowTopBar = false; break; }
-                case "H5Player": { ShowTopBar = false; break; }
                 default: { ShowTopBar = true; break; }
             }
         }
@@ -143,7 +150,7 @@ namespace Tucao.View
         }
         private void XFListTapped(object sender, TappedRoutedEventArgs e)
         {
-            ShowToast("怎么实现我不管,这个需求很简单");
+            ShowToast("正在施工");
         }
         /// <summary>
         /// 点击下载队列
@@ -172,6 +179,7 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void Setting_Tapped(object sender, TappedRoutedEventArgs e)
         {
+
             HamburgerMenu.IsPaneOpen = !HamburgerMenu.IsPaneOpen;
             if (Rua.CurrentSourcePageType != typeof(Setting))
             {
@@ -207,21 +215,21 @@ namespace Tucao.View
             item.Children.Add(rectangle);
             item.Children.Add(textBlock);
             //到ui线程中添加控件
-            var task=currentObject.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-            {
-                toastArea.Children.Add(item);
-                var s = item.Fade(1, 300, 0, EasingType.Default, EasingMode.EaseOut);
-                s.Completed += (ssender, se) =>
-                {
-                    var h = item.Fade(0, 300, 3000, EasingType.Default, EasingMode.EaseIn);
-                    h.Completed += (hsender, he) =>
-                    {
-                        toastArea.Children.Remove(item);
-                    };
-                    h.Start();
-                };
-                s.Start();
-            });
+            var task = currentObject.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+              {
+                  toastArea.Children.Add(item);
+                  var s = item.Fade(1, 300, 0, EasingType.Default, EasingMode.EaseOut);
+                  s.Completed += (ssender, se) =>
+                  {
+                      var h = item.Fade(0, 300, 3000, EasingType.Default, EasingMode.EaseIn);
+                      h.Completed += (hsender, he) =>
+                      {
+                          toastArea.Children.Remove(item);
+                      };
+                      h.Start();
+                  };
+                  s.Start();
+              });
         }
 
 

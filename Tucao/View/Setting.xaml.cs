@@ -28,13 +28,8 @@ namespace Tucao.View
     {
         public Setting()
         {
-            string appVersion = string.Format("Ver {0}.{1}.{2}.{3}",
-                       Package.Current.Id.Version.Major,
-                       Package.Current.Id.Version.Minor,
-                       Package.Current.Id.Version.Build,
-                       Package.Current.Id.Version.Revision);
             this.InitializeComponent();
-            Version.Text = appVersion;
+            Version.Text = Methods.GetAppVersion();
             DanmakuSizeSlider.Value = (double?)SettingHelper.GetValue("DanmakuSize") ?? 0.7;
             DanmakuSpeedSlider.Value = (double?)SettingHelper.GetValue("DanmakuSpeed") ?? 0.6;
             DanmakuOpacitySlider.Value = (double?)SettingHelper.GetValue("DanmakuOpacity") ?? 1;
