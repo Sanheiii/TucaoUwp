@@ -148,6 +148,8 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <PRIResource Include="Resource\Type.resw" />
+    <None Include="Notes\Settings.md" />
+    <None Include="Notes\UpdateLog.md" />
     <None Include="Tucao_StoreKey.pfx" />
     <None Include="Tucao_TemporaryKey.pfx" />
   </ItemGroup>
@@ -155,10 +157,9 @@
     <Content Include="Assets\bg_y_png24.png" />
     <Content Include="Assets\nophoto.gif" />
     <Content Include="Assets\RewardImg.jpg" />
-    <Content Include="Notes\Settings.txt" />
-    <Content Include="Notes\备忘.txt" />
     <None Include="Package.StoreAssociation.xml" />
     <None Include="Package.xml" />
+    <Content Include="Notes\Note.txt" />
     <Content Include="Properties\Default.rd.xml">
       <SubType>Designer</SubType>
     </Content>
