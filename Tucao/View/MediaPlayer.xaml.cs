@@ -1,9 +1,12 @@
 ﻿using Controls;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Tucao.Helpers;
 using Windows.ApplicationModel.Core;
+using Windows.Data.Json;
 using Windows.Graphics.Display;
+using Windows.Storage;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
@@ -139,18 +142,76 @@ namespace Tucao.View
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            //获取参数打开视频
             param = e.Parameter as MediaPlayerSource;
-            PlayerTitle.Text = param.Title;
+            PlayerTitle.Text = param.Title + '-' + param.PartTitle;
             LoadDanmaku();
             Play(param.PlayList);
+        }
+        /// <summary>
+        /// 从外部导航到此界面传递的信息
+        /// </summary>
+        public class MediaPlayerSource
+        {
+            public string Title;
+            public string Hid;
+            public int Part;
+            public string PartTitle;
+            //分类id
+            public string Tid;
+            public bool IsLocalFile;
+            public List<string> PlayList;
         }
         /// <summary>
         /// 加载弹幕
         /// </summary>
         private async void LoadDanmaku()
         {
-            danmakuList = await Tucao.Content.GetDanmakus(param.Hid, param.Part,param.IsLocalFile);
+            danmakuList = await Tucao.Content.GetDanmakus(param.Hid, param.Part, param.IsLocalFile);
         }
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+                SaveHistory(param.Hid, param.Title, param.Part, ProgressSlider.Value);
+        }
+
+        private async void SaveHistory(string hid, string title, int part, double position)
+        {
+            //打开文件
+            var folder = ApplicationData.Current.LocalCacheFolder;
+            StorageFile file = await folder.CreateFileAsync("history.json", CreationCollisionOption.OpenIfExists);
+            Stream stream = await file.OpenStreamForReadAsync();
+            //读取json
+            StreamReader reader = new StreamReader(stream);
+            string str = reader.ReadToEnd();
+            reader.Dispose();
+            stream.Dispose();
+            JsonArray jsons = new JsonArray();
+            JsonArray.TryParse(str, out jsons);
+            //如果已经有这个视频的记录就删掉重新写入
+            foreach (var j in jsons)
+            {
+                if (j.GetObject()["hid"].GetString() == hid)
+                {
+                    jsons.Remove(j);
+                    break;
+                }
+            }
+            //写入数据
+            JsonObject json = new JsonObject
+                        {
+                            { "hid", JsonValue.CreateStringValue(hid) },
+                            { "title", JsonValue.CreateStringValue(title) },
+                            { "part", JsonValue.CreateNumberValue(part) },
+                            { "position", JsonValue.CreateNumberValue((int)position) },
+                        };
+            jsons.Insert(0, json);
+            stream = await file.OpenStreamForWriteAsync();
+            StreamWriter writer = new StreamWriter(stream);
+            await writer.WriteAsync(jsons.ToString());
+            writer.Dispose();
+            stream.Dispose();
+        }
+
         /// <summary>
         /// 播放视频
         /// </summary>
@@ -224,7 +285,7 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void PlayPauseButton_Click(object sender, RoutedEventArgs e)
         {
-        var i = Media.CurrentState;
+            var i = Media.CurrentState;
             if (i == MediaElementState.Playing)
             {
                 //暂停
@@ -265,6 +326,7 @@ namespace Tucao.View
                 //使得返回变成退出全屏
                 //SystemNavigationManager.GetForCurrentView().BackRequested -= Link.OnBackrequested;
                 SystemNavigationManager.GetForCurrentView().BackRequested += MediaPlayer_OnBackRequested;
+                //使得导航栏透明
                 view.SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
             }
         }
@@ -394,18 +456,6 @@ namespace Tucao.View
                 BufferingProgress.Text = "";
             }
         }
-        /// <summary>
-        /// 从外部导航到此界面传递的信息
-        /// </summary>
-        public class MediaPlayerSource
-        {
-            public string Title;
-            public string Hid;
-            public int Part;
-            public string Tid;
-            public bool IsLocalFile;
-            public List<string> PlayList;
-        }
 
         private void Page_KeyDown(object sender, KeyRoutedEventArgs e)
         {
@@ -479,7 +529,7 @@ namespace Tucao.View
             positionValue = ProgressSlider.Value;
             windowWidth = this.RenderSize.Width;
         }
-
+        //划动时根据距离更改提示的文本
         private void Media_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
             int t = (int)(100 * e.Cumulative.Translation.X / windowWidth);
@@ -488,11 +538,11 @@ namespace Tucao.View
                 SwipingMessage.Text = "取消跳转";
                 return;
             }
-            if (positionValue+t<0) t = (int)-positionValue;
-            SwipingMessage.Text =positionText+  Convert.ToInt16(t).ToString("+#;-#;+0") + 's';
+            if (positionValue + t < 0) t = (int)-positionValue;
+            SwipingMessage.Text = positionText + Convert.ToInt16(t).ToString("+#;-#;+0") + 's';
             SwipingPopup.Visibility = Visibility.Visible;
         }
-
+        //松手时跳转进度
         private void Media_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
         {
             //松手0.5秒后使提示消失
@@ -503,14 +553,14 @@ namespace Tucao.View
                 timer.Stop();
             });
             timer.Start();
-            int t =(int) (100 * e.Cumulative.Translation.X / windowWidth);
+            int t = (int)(100 * e.Cumulative.Translation.X / windowWidth);
             if (t < 1 && t > -1)
             {
                 SwipingPopup.Visibility = Visibility.Collapsed;
                 return;
             }
-            if (positionValue + t < 0) t =(int) -positionValue;
-            ProgressSlider.Value =(int)positionValue+ t;
+            if (positionValue + t < 0) t = (int)-positionValue;
+            ProgressSlider.Value = (int)positionValue + t;
         }
         /// <summary>
         /// 检测进度条变化
@@ -519,7 +569,7 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void ProgressSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            if(e.OldValue>e.NewValue||e.NewValue-e.OldValue>1)
+            if (e.OldValue > e.NewValue || e.NewValue - e.OldValue > 1)
             {
                 DanmakuManager.Clear();
                 return;
@@ -541,14 +591,14 @@ namespace Tucao.View
             if (content.Length == 0) return;
             string cid = param.Tid + '-' + param.Hid + "-1-" + param.Part;
             DanmakuManager.DanmakuType type;
-            switch(Mode.SelectedIndex)
+            switch (Mode.SelectedIndex)
             {
-                case 1:type = DanmakuManager.DanmakuType.Scrollable;break;
-                case 2:type = DanmakuManager.DanmakuType.Top;break;
-                case 3:type = DanmakuManager.DanmakuType.Bottom;break;
-                default: type = DanmakuManager.DanmakuType.Scrollable;break;
+                case 0: type = DanmakuManager.DanmakuType.Scrollable; break;
+                case 1: type = DanmakuManager.DanmakuType.Top; break;
+                case 2: type = DanmakuManager.DanmakuType.Bottom; break;
+                default: type = DanmakuManager.DanmakuType.Scrollable; break;
             }
-            DanmakuManager.SendDanmaku(content,((SolidColorBrush)ColorPreview.Fill).Color,ProgressSlider.Value,cid,type);
+            DanmakuManager.SendDanmaku(content, ((SolidColorBrush)ColorPreview.Fill).Color, ProgressSlider.Value, cid, type);
             (sender as AutoSuggestBox).Text = "";
         }
         /// <summary>
@@ -560,6 +610,20 @@ namespace Tucao.View
         {
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             if (!coreTitleBar.IsVisible) FullWindowButton_Click(FullWindowButton, new RoutedEventArgs());
+        }
+        /// <summary>
+        /// 点击控制栏的返回
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Back_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var view = ApplicationView.GetForCurrentView();
+            view.ExitFullScreenMode();
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
+            SystemNavigationManager.GetForCurrentView().BackRequested -= MediaPlayer_OnBackRequested;
+            view.SetDesiredBoundsMode(ApplicationViewBoundsMode.UseVisible);
+            Link.GoBack();
         }
     }
 

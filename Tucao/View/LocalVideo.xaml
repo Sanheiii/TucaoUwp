@@ -33,7 +33,7 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="{Binding title}" Foreground="#FFFF3366" TextWrapping="WrapWholeWords" FontSize="18"  VerticalAlignment="Bottom" Margin="0,10,0,10"/>
-                                <ListView Name="Parts" Grid.Row="1" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Parts_ItemClick" ItemsSource="{Binding parts}" ScrollViewer.VerticalScrollMode="Disabled">
+                                <ListView Name="Parts" Grid.Row="1" IsItemClickEnabled="True" SelectionMode="None" ItemClick="Parts_ItemClick" ItemsSource="{Binding parts}" Tag="{Binding title}" ScrollViewer.VerticalScrollMode="Disabled">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid Height="Auto" Margin="0,0,0,5">
@@ -69,9 +69,15 @@
             <AppBarButton Label="下载目录" Name="OpenDownloadFolder" Tapped="OpenDownloadFolder_Tapped">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8DE;"/>
             </AppBarButton>
-            <AppBarToggleButton Label="删除" Name="Delete">
+            <AppBarButton Label="删除" Name="Delete" Tapped="Delete_Tapped">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74D;"/>
-            </AppBarToggleButton>
+            </AppBarButton>
+            <AppBarButton Label="取消" Name="Cancel" Tapped="Cancel_Tapped" Visibility="Collapsed">
+                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE711;"/>
+            </AppBarButton>
+            <AppBarButton Label="确定" Name="OK" Tapped="OK_Tapped" Visibility="Collapsed">
+                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE73E;"/>
+            </AppBarButton>
         </CommandBar>
     </Grid>
 </Page>

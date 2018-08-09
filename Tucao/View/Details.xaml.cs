@@ -218,7 +218,8 @@ namespace Tucao.View
             //打开播放器
             var param = new MediaPlayer.MediaPlayerSource();
             param.Hid = info.Hid;
-            param.Title = clickedItem.PartTitle;
+            param.Title = info.Title;
+            param.PartTitle = clickedItem.PartTitle;
             param.PlayList = url;
             //本地文件夹禁止有/字符.而网页url绝对有这个字符
             param.IsLocalFile = !url[0].Contains("/");

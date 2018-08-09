@@ -31,7 +31,7 @@ namespace Tucao.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Videos.ItemsSource = new ObservableCollection<Video>();
-            Task.Run(LoadItems);
+            LoadItems();
         }
         private async Task LoadItems()
         {
@@ -70,7 +70,6 @@ namespace Tucao.View
         {
             ObservableCollection<Part> parts = new ObservableCollection<Part>();
             var folders = await storage.GetFoldersAsync();
-            int c = 0;
             foreach (StorageFolder folder in folders)
             {
                 if (await folder.TryGetItemAsync("part.json") != null)
@@ -85,7 +84,7 @@ namespace Tucao.View
                     stream.Dispose();
                     JsonObject json = JsonObject.Parse(str);
                     p.hid = storage.Name;
-                    p.partNum = c;
+                    p.partNum = int.Parse(folder.Name) - 1;
                     p.partTitle = json["title"].GetString();
                     ulong size = 0;
                     List<string> playlist = new List<string>();
@@ -107,59 +106,27 @@ namespace Tucao.View
                     p.play_list = playlist;
                     parts.Add(p);
                 }
-                c++;
             }
             return parts;
         }
         //点击一个视频
         private void Videos_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (Delete.IsChecked == false)
-            {
-                App.OpenVideo((e.ClickedItem as Video).hid);
-            }
-            else
-            {
-
-            }
+            App.OpenVideo((e.ClickedItem as Video).hid);
         }
         //点击一个分P
-        private async void Parts_ItemClick(object sender, ItemClickEventArgs e)
+        private void Parts_ItemClick(object sender, ItemClickEventArgs e)
         {
             var part = e.ClickedItem as Part;
-            if (Delete.IsChecked == false)
-            {
-                var param = new MediaPlayer.MediaPlayerSource();
-                param.Title = part.partTitle;
-                param.PlayList = part.play_list;
-                param.IsLocalFile = true;
-                param.Hid = part.hid;
-                param.Part = part.partNum;
-                Frame root = Window.Current.Content as Frame;
-                App.Link.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
-            }
-            else
-            {
-                var folderpath = part.play_list[0].Remove(part.play_list[0].LastIndexOf("\\"));
-                var folder = await StorageFolder.GetFolderFromPathAsync(folderpath);
-                var parent = await folder.GetParentAsync();
-                //删除文件夹
-                await folder.DeleteAsync();
-                var items = ((sender as ListView).ItemsSource as ObservableCollection<Part>);
-                items.Remove(e.ClickedItem as Part);
-                if (items.Count == 0)
-                {
-                    var parentlist = Videos;
-                    (parentlist.ItemsSource as ObservableCollection<Video>).Remove((sender as ListView).DataContext as Video);
-                }
-                //父文件夹没有文件夹时删除它
-                int count = (await parent.GetFoldersAsync()).Count;
-                if (count == 0)
-                {
-                    await parent.DeleteAsync();
-                }
-            }
-
+            var param = new MediaPlayer.MediaPlayerSource();
+            param.Title = (string)(sender as ListView).Tag;
+            param.PartTitle = part.partTitle;
+            param.PlayList = part.play_list;
+            param.IsLocalFile = true;
+            param.Hid = part.hid;
+            param.Part = part.partNum;
+            Frame root = Window.Current.Content as Frame;
+            App.Link.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
         }
         //打开缓存文件夹
         private async void OpenDownloadFolder_Tapped(object sender, TappedRoutedEventArgs e)
@@ -181,5 +148,65 @@ namespace Tucao.View
             public List<string> play_list { get; set; }
         }
 
+        private void Delete_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            foreach (ListViewItem v in Videos.ItemsPanelRoot.Children)
+            {
+                ListView parts = ((v.ContentTemplateRoot as Grid).Children[0] as Grid).Children[1] as ListView;
+                parts.SelectionMode = ListViewSelectionMode.Multiple;
+                parts.IsItemClickEnabled = false;
+            }
+            Delete.Visibility = Visibility.Collapsed;
+            OpenDownloadFolder.Visibility = Visibility.Collapsed;
+            OK.Visibility = Visibility.Visible;
+            Cancel.Visibility = Visibility.Visible;
+        }
+
+        private void Cancel_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            foreach (ListViewItem v in Videos.ItemsPanelRoot.Children)
+            {
+                ListView parts = ((v.ContentTemplateRoot as Grid).Children[0] as Grid).Children[1] as ListView;
+                parts.SelectionMode = ListViewSelectionMode.None;
+                parts.IsItemClickEnabled = true;
+            }
+            Delete.Visibility = Visibility.Visible;
+            OpenDownloadFolder.Visibility = Visibility.Visible;
+            OK.Visibility = Visibility.Collapsed;
+            Cancel.Visibility = Visibility.Collapsed;
+        }
+
+        private async void OK_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            //倒着删,正着删会使\影响列表其他项目导致出错
+            for (int c = Videos.ItemsPanelRoot.Children.Count - 1; c >= 0; c--)
+            {
+                ListViewItem v = Videos.ItemsPanelRoot.Children[c] as ListViewItem;
+                ListView parts = ((v.ContentTemplateRoot as Grid).Children[0] as Grid).Children[1] as ListView;
+                for (int i = parts.SelectedItems.Count - 1; i >= 0; i--)
+                {
+                    Part part = parts.SelectedItems[i] as Part;
+                    var folderpath = part.play_list[0].Remove(part.play_list[0].LastIndexOf("\\"));
+                    var folder = await StorageFolder.GetFolderFromPathAsync(folderpath);
+                    var parent = await folder.GetParentAsync();
+                    //删除文件夹
+                    await folder.DeleteAsync();
+                    var items = (parts.ItemsSource as ObservableCollection<Part>);
+                    items.Remove(part);
+                    if (items.Count == 0)
+                    {
+                        (Videos.ItemsSource as ObservableCollection<Video>).Remove(parts.DataContext as Video);
+                    }
+                    //父文件夹没有文件夹时删除它
+                    int count = (await parent.GetFoldersAsync()).Count;
+                    if (count == 0)
+                    {
+                        await parent.DeleteAsync();
+                    }
+                }
+            }
+            //完成操作后关闭删除模式
+            Cancel_Tapped(Cancel, new TappedRoutedEventArgs());
+        }
     }
 }

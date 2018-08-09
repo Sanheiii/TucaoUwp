@@ -98,6 +98,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Content\Danmaku.cs" />
+    <Compile Include="Content\ViewModel.cs" />
     <Compile Include="Controls\DanmakuManager.xaml.cs">
       <DependentUpon>DanmakuManager.xaml</DependentUpon>
     </Compile>
@@ -109,6 +110,9 @@
     </Compile>
     <Compile Include="View\Details.xaml.cs">
       <DependentUpon>Details.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\History.xaml.cs">
+      <DependentUpon>History.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Link.xaml.cs">
       <DependentUpon>Link.xaml</DependentUpon>
@@ -189,6 +193,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Details.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\History.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

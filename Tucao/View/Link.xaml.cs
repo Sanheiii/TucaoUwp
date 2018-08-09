@@ -110,6 +110,7 @@ namespace Tucao.View
             switch (e.SourcePageType.Name)
             {
                 case "Index": { PageName.Text = "首页"; ShowTopBar = true; break; }
+                case "History": { PageName.Text = "播放历史"; ShowTopBar = true; break; }
                 case "DownloadList": { PageName.Text = "下载队列"; ShowTopBar = true; break; }
                 case "LocalVideo": { PageName.Text = "本地视频"; ShowTopBar = true; break; }
                 case "Search": { PageName.Text = "搜索"; ShowTopBar = true; break; }
@@ -153,6 +154,18 @@ namespace Tucao.View
             ShowToast("正在施工");
         }
         /// <summary>
+        /// 点击历史记录
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HistoryTapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (Rua.CurrentSourcePageType != typeof(History))
+            {
+                Rua.Navigate(typeof(History), null, new DrillInNavigationTransitionInfo());
+            }
+        }
+        /// <summary>
         /// 点击下载队列
         /// </summary>
         /// <param name="sender"></param>
@@ -180,7 +193,7 @@ namespace Tucao.View
         private void Setting_Tapped(object sender, TappedRoutedEventArgs e)
         {
 
-            HamburgerMenu.IsPaneOpen = !HamburgerMenu.IsPaneOpen;
+            HamburgerMenu.IsPaneOpen = false;
             if (Rua.CurrentSourcePageType != typeof(Setting))
             {
                 Rua.Navigate(typeof(Setting), null, new DrillInNavigationTransitionInfo());
@@ -193,7 +206,7 @@ namespace Tucao.View
         /// <param name="e"></param>
         private void NavLinksList_ItemClick(object sender, ItemClickEventArgs e)
         {
-            HamburgerMenu.IsPaneOpen = !HamburgerMenu.IsPaneOpen;
+            HamburgerMenu.IsPaneOpen = false;
         }
         bool ShowTopBar
         {

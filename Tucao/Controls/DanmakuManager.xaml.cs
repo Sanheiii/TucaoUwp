@@ -282,7 +282,7 @@ namespace Controls
             //创建弹幕块
             Grid item = new Grid() { Margin = new Thickness(0, GetY_axis(line), 0, 0), HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x33, 0x66)), BorderThickness = new Thickness(borderThickness) };
             TextBlock textBlock = new TextBlock() { Text = content, Foreground = new SolidColorBrush(foreground), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
-            TextBlock shadow = new TextBlock() { Text = content, Margin = new Thickness(2, 1, 0, 0), Foreground = new SolidColorBrush(GetShadowColor(foreground)), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
+            TextBlock shadow = new TextBlock() { Text = content, Margin = new Thickness(1, 1, 0, 0), Foreground = new SolidColorBrush(GetShadowColor(foreground)), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
             item.Children.Add(shadow);
             item.Children.Add(textBlock);
             //将弹幕添加到容器中
@@ -349,7 +349,7 @@ namespace Controls
             //创建弹幕块
             Grid item = new Grid() { Margin = new Thickness(0, Container.ActualHeight - GetY_axis(line) - LineHeight, 0, 0), HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Top, BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x33, 0x66)), BorderThickness = new Thickness(borderThickness) };
             TextBlock textBlock = new TextBlock() { Text = content, Foreground = new SolidColorBrush(foreground), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
-            TextBlock shadow = new TextBlock() { Text = content, Margin = new Thickness(2, 1, 0, 0), Foreground = new SolidColorBrush(GetShadowColor(foreground)), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
+            TextBlock shadow = new TextBlock() { Text = content, Margin = new Thickness(1, 1, 0, 0), Foreground = new SolidColorBrush(GetShadowColor(foreground)), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
             item.Children.Add(shadow);
             item.Children.Add(textBlock);
             //将弹幕添加到容器中
@@ -384,7 +384,7 @@ namespace Controls
             //创建弹幕块
             Grid item = new Grid() { Margin = new Thickness(0, GetY_axis(line), 0, 0), HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Top, BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x33, 0x66)), BorderThickness = new Thickness(borderThickness) };
             TextBlock textBlock = new TextBlock() { Text = content, Foreground = new SolidColorBrush(foreground), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
-            TextBlock shadow = new TextBlock() { Text = content, Margin = new Thickness(2, 1, 0, 0), Foreground = new SolidColorBrush(GetShadowColor(foreground)), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
+            TextBlock shadow = new TextBlock() { Text = content, Margin = new Thickness(1, 1, 0, 0), Foreground = new SolidColorBrush(GetShadowColor(foreground)), FontSize = danmakuSize, FontWeight = Windows.UI.Text.FontWeights.Bold };
             item.Children.Add(shadow);
             item.Children.Add(textBlock);
             //将弹幕添加到容器中

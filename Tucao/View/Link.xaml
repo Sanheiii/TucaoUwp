@@ -14,7 +14,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
        
-        <SplitView Name="HamburgerMenu" Grid.Row="1" IsPaneOpen="False" OpenPaneLength="300" PaneBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" CompactPaneLength="0" DisplayMode="CompactOverlay">
+        <SplitView Name="HamburgerMenu" Grid.Row="1" IsPaneOpen="False" OpenPaneLength="256" PaneBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" CompactPaneLength="0" DisplayMode="CompactOverlay">
             <SplitView.Pane>
                 <Grid VerticalAlignment="Stretch" Background="#3CBFBFBF">
                     <Grid.RowDefinitions>
@@ -39,6 +39,12 @@
                             <StackPanel Orientation="Horizontal" Margin="3,0,0,0" >
                                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8C0;" FontSize="18"/>
                                 <TextBlock Text="番组" Margin="15,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Microsoft YaHei UI"/>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem Tapped="HistoryTapped">
+                            <StackPanel Orientation="Horizontal" Margin="3,0,0,0" >
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE81C;" FontSize="18"/>
+                                <TextBlock Text="播放历史" Margin="15,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Microsoft YaHei UI"/>
                             </StackPanel>
                         </ListViewItem>
                         <ListViewItem Tapped="DownloadListTapped">

@@ -137,18 +137,18 @@
         </Pivot>
         <Grid Name="CommandBars">
             <CommandBar Name="DetailCommandBar" VerticalAlignment="Bottom" Margin="0,0,0,0">
-                <AppBarButton Label="分享" IsTabStop="False" Name="Share" Grid.Column="2" HorizontalAlignment="Center" Tapped="Share_Tapped">
+                <AppBarButton Label="分享" Name="Share" Tapped="Share_Tapped">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;"/>
                 </AppBarButton>
-                <AppBarButton Label="缓存" IsTabStop="False" Name="Download" Grid.Column="3" HorizontalAlignment="Center" Tapped="Download_Tapped">
+                <AppBarButton Label="缓存" Name="Download" Tapped="Download_Tapped">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE896;"/>
                 </AppBarButton>
             </CommandBar>
             <CommandBar Name="DownloadCommandBar" VerticalAlignment="Bottom" Margin="0,0,0,0" Visibility="Collapsed">
-                <AppBarButton Label="取消" IsTabStop="False" Name="Cancel" Grid.Column="0" HorizontalAlignment="Center" Tapped="Cancel_Tapped">
+                <AppBarButton Label="取消" Name="Cancel" Tapped="Cancel_Tapped">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE711;"/>
                 </AppBarButton>
-                <AppBarButton Label="确定" IsTabStop="False" Name="OK" Grid.Column="0" HorizontalAlignment="Center" Tapped="OK_Tapped">
+                <AppBarButton Label="确定" Name="OK" Tapped="OK_Tapped">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE73E;"/>
                 </AppBarButton>
             </CommandBar>
