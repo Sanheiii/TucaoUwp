@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using Tucao.Helpers;
 using Windows.ApplicationModel.Core;
 using Windows.Data.Json;
@@ -171,43 +174,45 @@ namespace Tucao.View
         }
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
-                SaveHistory(param.Hid, param.Title, param.Part, ProgressSlider.Value);
+            SaveHistory(param.Hid, param.Title, param.Part, ProgressSlider.Value);
         }
 
         private async void SaveHistory(string hid, string title, int part, double position)
         {
             //打开文件
             var folder = ApplicationData.Current.LocalCacheFolder;
-            StorageFile file = await folder.CreateFileAsync("history.json", CreationCollisionOption.OpenIfExists);
+            StorageFile file = await folder.CreateFileAsync("history.xml", CreationCollisionOption.OpenIfExists);
             Stream stream = await file.OpenStreamForReadAsync();
-            //读取json
             StreamReader reader = new StreamReader(stream);
             string str = reader.ReadToEnd();
             reader.Dispose();
             stream.Dispose();
-            JsonArray jsons = new JsonArray();
-            JsonArray.TryParse(str, out jsons);
-            //如果已经有这个视频的记录就删掉重新写入
-            foreach (var j in jsons)
+            XDocument xDocument;
+            try
             {
-                if (j.GetObject()["hid"].GetString() == hid)
+                xDocument = XDocument.Parse(str);
+            }
+            catch
+            {
+                xDocument = new XDocument();
+                xDocument.Add(new XElement("history"));
+            }
+            //操作xml文档
+            var xElement = xDocument.Element("history");
+            foreach (var element in xElement.Elements())
+            {
+                if (element.Attribute("hid").Value == hid)
                 {
-                    jsons.Remove(j);
+                    element.Remove();
                     break;
                 }
             }
-            //写入数据
-            JsonObject json = new JsonObject
-                        {
-                            { "hid", JsonValue.CreateStringValue(hid) },
-                            { "title", JsonValue.CreateStringValue(title) },
-                            { "part", JsonValue.CreateNumberValue(part) },
-                            { "position", JsonValue.CreateNumberValue((int)position) },
-                        };
-            jsons.Insert(0, json);
+            //<li hid="4077227" part="1" position="2" time="1533922742453">【7月】来玩游戏吧 04【喵萌茶会】</li>
+            xElement.AddFirst(new XElement("li", new XAttribute("hid", hid), new XAttribute("part", part), new XAttribute("position", (int)position), new XAttribute("time", Methods.GetUnixTimestamp())) { Value = title });
+            //写入文件
             stream = await file.OpenStreamForWriteAsync();
             StreamWriter writer = new StreamWriter(stream);
-            await writer.WriteAsync(jsons.ToString());
+            await writer.WriteAsync(xDocument.ToString());
             writer.Dispose();
             stream.Dispose();
         }
@@ -263,8 +268,13 @@ namespace Tucao.View
             var duration = Media.NaturalDuration.TimeSpan.TotalSeconds;
             ProgressSlider.Maximum = duration;
             TimeRemainingElement.Text = ((int)duration / 60).ToString("d2") + ":" + ((int)duration % 60).ToString("d2");
+            Count();
         }
-
+        //播放数+1
+        private void Count()
+        {
+            var t=Methods.HttpGetAsync("http://www.tucao.tv/api.php?op=count&id="+param.Hid+"&modelid="+param.Tid);
+        }
 
         /// <summary>
         /// 视频错误时候发生

@@ -105,6 +105,7 @@
     <Compile Include="Controls\UpdateLog.xaml.cs">
       <DependentUpon>UpdateLog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Methods\Test.cs" />
     <Compile Include="View\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>

@@ -64,6 +64,7 @@ namespace Tucao.View
             await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                     {
                         LoadProgress.Visibility = Visibility.Collapsed;
+                        Delete.IsEnabled = true;
                     });
         }
         private async Task<ObservableCollection<Part>> LoadParts(StorageFolder storage)

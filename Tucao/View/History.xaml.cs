@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Xml.Linq;
 using Windows.Data.Json;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -32,30 +33,47 @@ namespace Tucao.View
         }
         async void LoadHistory()
         {
-            var i=new ObservableCollection<ViewModel.History>();
+            List.ItemsSource = new ObservableCollection<ViewModel.History>();
             //打开文件
             var folder = ApplicationData.Current.LocalCacheFolder;
-            StorageFile file = await folder.CreateFileAsync("history.json", CreationCollisionOption.OpenIfExists);
+            StorageFile file = await folder.CreateFileAsync("history.xml", CreationCollisionOption.OpenIfExists);
             Stream stream = await file.OpenStreamForReadAsync();
-            //读取json
             StreamReader reader = new StreamReader(stream);
             string str = reader.ReadToEnd();
             reader.Dispose();
             stream.Dispose();
-            JsonArray jsons = new JsonArray();
-            JsonArray.TryParse(str, out jsons);
-            foreach (var j in jsons)
+            //读取xml
+            XDocument xDocument;
+            try
             {
-                var json = j.GetObject();
+                xDocument = XDocument.Parse(str);
+            }
+            catch
+            {
+                xDocument = new XDocument();
+                xDocument.Add(new XElement("history"));
+            }
+            //操作xml文档
+            var xElement = xDocument.Element("history");
+            foreach (var element in xElement.Elements())
+            {
+                var position = TimeSpan.FromSeconds(double.Parse(element.Attribute("position").Value));
                 var history = new ViewModel.History()
                 {
-                    Hid = json["hid"].GetString(),
-                    Title = json["title"].GetString(),
-                    Part = (int)json["part"].GetNumber(),
-                    Position = json["position"].GetNumber()
+                    Hid = element.Attribute("hid").Value,
+                    Title = element.Value,
+                    Part = int.Parse(element.Attribute("part").Value)+1,
+                    Position = (position.Hours * 60 + position.Minutes).ToString("D2") + ':' + position.Seconds.ToString("D2"),
+                    Time = long.Parse(element.Attribute("time").Value)
                 };
-                i.Add(history);
+                (List.ItemsSource as ObservableCollection<ViewModel.History>).Add(history);
             }
+        }
+
+        private void List_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var item = (e.ClickedItem as ViewModel.History);
+            App.OpenVideo(item.Hid);
         }
     }
 }

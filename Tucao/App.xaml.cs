@@ -36,6 +36,7 @@ namespace Tucao
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
 #if DEBUG
+            Test.ldhrbq();
 #endif
             //设置桌面模式窗口的最小宽高
             Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated += Dispatcher_AcceleratorKeyActivated;

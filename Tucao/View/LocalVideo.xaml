@@ -69,7 +69,7 @@
             <AppBarButton Label="下载目录" Name="OpenDownloadFolder" Tapped="OpenDownloadFolder_Tapped">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8DE;"/>
             </AppBarButton>
-            <AppBarButton Label="删除" Name="Delete" Tapped="Delete_Tapped">
+            <AppBarButton Label="删除" Name="Delete" Tapped="Delete_Tapped" IsEnabled="False">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74D;"/>
             </AppBarButton>
             <AppBarButton Label="取消" Name="Cancel" Tapped="Cancel_Tapped" Visibility="Collapsed">

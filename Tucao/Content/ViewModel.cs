@@ -17,7 +17,8 @@ namespace Tucao
             public string Hid { get; set; }
             public string Title { get; set; }
             public int Part { get; set; }
-            public double Position { get; set; }
+            public string Position { get; set; }
+            public long Time { get; set; }
         }
     }
 }

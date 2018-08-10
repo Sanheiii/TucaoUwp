@@ -8,6 +8,24 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        <ListView Name="List" SelectionMode="None" IsItemClickEnabled="True" ItemClick="List_ItemClick">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Title}" Foreground="#FFFF3366" FontSize="20" TextWrapping="WrapWholeWords"/>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Padding="10,0,0,0">
+                            <TextBlock Text="P" Foreground="#FF888888" FontSize="12"/>
+                            <TextBlock Text="{Binding Part}" Foreground="#FF888888" FontSize="12"/>
+                            <TextBlock Text="-" Foreground="#FF888888" FontSize="12"/>
+                            <TextBlock Text="{Binding Position}" Foreground="#FF888888" FontSize="12"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>
