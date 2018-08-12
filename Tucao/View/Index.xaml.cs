@@ -100,7 +100,7 @@ namespace Tucao.View
         {
             //提取出h号
             var v = e.ClickedItem as Introduction;
-            var id = v.Link.Replace("http://www.tucao.tv/play/", "").Replace("/", "");
+            var id = v.Link.Replace("http://www.tucao.one/play/", "").Replace("/", "");
             //打开视频页面
             if (id.First() == 'h')
             {

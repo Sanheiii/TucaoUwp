@@ -454,7 +454,7 @@ namespace Controls
         /// <param name="mode"></param>
         public void SendDanmaku(string content,Color color,double position,string cid,DanmakuType mode)
         {
-            string url = "http://www.tucao.tv/index.php";
+            string url = "http://www.tucao.one/index.php";
             //message=敌台全是圣光&color=16777215&stime=13.413373&addtime=1533297826&token=demo&cid=11-4077158-1-0&mode=1&size=25&user=test&datatype=send&
             var body = new List<KeyValuePair<string, string>>
                     {
@@ -469,7 +469,7 @@ namespace Controls
                         new KeyValuePair<string,string>("user", "test"),
                         new KeyValuePair<string,string>("datatype", "send")
                     };
-            //POST http://www.tucao.tv/index.php?m=mukio&c=index&a=post&playerID=11-4077158-1-0 
+            //POST http://www.tucao.one/index.php?m=mukio&c=index&a=post&playerID=11-4077158-1-0 
             Hashtable queries = new Hashtable();
             {
                 queries.Add("m", "mukio");

@@ -177,7 +177,7 @@ namespace Tucao
                     param.Add("vid", part["vid"]);
                     param.Add("r", (unixtimestamp / 1000).ToString());
                 }
-                var result = await Methods.HttpGetAsync("http://api.tucao.tv/api/playurl", param);
+                var result = await Methods.HttpGetAsync("http://api.tucao.one/api/playurl", param);
                 var xml = await result.Content.ReadAsStringAsync();
                 XMLParser xmlParser = new XMLParser();
                 XMLNode xn = xmlParser.Parse(xml);

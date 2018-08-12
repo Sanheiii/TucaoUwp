@@ -273,7 +273,7 @@ namespace Tucao.View
         //播放数+1
         private void Count()
         {
-            var t=Methods.HttpGetAsync("http://www.tucao.tv/api.php?op=count&id="+param.Hid+"&modelid="+param.Tid);
+            var t=Methods.HttpGetAsync("http://www.tucao.one/api.php?op=count&id="+param.Hid+"&modelid="+param.Tid);
         }
 
         /// <summary>

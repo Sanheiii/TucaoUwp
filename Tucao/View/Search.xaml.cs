@@ -32,7 +32,7 @@ namespace Tucao.View
         private void VideoList_ItemClick(object sender, ItemClickEventArgs e)
         {
             var v=e.ClickedItem as Introduction;
-            var id = v.Link.Replace("http://www.tucao.tv/play/", "").Replace("/", "");
+            var id = v.Link.Replace("http://www.tucao.one/play/", "").Replace("/", "");
             Frame root = Window.Current.Content as Frame;
             if (id.First() == 'h')
             {

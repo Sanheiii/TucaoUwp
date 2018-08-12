@@ -9,8 +9,16 @@
     Title="Version"
     PrimaryButtonText="确定">
     <ScrollViewer>
-    <StackPanel>
-            <TextBlock TextWrapping="WrapWholeWords" FontWeight="Bold" Margin="0,0,0,5">本次更新内容 2018.8.6</TextBlock>
+        <StackPanel>
+            <TextBlock TextWrapping="WrapWholeWords" FontWeight="Bold" Margin="0,0,0,5">本次更新 2018.8.11</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords">-[修复] 主站更换域名导致客户端不可用</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords" FontWeight="Bold" Margin="0,0,0,5">1.4.1.0 2018.8.11</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords">-[新增] 在本地视频中选择删除后列表会进入多选模式,点击确认才会删除</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords">-[新增] 播放视频成功时服务器播放数将会+1</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords">-[新增] 历史记录</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords">-[修改] 播放器进度条滑块颜色改为了透明</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords">-[修复] 播放本地视频时候会加载其他分P弹幕的bug</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords" FontWeight="Bold" Margin="0,0,0,5">1.4.0.0(未发布) 2018.8.6</TextBlock>
         <TextBlock TextWrapping="WrapWholeWords">-[新增] 划动屏幕跳转进度</TextBlock>
         <TextBlock TextWrapping="WrapWholeWords">-[新增] 发送弹幕</TextBlock>
         <TextBlock TextWrapping="WrapWholeWords">-[新增] 弹幕的详细设置</TextBlock>
@@ -23,8 +31,8 @@
         <TextBlock TextWrapping="WrapWholeWords">-[修复] 搜索不到一页会显示没有结果的bug</TextBlock>
         <TextBlock TextWrapping="WrapWholeWords">-[修复] 不能下载多个分p的bug</TextBlock>
         <TextBlock TextWrapping="WrapWholeWords">-[修复] 取消下载会弹出错误的bug</TextBlock>
-        <TextBlock TextWrapping="WrapWholeWords">-[修复] 下载出错后重新下载会判定已下载完的bug</TextBlock>
-        <TextBlock TextWrapping="WrapWholeWords" Margin="0,10,0,0">如果你觉得本应用不错</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords">-[修复] 下载出错后重新下载会判定已下载完的bug</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords" Margin="0,10,0,0">如果你觉得本应用不错</TextBlock>
         <TextBlock TextWrapping="WrapWholeWords">可以在设置页面支持一下作者</TextBlock>
         </StackPanel>
     </ScrollViewer>

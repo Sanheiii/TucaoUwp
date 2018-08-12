@@ -221,15 +221,15 @@ namespace Tucao.View
         /// <param name="message"></param>
         public static void ShowToast(string message)
         {
-            //创建要显示的控件
-            Grid item = new Grid() { Opacity = 0, MaxWidth = App.Link.ActualWidth, MinWidth = 200 };
-            Rectangle rectangle = new Rectangle() { Fill = new SolidColorBrush(Color.FromArgb(0xCC, 0x66, 0x66, 0x66)), RadiusX = 4, RadiusY = 4 };
-            TextBlock textBlock = new TextBlock { TextWrapping = TextWrapping.WrapWholeWords, Foreground = new SolidColorBrush(Color.FromArgb(0xCC, 0xFF, 0xFF, 0xFF)), Margin = new Thickness(20, 10, 20, 10), HorizontalAlignment = HorizontalAlignment.Center, Text = message };
-            item.Children.Add(rectangle);
-            item.Children.Add(textBlock);
-            //到ui线程中添加控件
             var task = currentObject.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
               {
+                  //创建要显示的控件
+                  Grid item = new Grid() { Opacity = 0, MaxWidth = App.Link.ActualWidth, MinWidth = 200 };
+                  Rectangle rectangle = new Rectangle() { Fill = new SolidColorBrush(Color.FromArgb(0xCC, 0x66, 0x66, 0x66)), RadiusX = 4, RadiusY = 4 };
+                  TextBlock textBlock = new TextBlock { TextWrapping = TextWrapping.WrapWholeWords, Foreground = new SolidColorBrush(Color.FromArgb(0xCC, 0xFF, 0xFF, 0xFF)), Margin = new Thickness(20, 10, 20, 10), HorizontalAlignment = HorizontalAlignment.Center, Text = message };
+                  item.Children.Add(rectangle);
+                  item.Children.Add(textBlock);
+                  //到ui线程中添加控件
                   toastArea.Children.Add(item);
                   var s = item.Fade(1, 300, 0, EasingType.Default, EasingMode.EaseOut);
                   s.Completed += (ssender, se) =>

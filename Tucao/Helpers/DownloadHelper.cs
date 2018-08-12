@@ -105,7 +105,7 @@ namespace Tucao.Helpers
                             param.Add("a", "init");
                             param.Add("playerID", "11-" + info.Hid + "-1-" + (partNumber-1) + "");
                         }
-                        var result = await Methods.HttpGetAsync("http://www.tucao.tv/index.php", param);
+                        var result = await Methods.HttpGetAsync("http://www.tucao.one/index.php", param);
                         var danmakus =await result.Content.ReadAsStringAsync();
                         //打开文件
                         Stream danmakuFileStream = await danmakuFile.OpenStreamForWriteAsync();

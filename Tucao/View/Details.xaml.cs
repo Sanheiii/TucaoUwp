@@ -88,7 +88,7 @@ namespace Tucao.View
                         continue;
                     string url = node.Attributes["src"].Value;
                     if (url[0] == '/')
-                        url = url.Insert(0, @"http://www.tucao.tv");
+                        url = url.Insert(0, @"http://www.tucao.one");
                     Image img = new Image();
                     img.MaxHeight = 160;
                     img.MaxWidth = 200;
@@ -170,7 +170,7 @@ namespace Tucao.View
         private void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
         {
             DataRequest request = args.Request;
-            Uri uri = new Uri("http://www.tucao.tv/play/h" + info.Hid + "/");
+            Uri uri = new Uri("http://www.tucao.one/play/h" + info.Hid + "/");
             request.Data.SetWebLink(uri);
             request.Data.Properties.Title = info.Title;
             request.Data.Properties.Description = "分享自吐槽UWP";
@@ -304,28 +304,35 @@ namespace Tucao.View
         /// </summary>
         async void LoadComment()
         {
-            var comments = await Tucao.Content.GetComment(info.TypeId, info.Hid, Commentpage, Tucao.Content.Order.New);
-            foreach (Comment comment in comments)
+            try
             {
-                (Comment.ItemsSource as ObservableCollection<Comment>).Add(comment);
+                var comments = await Tucao.Content.GetComment(info.TypeId, info.Hid, Commentpage, Tucao.Content.Order.New);
+                foreach (Comment comment in comments)
+                {
+                    (Comment.ItemsSource as ObservableCollection<Comment>).Add(comment);
+                }
+                if ((Comment.ItemsSource as ObservableCollection<Comment>).Count == 0)
+                {
+                    BottomText.Text = "还没有人评论过";
+                    BottomText.Tapped -= BottomText_Tapped;
+                }
+                else if ((Comment.ItemsSource as ObservableCollection<Comment>).Count % 20 == 0 && comments.Count != 0)
+                {
+                    BottomText.Text = "加载下一页";
+                    BottomText.Tapped += BottomText_Tapped;
+                }
+                else
+                {
+                    BottomText.Text = "下面没了";
+                    BottomText.Tapped -= BottomText_Tapped;
+                }
+                BottomText.Visibility = Visibility.Visible;
+                LoadingProgress.Visibility = Visibility.Collapsed;
             }
-            if ((Comment.ItemsSource as ObservableCollection<Comment>).Count == 0)
+            catch
             {
-                BottomText.Text = "还没有人评论过";
-                BottomText.Tapped -= BottomText_Tapped;
+                Link.ShowToast("获取评论失败");
             }
-            else if ((Comment.ItemsSource as ObservableCollection<Comment>).Count % 20 == 0 && comments.Count != 0)
-            {
-                BottomText.Text = "加载下一页";
-                BottomText.Tapped += BottomText_Tapped;
-            }
-            else
-            {
-                BottomText.Text = "下面没了";
-                BottomText.Tapped -= BottomText_Tapped;
-            }
-            BottomText.Visibility = Visibility.Visible;
-            LoadingProgress.Visibility = Visibility.Collapsed;
         }
         /// <summary>
         /// 点击加载下一页评论
