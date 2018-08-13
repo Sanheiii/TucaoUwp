@@ -372,7 +372,7 @@ namespace Controls
                 timer.Stop();
             });
             timers.Add(timer);
-            timer.Start();
+            if (!IsPaused) timer.Start();
         }
         void AddTopDanmaku(string content, Color foreground, int borderThickness)
         {
@@ -407,7 +407,7 @@ namespace Controls
                 timer.Stop();
             });
             timers.Add(timer);
-            timer.Start();
+            if(!IsPaused) timer.Start();
         }
         /// <summary>
         /// 暂停弹幕
@@ -477,7 +477,7 @@ namespace Controls
                 queries.Add("a", "post");
                 queries.Add("playerID", cid);
             }
-            Methods.HttpPostAsync(url, body, queries);
+            var t=Methods.HttpPostAsync(url, body, queries);
             AddDanmaku(content, color, mode, 2);
         }
     }

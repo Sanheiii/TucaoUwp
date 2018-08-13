@@ -35,6 +35,7 @@ namespace Tucao.View
         }
         private async Task LoadItems()
         {
+            ObservableCollection<Video> items = new ObservableCollection<Video>();
             //下载目录
             StorageFolder downloadfolder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("Download", CreationCollisionOption.OpenIfExists);
             //获取目录下
@@ -55,14 +56,12 @@ namespace Tucao.View
                     v.parts = await LoadParts(folder);
                     //没有下载完成的分p就不显示标题
                     if (v.parts.Count == 0) continue;
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-                    {
-                        (Videos.ItemsSource as ObservableCollection<Video>).Add(v);
-                    });
+                    items.Add(v);
                 }
             }
             await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                     {
+                        Videos.ItemsSource = items;
                         LoadProgress.Visibility = Visibility.Collapsed;
                         Delete.IsEnabled = true;
                     });

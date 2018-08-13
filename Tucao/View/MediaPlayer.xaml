@@ -15,7 +15,7 @@
     <Grid>
         <Grid Name="Player" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" Tapped="Media_Tapped" DoubleTapped="Media_DoubleTapped" ManipulationMode="TranslateX" ManipulationStarted="Media_ManipulationStarted" ManipulationDelta="Media_ManipulationDelta" ManipulationCompleted="Media_ManipulationCompleted">
             <MediaElement x:Name="Media" RealTimePlayback="True" MediaOpened="Media_MediaOpened" MediaEnded="Media_MediaEnded" CurrentStateChanged="Media_CurrentStateChanged"
-                      MediaFailed="Media_MediaFailed" BufferingProgressChanged="Media_BufferingProgressChanged" Loaded="Media_Loaded"/>
+                      MediaFailed="Media_MediaFailed" BufferingProgressChanged="Media_BufferingProgressChanged" Loaded="Media_Loaded" Volume="0"/>
             <controls:DanmakuManager x:Name="DanmakuManager"/>
         </Grid>
         <!--提示-->
@@ -27,7 +27,7 @@
             <TextBlock Name="BufferingProgress" Visibility="Collapsed" Foreground="White" FontSize="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
         <!--控制栏-->
-        <Grid x:Name="ControlPanelGrid" Visibility="Collapsed">
+        <Grid x:Name="ControlPanel" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -167,7 +167,39 @@
                             Grid.Row="1">
                     <CommandBar x:Name="MediaControlsCommandBar" IsDynamicOverflowEnabled="False" Margin="0,0" RequestedTheme="Dark" Style="{StaticResource CommandBarStyle}">
                         <CommandBar.PrimaryCommands>
-                            <AppBarButton x:Name="FullWindowButton" MediaTransportControlsHelper.DropoutOrder="17" Style="{StaticResource AppBarButtonStyle}" Click="FullWindowButton_Click">
+                            <AppBarButton Style="{StaticResource AppBarButtonStyle}">
+                                <AppBarButton.Icon>
+                                    <SymbolIcon Symbol="Setting"/>
+                                </AppBarButton.Icon>
+                                <AppBarButton.Flyout>
+                                    <Flyout>
+                                        <Grid Margin="10,0,20,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <StackPanel Name="SettingsRow0" Orientation="Horizontal" Grid.Row="0">
+                                                <ToggleSwitch Name="AutoRotateSwitch" Header="自动转屏" OnContent="开启" OffContent="关闭" IsOn="False" Toggled="AutoRotateSwitch_Toggled"/>
+                                                <HyperlinkButton VerticalAlignment="Center" Margin="0,17,0,0" Click="HyperlinkButton_Click">旋转屏幕</HyperlinkButton>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                                <Button Background="Transparent" BorderThickness="0" Grid.Row="2">
+                                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEB9D;"/>
+                                                </Button>
+                                                <Slider Name="PlaybackRateSlider" Margin="5,5,0,0" Width="180" Maximum="2" Minimum="0.5" StepFrequency="0.25" Value="1" ValueChanged="PlaybackRateSlider_ValueChanged"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                                                <Button Background="Transparent" BorderThickness="0" Grid.Row="2">
+                                                    <FontIcon Name="VolumeIcon" FontFamily="Segoe MDL2 Assets" Glyph="&#xE74F;"/>
+                                                </Button>
+                                                <Slider Name="VolumeSlider" Margin="5,2,0,0" Width="180" Maximum="100" Minimum="0" StepFrequency="1" ValueChanged="VolumeSlider_ValueChanged"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Flyout>
+                                </AppBarButton.Flyout>
+                            </AppBarButton>
+                            <AppBarButton x:Name="FullWindowButton" Style="{StaticResource AppBarButtonStyle}" Click="FullWindowButton_Click">
                                 <AppBarButton.Icon>
                                     <SymbolIcon x:Name="FullWindowSymbol" Symbol="FullScreen"/>
                                 </AppBarButton.Icon>

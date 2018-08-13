@@ -39,7 +39,8 @@ namespace Tucao
             //Test.ldhrbq();
 #endif
             //设置桌面模式窗口的最小宽高
-            Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated += Dispatcher_AcceleratorKeyActivated;
+            //设置快捷键
+            //Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated += Dispatcher_AcceleratorKeyActivated;
             //隐藏原来的标题栏
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;

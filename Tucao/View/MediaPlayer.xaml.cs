@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using Tucao.Helpers;
 using Windows.ApplicationModel.Core;
 using Windows.Data.Json;
+using Windows.Devices.Sensors;
 using Windows.Graphics.Display;
 using Windows.Storage;
 using Windows.System;
@@ -34,37 +35,11 @@ namespace Tucao.View
         bool isTapped = false;
         MediaPlayerSource param = new MediaPlayerSource();
         List<Danmaku> danmakuList = new List<Danmaku>();
+        private SimpleOrientationSensor simpleorientation;
         public MediaPlayer()
         {
             this.InitializeComponent();
-            //这两个东西有最小值,加载会出发ValueChanged事件,这里等它加载完再添加委托
-            DanmakuSizeSlider.Loaded += ((sender, e) => DanmakuSizeSlider.ValueChanged += DanmakuSizeSlider_ValueChanged);
-            DanmakuSpeedSlider.Loaded += ((sender, e) => DanmakuSpeedSlider.ValueChanged += DanmakuSpeedSlider_ValueChanged);
             Media.Stop();
-            ControlPanelGrid.Visibility = Visibility.Collapsed;
-            StatusText.Text = "";
-            Status.Visibility = Visibility.Visible;
-            SetValues();
-        }
-        /// <summary>
-        /// 设置一些控件的状态
-        /// </summary>
-        private void SetValues()
-        {
-            ShowDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowDanmaku") ?? true;
-            ShowScrollableDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowScrollableDanmaku") ?? true;
-            ShowTopDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowTopDanmaku") ?? true;
-            ShowBottomDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowBottomDanmaku") ?? true;
-            DanmakuSizeSlider.Value = (double?)SettingHelper.GetValue("DanmakuSize") ?? 0.7;
-            DanmakuSpeedSlider.Value = (double?)SettingHelper.GetValue("DanmakuSpeed") ?? 0.6;
-            DanmakuOpacitySlider.Value = (double?)SettingHelper.GetValue("DanmakuOpacity") ?? 1;
-            DanmakuManager.IsShowDanmaku = ShowDanmaku.IsChecked ?? false;
-            DanmakuManager.IsShowScrollableDanmaku = ShowScrollableDanmaku.IsChecked ?? false;
-            DanmakuManager.IsShowBottomDanmaku = ShowBottomDanmaku.IsChecked ?? false;
-            DanmakuManager.IsShowTopDanmaku = ShowTopDanmaku.IsChecked ?? false;
-            DanmakuManager.SizeRatio = DanmakuSizeSlider.Value;
-            DanmakuManager.SpeedRatio = DanmakuSpeedSlider.Value;
-            DanmakuManager.Opacity = DanmakuOpacitySlider.Value;
         }
         //弹幕设置
         #region
@@ -148,9 +123,75 @@ namespace Tucao.View
             //获取参数打开视频
             param = e.Parameter as MediaPlayerSource;
             PlayerTitle.Text = param.Title + '-' + param.PartTitle;
+            //加载弹幕
             LoadDanmaku();
+            //播放视频
             Play(param.PlayList);
+            //设置屏幕方向
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
+            //获取方向传感器
+            simpleorientation = SimpleOrientationSensor.GetDefault();
+            if (simpleorientation == null)
+            {
+                SettingsRow0.Visibility = Visibility.Collapsed;
+            }
+            //这两个东西有最小值,加载会出发ValueChanged事件,这里等它加载完再添加委托
+            DanmakuSizeSlider.Loaded += ((sender, args) => DanmakuSizeSlider.ValueChanged += DanmakuSizeSlider_ValueChanged);
+            DanmakuSpeedSlider.Loaded += ((sender, args) => DanmakuSpeedSlider.ValueChanged += DanmakuSpeedSlider_ValueChanged);
+            //隐藏控制栏
+            ControlPanel.Visibility = Visibility.Collapsed;
+            StatusText.Text = "";
+            Status.Visibility = Visibility.Visible;
+            //设置一些控件的初始值
+            SetValues();
         }
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            //保存历史记录
+            SaveHistory(param.Hid, param.Title, param.Part, ProgressSlider.Value);
+            //屏幕转正
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
+            //取消自动转屏
+            if (simpleorientation != null)
+            {
+                simpleorientation.OrientationChanged -= Simpleorientation_OrientationChanged;
+            }
+
+        }
+        /// <summary>
+        /// 设置一些控件的状态
+        /// </summary>
+        private void SetValues()
+        {
+            ShowDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowDanmaku") ?? true;
+            ShowScrollableDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowScrollableDanmaku") ?? true;
+            ShowTopDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowTopDanmaku") ?? true;
+            ShowBottomDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowBottomDanmaku") ?? true;
+            DanmakuSizeSlider.Value = (double?)SettingHelper.GetValue("DanmakuSize") ?? 0.7;
+            DanmakuSpeedSlider.Value = (double?)SettingHelper.GetValue("DanmakuSpeed") ?? 0.6;
+            DanmakuOpacitySlider.Value = (double?)SettingHelper.GetValue("DanmakuOpacity") ?? 1;
+            DanmakuManager.IsShowDanmaku = ShowDanmaku.IsChecked ?? false;
+            DanmakuManager.IsShowScrollableDanmaku = ShowScrollableDanmaku.IsChecked ?? false;
+            DanmakuManager.IsShowBottomDanmaku = ShowBottomDanmaku.IsChecked ?? false;
+            DanmakuManager.IsShowTopDanmaku = ShowTopDanmaku.IsChecked ?? false;
+            DanmakuManager.SizeRatio = DanmakuSizeSlider.Value;
+            DanmakuManager.SpeedRatio = DanmakuSpeedSlider.Value;
+            DanmakuManager.Opacity = DanmakuOpacitySlider.Value;
+
+            AutoRotateSwitch.IsOn = (bool?)SettingHelper.GetValue("IsAutoRotate") ?? false;
+            VolumeSlider.Value = (double?)SettingHelper.GetValue("Volume") ?? 100;
+        }
+        private void Simpleorientation_OrientationChanged(SimpleOrientationSensor sender, SimpleOrientationSensorOrientationChangedEventArgs args)
+        {
+            SimpleOrientation orientation = args.Orientation;
+            switch (orientation)
+            {
+                case SimpleOrientation.Rotated90DegreesCounterclockwise: DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape; break;
+                case SimpleOrientation.Rotated270DegreesCounterclockwise: DisplayInformation.AutoRotationPreferences = DisplayOrientations.LandscapeFlipped; break;
+                default: return;
+            }
+        }
+
         /// <summary>
         /// 从外部导航到此界面传递的信息
         /// </summary>
@@ -172,21 +213,18 @@ namespace Tucao.View
         {
             danmakuList = await Tucao.Content.GetDanmakus(param.Hid, param.Part, param.IsLocalFile);
         }
-        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
-        {
-            SaveHistory(param.Hid, param.Title, param.Part, ProgressSlider.Value);
-        }
 
         private async void SaveHistory(string hid, string title, int part, double position)
         {
             //打开文件
             var folder = ApplicationData.Current.LocalCacheFolder;
             StorageFile file = await folder.CreateFileAsync("history.xml", CreationCollisionOption.OpenIfExists);
-            Stream stream = await file.OpenStreamForReadAsync();
-            StreamReader reader = new StreamReader(stream);
+            Stream inputStream = await file.OpenStreamForReadAsync();
+            StreamReader reader = new StreamReader(inputStream);
             string str = reader.ReadToEnd();
             reader.Dispose();
-            stream.Dispose();
+            inputStream.Dispose();
+            await file.DeleteAsync();
             XDocument xDocument;
             try
             {
@@ -210,11 +248,12 @@ namespace Tucao.View
             //<li hid="4077227" part="1" position="2" time="1533922742453">【7月】来玩游戏吧 04【喵萌茶会】</li>
             xElement.AddFirst(new XElement("li", new XAttribute("hid", hid), new XAttribute("part", part), new XAttribute("position", (int)position), new XAttribute("time", Methods.GetUnixTimestamp())) { Value = title });
             //写入文件
-            stream = await file.OpenStreamForWriteAsync();
-            StreamWriter writer = new StreamWriter(stream);
-            await writer.WriteAsync(xDocument.ToString());
+            file=await folder.CreateFileAsync("history.xml", CreationCollisionOption.OpenIfExists);
+            Stream outputStream = await file.OpenStreamForWriteAsync();
+            StreamWriter writer = new StreamWriter(outputStream);
+            writer.Write(xDocument);
             writer.Dispose();
-            stream.Dispose();
+            outputStream.Dispose();
         }
 
         /// <summary>
@@ -273,7 +312,7 @@ namespace Tucao.View
         //播放数+1
         private void Count()
         {
-            var t=Methods.HttpGetAsync("http://www.tucao.one/api.php?op=count&id="+param.Hid+"&modelid="+param.Tid);
+            var t = Methods.HttpGetAsync("http://www.tucao.one/api.php?op=count&id=" + param.Hid + "&modelid=" + param.Tid);
         }
 
         /// <summary>
@@ -319,7 +358,7 @@ namespace Tucao.View
                 view.ExitFullScreenMode();
                 //和下面都是反着的
                 FullWindowSymbol.Symbol = Symbol.FullScreen;
-                DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
+                //DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
                 //返回恢复原来的功能
                 SystemNavigationManager.GetForCurrentView().BackRequested -= MediaPlayer_OnBackRequested;
                 //SystemNavigationManager.GetForCurrentView().BackRequested += Link.OnBackrequested;
@@ -332,7 +371,7 @@ namespace Tucao.View
                 FullWindowSymbol.Symbol = Symbol.BackToWindow;
                 //显示返回键
                 //横过来
-                DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
+                //DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
                 //使得返回变成退出全屏
                 //SystemNavigationManager.GetForCurrentView().BackRequested -= Link.OnBackrequested;
                 SystemNavigationManager.GetForCurrentView().BackRequested += MediaPlayer_OnBackRequested;
@@ -360,10 +399,10 @@ namespace Tucao.View
                 if (isTapped)
                 {
                     isTapped = false;
-                    if (ControlPanelGrid.Visibility == Visibility.Collapsed)
-                        ControlPanelGrid.Visibility = Visibility.Visible;
+                    if (ControlPanel.Visibility == Visibility.Collapsed)
+                        ControlPanel.Visibility = Visibility.Visible;
                     else
-                        ControlPanelGrid.Visibility = Visibility.Collapsed;
+                        ControlPanel.Visibility = Visibility.Collapsed;
                 }
                 timer.Stop();
             });
@@ -383,24 +422,6 @@ namespace Tucao.View
                 PlayPauseButton_Click(PlayPauseButton, new RoutedEventArgs());
             }
             else Media_Tapped(Media, new TappedRoutedEventArgs());
-        }
-        /// <summary>
-        /// 转屏
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void InvertScreen_Click(object sender, RoutedEventArgs e)
-        {
-            //获取当前方向
-            var vo = DisplayInformation.GetForCurrentView().CurrentOrientation;
-            if (vo == DisplayOrientations.Landscape)
-            {
-                DisplayInformation.AutoRotationPreferences = DisplayOrientations.LandscapeFlipped;
-            }
-            else
-            {
-                DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
-            }
         }
         /// <summary>
         /// 播放完成后
@@ -505,11 +526,6 @@ namespace Tucao.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void RGB_ValueChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
         private void RGB_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
         {
             try
@@ -630,10 +646,73 @@ namespace Tucao.View
         {
             var view = ApplicationView.GetForCurrentView();
             view.ExitFullScreenMode();
-            DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
             SystemNavigationManager.GetForCurrentView().BackRequested -= MediaPlayer_OnBackRequested;
             view.SetDesiredBoundsMode(ApplicationViewBoundsMode.UseVisible);
             Link.GoBack();
+        }
+        /// <summary>
+        /// 播放速率的值发生变化时
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PlaybackRateSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            Media.PlaybackRate = e.NewValue;
+        }
+        /// <summary>
+        /// 音量条的值变化时
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void VolumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            Media.Volume = e.NewValue / 100;
+            if (e.NewValue == 0)
+            {
+                VolumeIcon.Glyph = System.Net.WebUtility.HtmlDecode("&#xE74F;");
+            }
+            else
+            {
+                int d = (int)(e.NewValue) / 34;
+                VolumeIcon.Glyph = System.Net.WebUtility.HtmlDecode("&#xE99" + (3 + d) + ";");
+            }
+            SettingHelper.SetValue("Volume", e.NewValue);
+        }
+        /// <summary>
+        /// 自动转屏按钮被开关
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AutoRotateSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (simpleorientation != null)
+            {
+                var t = sender as ToggleSwitch;
+                bool isOn = t.IsOn;
+                SettingHelper.SetValue("IsAutoRotate", isOn);
+                if (isOn)
+                {
+                    simpleorientation.OrientationChanged += Simpleorientation_OrientationChanged;
+                }
+                else
+                {
+                    simpleorientation.OrientationChanged -= Simpleorientation_OrientationChanged;
+                }
+            }
+        }
+
+        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            //获取当前方向
+            var vo = DisplayInformation.GetForCurrentView().CurrentOrientation;
+            if (vo == DisplayOrientations.Landscape)
+            {
+                DisplayInformation.AutoRotationPreferences = DisplayOrientations.LandscapeFlipped;
+            }
+            else
+            {
+                DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
+            }
         }
     }
 

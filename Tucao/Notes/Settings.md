@@ -1,6 +1,10 @@
 ﻿键|值的类型|注释
 |:-|:-|:-
 Version|string|上一次打开时的版本号
+播放|
+Volume|int|播放视频时的默认音量0-100
+IsAutoRotate|bool|是否自动转屏
+弹幕|
 IsShowDanmaku|bool|是否显示弹幕
 IsShowScrollableDanmaku|bool|是否显示滚动弹幕
 IsShowTopDanmaku|bool|是否显示顶部弹幕
