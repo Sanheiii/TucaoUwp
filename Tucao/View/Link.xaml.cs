@@ -152,6 +152,8 @@ namespace Tucao.View
         private void XFListTapped(object sender, TappedRoutedEventArgs e)
         {
             ShowToast("正在施工");
+            if (Rua.CurrentSourcePageType != typeof(Bangumi))
+                Rua.Navigate(typeof(Bangumi), null, new DrillInNavigationTransitionInfo());
         }
         /// <summary>
         /// 点击历史记录

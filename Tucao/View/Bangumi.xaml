@@ -1,0 +1,187 @@
+﻿<Page
+    x:Class="Tucao.View.Bangumi"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Tucao.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Pivot Title="时间表">
+            <PivotItem Header="星期天">
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <GridView Name="List0" SelectionMode="None" IsItemClickEnabled="True" ItemClick="List0_ItemClick" >
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+
+
+                                    <StackPanel Grid.Row="2" Orientation="Vertical" Padding="10,0,0,0">
+
+                                        <Image  Source="{Binding Picture}" Height=" 80" Width=" 80"  />
+                                        <TextBlock Text="{Binding Name}"   />
+
+
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                </Grid>
+
+
+            </PivotItem>
+            <PivotItem Header="星期一">
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <GridView Name="List1" SelectionMode="None" IsItemClickEnabled="True"  >
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    
+                                   
+                                    <StackPanel Grid.Row="2" Orientation="Vertical" Padding="10,0,0,0">
+
+                                        <Image  Source="{Binding Picture}" Height=" 80" Width=" 80"  />
+                                        <TextBlock Text="{Binding Name}"   />
+
+                                       
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                </Grid>
+
+
+            </PivotItem>
+            <PivotItem Header="星级二">
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <GridView Name="List2" SelectionMode="None" IsItemClickEnabled="True"  >
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+
+
+                                    <StackPanel Grid.Row="2" Orientation="Vertical" Padding="10,0,0,0">
+
+                                        <Image  Source="{Binding Picture}" Height=" 80" Width=" 80"  />
+                                        <TextBlock Text="{Binding Name}"   />
+
+
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="星期三">
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <GridView Name="List3" SelectionMode="None" IsItemClickEnabled="True"  >
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+
+
+                                    <StackPanel Grid.Row="2" Orientation="Vertical" Padding="10,0,0,0">
+
+                                        <Image  Source="{Binding Picture}" Height=" 80" Width=" 80"  />
+                                        <TextBlock Text="{Binding Name}"   />
+
+
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="星期四">
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <GridView Name="List4" SelectionMode="None" IsItemClickEnabled="True"  >
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+
+
+                                    <StackPanel Grid.Row="2" Orientation="Vertical" Padding="10,0,0,0">
+
+                                        <Image  Source="{Binding Picture}" Height=" 80" Width=" 80"  />
+                                        <TextBlock Text="{Binding Name}"   />
+
+
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="星期五">
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <GridView Name="List5" SelectionMode="None" IsItemClickEnabled="True"  >
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+
+
+                                    <StackPanel Grid.Row="2" Orientation="Vertical" Padding="10,0,0,0">
+
+                                        <Image  Source="{Binding Picture}" Height=" 80" Width=" 80"  />
+                                        <TextBlock Text="{Binding Name}"   />
+
+
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="星期六" >
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <GridView Name="List6" SelectionMode="None" IsItemClickEnabled="True"  >
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+
+
+                                    <StackPanel Grid.Row="2" Orientation="Vertical" Padding="10,0,0,0">
+
+                                        <Image  Source="{Binding Picture}" Height=" 80" Width=" 80"  />
+                                        <TextBlock Text="{Binding Name}"   />
+
+
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="天朝出品" >
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <GridView Name="List7" SelectionMode="None" IsItemClickEnabled="True"  >
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+
+
+                                    <StackPanel Grid.Row="2" Orientation="Vertical" Padding="10,0,0,0">
+
+                                        <Image  Source="{Binding Picture}" Height=" 80" Width=" 80"  />
+                                        <TextBlock Text="{Binding Name}"   />
+
+
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                </Grid>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+</Page>

@@ -234,6 +234,74 @@ namespace Tucao
             }
             return Danmaku.ParseDanmakus(danmakus_xml);
         }
+
+        public static async Task<List<Bangumi>> GetBangumi()
+        {
+            //获取含有首页内容的字符串
+            string html = await Content.GetIndex();
+            //解析上面的字符串
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            //找到一个符合条件的标签 括号内参数的格式是//标签名[@属性名='值']
+            var bangumi = doc.DocumentNode.SelectSingleNode("//td");
+            //获得所有的子节点
+            var list = bangumi.ChildNodes;
+            //list可以用foreach遍历得到每个子节点
+            //一个节点的结构:<标签名 属性名1="属性值1" 属性名2="属性值2">内容</标签名>
+            //               <ldh class="rbq" price="1">真舒服</ldh>
+            //    节点.Attitudes["属性名"].Value可以得到属性值
+            //    节点.InnerText可以得到内容的值
+            //如果内容是其他节点的话可以和上面一样用  节点.SelectSingleNode(string xpath)
+            //                          或者用  节点.Child[索引(0开始)]   来得到子节点
+            List<Bangumi> result = new List<Bangumi>();
+            //list=ul
+            int i = 0;
+            foreach (var item in list)//第一次循环
+            {
+                foreach (var it in item.ChildNodes)//这里面是每个番剧的数据 分别用一个对象的成员变量储存 再将对象储存在对象list里
+                {
+                    var v = new Bangumi();
+                    v.Link = it.FirstChild.Attributes["href"].Value;
+                    v.Picture = new Uri(it.FirstChild.FirstChild.Attributes["src"].Value);
+                    //source要绑定Uri类型
+
+                    //var uri=new Uri(string);
+                    //string是用字符串表示的链接
+                    v.Name = it.FirstChild.ChildNodes[1].InnerText;
+                    v.Week = i;
+                    // v.Name = System.Net.WebUtility.HtmlDecode(v.Name);
+                    result.Add(v);
+                }
+                i++;
+                //参考
+                // v.Link = item.FirstChild.FirstChild.Attributes["href"].Value;
+                //v.Picture = item.FirstChild.FirstChild.FirstChild.Attributes["src"].Value;
+                //v.Name = item.FirstChild.FirstChild.ChildNodes[1].InnerText;
+                //v.Name = item.FirstChild.FirstChild.Attributes["alt"].Value;
+                //v.Up = item.LastChild.FirstChild.InnerText.Trim();
+                //  v.Time = item.LastChild.LastChild.InnerText.Trim().Replace("UP:", "");
+                // v.Name = item.SelectSingleNode(".//div[1]").FirstChild.InnerText;
+
+
+            }
+
+
+            return result;
+
+        }
+
+    }
+    public class Bangumi
+    {
+        //
+        public int Week { get; set; }
+        //封面地址
+        public Uri Picture { get; set; }
+        //视频地址
+        public string Link { get; set; }
+        //番剧名字
+        public string Name { get; set; }
+
     }
     /// <summary>
     /// 分区和搜索里的每一块视频的必要信息
