@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -13,7 +14,7 @@ namespace Tucao
 {
     public class Content
     {
-        static string TUCAO_URL= "http://www.tucao.one/";
+        static readonly string TUCAO_URL = "http://www.tucao.one/";
         static string apikey = "25tids8f1ew1821ed";
         /// <summary>
         /// 获取视频信息
@@ -30,13 +31,13 @@ namespace Tucao
                 param.Add("apikey", apikey);
                 param.Add("type", "json");
             }
-            var str = await Methods.HttpGetAsync(TUCAO_URL+"api_v2/view.php", param);
+            var str = await Methods.HttpGetAsync(TUCAO_URL + "api_v2/view.php", param);
             string message1 = await str.Content.ReadAsStringAsync();
             var information = Newtonsoft.Json.JsonConvert.DeserializeObject<Hashtable>(message1);
             var result = Newtonsoft.Json.JsonConvert.DeserializeObject<Hashtable>(information["result"].ToString());
             info.Parse(result);
             //解析html得到头像和介绍
-            HttpResponseMessage message2 = await Methods.HttpGetAsync(TUCAO_URL+"play/h" + hid);
+            HttpResponseMessage message2 = await Methods.HttpGetAsync(TUCAO_URL + "play/h" + hid);
             string webpage = await message2.Content.ReadAsStringAsync();
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(webpage);
@@ -154,7 +155,7 @@ namespace Tucao
                 var c = new Comment();
                 c.ProfilePhoto = list[i].SelectSingleNode(".//img[1]").Attributes["src"].Value;
                 var d = list[i].SelectSingleNode(".//a[2]").Attributes["href"].Value;
-                c.UserId=Regex.Match(d, @"[0-9]+").Value;
+                c.UserId = Regex.Match(d, @"[0-9]+").Value;
                 c.UserName = list[i].SelectSingleNode(".//a[2]").InnerText;
                 c.Level = int.Parse(list[i].SelectSingleNode(".//div[1]").Attributes["class"].Value.Replace("lv lv", "")) - 1;
                 if (c.Level == 27) c.Level -= 7;
@@ -182,8 +183,11 @@ namespace Tucao
                 param.Add("forward", "http%3A%2F%2Ftucao.one%2F");
                 param.Add("siteid", "1");
             }
-            var result = await Methods.HttpGetAsync(TUCAO_URL + "index.php", param);
-            return await result.Content.ReadAsStringAsync();
+            var result = await Methods.HttpGetAsync(TUCAO_URL,param);
+            Stream stream = (await result.Content.ReadAsInputStreamAsync()).AsStreamForRead();
+            StreamReader streamReader = new System.IO.StreamReader(stream, Encoding.UTF8);
+            var str=streamReader.ReadToEnd();
+            return str;
         }
         /// <summary>
         /// 
@@ -237,59 +241,65 @@ namespace Tucao
 
         public static async Task<List<Bangumi>> GetBangumi()
         {
-            //获取含有首页内容的字符串
-            string html = await Content.GetIndex();
-            //解析上面的字符串
-            HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml(html);
-            //找到一个符合条件的标签 括号内参数的格式是//标签名[@属性名='值']
-            var bangumi = doc.DocumentNode.SelectSingleNode("//td");
-            //获得所有的子节点
-            var list = bangumi.ChildNodes;
-            //list可以用foreach遍历得到每个子节点
-            //一个节点的结构:<标签名 属性名1="属性值1" 属性名2="属性值2">内容</标签名>
-            //               <ldh class="rbq" price="1">真舒服</ldh>
-            //    节点.Attitudes["属性名"].Value可以得到属性值
-            //    节点.InnerText可以得到内容的值
-            //如果内容是其他节点的话可以和上面一样用  节点.SelectSingleNode(string xpath)
-            //                          或者用  节点.Child[索引(0开始)]   来得到子节点
             List<Bangumi> result = new List<Bangumi>();
-            //list=ul
-            int i = 0;
-            foreach (var item in list)//第一次循环
+            try
             {
-                foreach (var it in item.ChildNodes)//这里面是每个番剧的数据 分别用一个对象的成员变量储存 再将对象储存在对象list里
+
+                //获取含有首页内容的字符串
+                string html = await Content.GetIndex();
+                //解析上面的字符串
+                HtmlDocument doc = new HtmlDocument();
+                doc.LoadHtml(html);
+                //找到一个符合条件的标签 括号内参数的格式是//标签名[@属性名='值']
+                var bangumi = doc.DocumentNode.SelectSingleNode("//td");
+                //获得所有的子节点
+                var list = bangumi.ChildNodes;
+                //list可以用foreach遍历得到每个子节点
+                //一个节点的结构:<标签名 属性名1="属性值1" 属性名2="属性值2">内容</标签名>
+                //               <ldh class="rbq" price="1">真舒服</ldh>
+                //    节点.Attitudes["属性名"].Value可以得到属性值
+                //    节点.InnerText可以得到内容的值
+                //如果内容是其他节点的话可以和上面一样用  节点.SelectSingleNode(string xpath)
+                //                          或者用  节点.Child[索引(0开始)]   来得到子节点
+                //list=ul
+                int i = 0;
+                foreach (var item in list)//第一次循环
                 {
-                    var v = new Bangumi();
-                    v.Link = it.FirstChild.Attributes["href"].Value;
-                    v.Picture = new Uri(it.FirstChild.FirstChild.Attributes["src"].Value);
-                    //source要绑定Uri类型
+                    foreach (var it in item.ChildNodes)//这里面是每个番剧的数据 分别用一个对象的成员变量储存 再将对象储存在对象list里
+                    {
+                        var v = new Bangumi();
+                        v.Link = it.FirstChild.Attributes["href"].Value;
+                        v.Picture = new Uri(it.FirstChild.FirstChild.Attributes["src"].Value);
+                        //source要绑定Uri类型
 
-                    //var uri=new Uri(string);
-                    //string是用字符串表示的链接
-                    v.Name = it.FirstChild.ChildNodes[1].InnerText;
-                    v.Week = i;
-                    // v.Name = System.Net.WebUtility.HtmlDecode(v.Name);
-                    result.Add(v);
+                        //var uri=new Uri(string);
+                        //string是用字符串表示的链接
+                        v.Name = it.FirstChild.ChildNodes[1].InnerText;
+                        v.Week = i;
+                        // v.Name = System.Net.WebUtility.HtmlDecode(v.Name);
+                        result.Add(v);
+                    }
+                    i++;
+                    //参考
+                    // v.Link = item.FirstChild.FirstChild.Attributes["href"].Value;
+                    //v.Picture = item.FirstChild.FirstChild.FirstChild.Attributes["src"].Value;
+                    //v.Name = item.FirstChild.FirstChild.ChildNodes[1].InnerText;
+                    //v.Name = item.FirstChild.FirstChild.Attributes["alt"].Value;
+                    //v.Up = item.LastChild.FirstChild.InnerText.Trim();
+                    //  v.Time = item.LastChild.LastChild.InnerText.Trim().Replace("UP:", "");
+                    // v.Name = item.SelectSingleNode(".//div[1]").FirstChild.InnerText;
+
+
                 }
-                i++;
-                //参考
-                // v.Link = item.FirstChild.FirstChild.Attributes["href"].Value;
-                //v.Picture = item.FirstChild.FirstChild.FirstChild.Attributes["src"].Value;
-                //v.Name = item.FirstChild.FirstChild.ChildNodes[1].InnerText;
-                //v.Name = item.FirstChild.FirstChild.Attributes["alt"].Value;
-                //v.Up = item.LastChild.FirstChild.InnerText.Trim();
-                //  v.Time = item.LastChild.LastChild.InnerText.Trim().Replace("UP:", "");
-                // v.Name = item.SelectSingleNode(".//div[1]").FirstChild.InnerText;
-
+            }
+            catch(Exception ex)
+            {
 
             }
-
 
             return result;
 
         }
-
     }
     public class Bangumi
     {
