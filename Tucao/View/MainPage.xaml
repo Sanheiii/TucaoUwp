@@ -1,0 +1,89 @@
+﻿<Page
+    x:Class="Tucao.View.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Tucao.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:muxm="using:Microsoft.UI.Xaml.Media"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <muxm:AcrylicBrush x:Key="NavigationViewDefaultPaneBackground"
+        BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".6"/>
+            <muxm:AcrylicBrush x:Key="NavigationViewTopPaneBackground"
+        BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".6"/>
+            <muxm:AcrylicBrush x:Key="NavigationViewExpandedPaneBackground"
+        BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".6"/>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid>
+        <Frame Name="MainFrame" Navigated="MainFrame_Navigated" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        <Rectangle Fill="{StaticResource NavigationViewDefaultPaneBackground}" VerticalAlignment="Top" Height="32"/>
+        <muxc:NavigationView x:Name="NavView" CompactModeThresholdWidth="699" ExpandedModeThresholdWidth="700" ItemInvoked="NavView_ItemInvoked"
+                             DisplayModeChanged="NavView_DisplayModeChanged" OpenPaneLength="255" IsBackButtonVisible="Visible" IsSettingsVisible="False">
+            <muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem Content="连载新番" Tag="HomePage"/>
+                <muxc:NavigationViewItem Content="更新时间" Tag="Login"/>
+                <muxc:NavigationViewItem Content="播放历史" Tag="Status"/>
+                <muxc:NavigationViewItem Content="下载队列" Tag="Status"/>
+            </muxc:NavigationView.MenuItems>
+            <muxc:NavigationView.PaneFooter>
+                <StackPanel Name="TopFooter" Orientation="Horizontal" Visibility="Collapsed">
+                    <Button Height="40" Width="40" BorderThickness="0" Background="Transparent">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="15" Glyph="&#xE721;"/>
+                    </Button>
+                    <!--<Button Height="40" Width="40" BorderThickness="0" Background="Transparent">
+                        <Button.Flyout>
+                            <Flyout>
+                                <Grid Margin="-12" Width="155">
+                                    <ListView>
+                                        <ListViewItem>播放历史</ListViewItem>
+                                        <ListViewItem>下载队列</ListViewItem>
+                                    </ListView>
+                                </Grid>
+                            </Flyout>
+                        </Button.Flyout>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE712;"/>
+                    </Button>-->
+                </StackPanel>
+            </muxc:NavigationView.PaneFooter>
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SizeChanged="Grid_SizeChanged">
+                <Grid Name="TopBar" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="{StaticResource NavigationViewDefaultPaneBackground}">
+                    <TextBlock FontWeight="Bold" Margin="100,12,0,0">连载新番</TextBlock>
+                    <Button Height="40" Width="40" BorderThickness="0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="15" Glyph="&#xE721;"/>
+                    </Button>
+                </Grid>
+            </Grid>
+        </muxc:NavigationView>
+        <TextBlock Name="TitleText" FontSize="13" Margin="12,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">Tucao</TextBlock>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{x:Bind NavView.ExpandedModeThresholdWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="NavView.PaneDisplayMode" Value="Top"/>
+                        <Setter Target="TopBar.Visibility" Value="Collapsed"/>
+                        <Setter Target="TopFooter.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="NavView.PaneDisplayMode" Value="LeftMinimal"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+
+</Page>

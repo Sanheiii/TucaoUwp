@@ -30,6 +30,9 @@ namespace Tucao.View
             //设置标题栏
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             if (!coreTitleBar.IsVisible) AppTitleBar.Visibility = Visibility.Collapsed;
+            Thickness thickness = new Thickness() { Top = coreTitleBar.IsVisible ? 32 : 0 };
+            PaneGrid.Padding = thickness;
+            TopBar.Padding = thickness;
             coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
             Window.Current.SetTitleBar(DraggableArea);
             //设置导航
@@ -103,6 +106,9 @@ namespace Tucao.View
             {
                 AppTitleBar.Visibility = Visibility.Collapsed;
             }
+            Thickness thickness = new Thickness() { Top = sender.IsVisible ? 32 : 0 };
+            PaneGrid.Padding = thickness;
+            TopBar.Padding = thickness;
         }
         private void Content_Navigated(object sender, NavigationEventArgs e)
         {
@@ -246,7 +252,5 @@ namespace Tucao.View
                   s.Start();
               });
         }
-
-
     }
 }

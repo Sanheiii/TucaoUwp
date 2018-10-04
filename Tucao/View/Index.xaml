@@ -19,7 +19,7 @@
     </Page.Transitions>
     <Grid>
         <ScrollViewer ViewChanged="ScrollViewer_ViewChanged">
-            <Grid ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Enabled">
+            <Grid ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Enabled" Padding="0,48,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
