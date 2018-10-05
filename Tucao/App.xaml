@@ -8,9 +8,11 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resource/View.xaml"/>
+                <ResourceDictionary Source="Resource/Brush.xaml"/>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls"/>
             </ResourceDictionary.MergedDictionaries>
-        <XamlControlsResources x:Key="MResources" xmlns="using:Microsoft.UI.Xaml.Controls"/>
-        
+
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -107,7 +107,7 @@ namespace Tucao.View
             foreach (var p in info.Video)
             {
                 i++;
-                parts.Add(new PartInfo() {PartNumber=i, PartTitle = p["title"].ToString(), SourceType = p["type"].ToString() });
+                parts.Add(new PartInfo() { PartNumber = i, PartTitle = p["title"].ToString(), SourceType = p["type"].ToString() });
             }
             for (i = 0; i < parts.Count; i++)
             {
@@ -150,6 +150,7 @@ namespace Tucao.View
         /// <param name="e"></param>
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
+            //防止下次打开详情闪一下
             if (e.NavigationMode == NavigationMode.Back)
             {
                 App.ResetPageCache();
@@ -196,7 +197,7 @@ namespace Tucao.View
                     await RandomAccessStream.CopyAndCloseAsync(stream, destinationStream);
                 }
             }
-            Link.ShowToast("图片已保存到"+ KnownFolders.SavedPictures.Path);
+            Link.ShowToast("图片已保存到" + KnownFolders.SavedPictures.Path);
         }
         /// <summary>
         /// 点击一个分p时
@@ -225,7 +226,8 @@ namespace Tucao.View
             param.IsLocalFile = !url[0].Contains("/");
             param.Part = clickedItem.PartNumber - 1;
             param.Tid = info.TypeId;
-            App.Link.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
+            Frame frame=Window.Current.Content as Frame;
+            frame.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
         }
         /// <summary>
         /// 选择下载
@@ -260,14 +262,14 @@ namespace Tucao.View
         private async void OK_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var items = PartList.SelectedItems;
-            int i=0;
+            int i = 0;
             foreach (PartInfo item in items)
             {
                 if (item.SourceType == "已下载") continue;
                 await DownloadHelper.Download(info, item.PartNumber);
                 i++;
             }
-            if (i <1)
+            if (i < 1)
             {
                 Link.ShowToast("未选择任何项");
                 return;
@@ -362,7 +364,8 @@ namespace Tucao.View
             public int PartNumber { get; set; }
             public string PartTitle { get; set; }
             string sourceType;
-            public string SourceType {
+            public string SourceType
+            {
                 get
                 {
                     return sourceType;

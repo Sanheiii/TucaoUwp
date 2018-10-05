@@ -104,10 +104,12 @@
     <Compile Include="Controls\DanmakuManager.xaml.cs">
       <DependentUpon>DanmakuManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\UpdateLog.xaml.cs">
+    <Compile Include="View\Dialogs\ErrorDialog.xaml.cs">
+      <DependentUpon>ErrorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialogs\UpdateLog.xaml.cs">
       <DependentUpon>UpdateLog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Methods\Test.cs" />
     <Compile Include="View\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
@@ -188,7 +190,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\UpdateLog.xaml">
+    <Page Include="View\Dialogs\ErrorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialogs\UpdateLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resource\Brush.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -236,10 +246,6 @@
     <Page Include="View\Search.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resource\Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Setting.xaml">
       <SubType>Designer</SubType>

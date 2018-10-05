@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Animations;
+using Tucao.View.Dialogs;
 using Windows.ApplicationModel.Core;
 using Windows.UI;
 using Windows.UI.Core;
@@ -47,7 +48,7 @@ namespace Tucao.View
             string appVersion = Methods.GetAppVersion();
             if ((string)Helpers.SettingHelper.GetValue("Version") != appVersion)
             {
-                Controls.UpdateLog dialog = new Controls.UpdateLog();
+                var dialog = new UpdateLog();
                 var task = dialog.ShowAsync();
                 Helpers.SettingHelper.SetValue("Version", appVersion);
             }
@@ -115,15 +116,14 @@ namespace Tucao.View
             BackButton.Visibility = App.CanGoBack() ? Visibility.Visible : Visibility.Collapsed;
             switch (e.SourcePageType.Name)
             {
-                case "Index": { PageName.Text = "首页"; ShowTopBar = true; break; }
-                case "History": { PageName.Text = "播放历史"; ShowTopBar = true; break; }
-                case "DownloadList": { PageName.Text = "下载队列"; ShowTopBar = true; break; }
-                case "LocalVideo": { PageName.Text = "本地视频"; ShowTopBar = true; break; }
-                case "Search": { PageName.Text = "搜索"; ShowTopBar = true; break; }
-                case "Setting": { PageName.Text = "设置"; ShowTopBar = true; break; }
-                case "Details": { ShowTopBar = true; break; }
-                case "MediaPlayer": { ShowTopBar = false; break; }
-                default: { ShowTopBar = true; break; }
+                case "Index": { PageName.Text = "首页"; break; }
+                case "History": { PageName.Text = "播放历史"; break; }
+                case "DownloadList": { PageName.Text = "下载队列"; break; }
+                case "LocalVideo": { PageName.Text = "本地视频"; break; }
+                case "Search": { PageName.Text = "搜索"; break; }
+                case "Setting": { PageName.Text = "设置"; break; }
+                case "Details": break;
+                default: break;
             }
         }
         /// <summary>
@@ -157,7 +157,6 @@ namespace Tucao.View
         }
         private void XFListTapped(object sender, TappedRoutedEventArgs e)
         {
-            ShowToast("正在施工");
             if (Rua.CurrentSourcePageType != typeof(Bangumi))
                 Rua.Navigate(typeof(Bangumi), null, new DrillInNavigationTransitionInfo());
         }
@@ -215,13 +214,6 @@ namespace Tucao.View
         private void NavLinksList_ItemClick(object sender, ItemClickEventArgs e)
         {
             HamburgerMenu.IsPaneOpen = false;
-        }
-        bool ShowTopBar
-        {
-            set
-            {
-                TopBar.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
-            }
         }
         /// <summary>
         /// 显示提示

@@ -39,14 +39,20 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    <AppBarButton Style="{StaticResource AppBarButtonStyle}" Tapped="Back_Tapped">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <AppBarButton Style="{StaticResource AppBarButtonStyle}" Click="Back_Click">
                         <AppBarButton.Icon>
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE973;"/>
                         </AppBarButton.Icon>
                     </AppBarButton>
-                    <TextBlock Name="PlayerTitle" Margin="5,0,0,0" FontSize="18" VerticalAlignment="Center" Foreground="#FFFFFFFF"/>
-                </StackPanel>
+                    <Border Name="DraggableArea" Background="Transparent" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock Name="PlayerTitle" Margin="5,0,0,0" FontSize="18" VerticalAlignment="Center" Foreground="#FFFFFFFF"/>
+                    </Border>
+                </Grid>
                 <Grid Grid.Row="1" Margin="10,0,10,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -158,7 +164,7 @@
                     <Grid x:Name="MediaTransportControls_Timeline_Grid">
                         <Slider x:Name="ProgressSlider" Height="32" IsThumbToolTipEnabled="False" MinWidth="80" Margin="12,0" ValueChanged="ProgressSlider_ValueChanged"
                                 Style="{StaticResource MediaSliderStyle}" VerticalAlignment="Top" Value="{Binding ElementName=Media,Path=Position,Mode=TwoWay,Converter={StaticResource cvt1}}">
-                            
+
                         </Slider>
                     </Grid>
                 </Border>
@@ -172,8 +178,8 @@
                                     <SymbolIcon Symbol="Setting"/>
                                 </AppBarButton.Icon>
                                 <AppBarButton.Flyout>
-                                    <Flyout>
-                                        <Grid Margin="10,0,20,0">
+                                    <Flyout Placement="Left">
+                                        <Grid Margin="-5,-5,0,-5" Background="Transparent">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
                                                 <RowDefinition/>

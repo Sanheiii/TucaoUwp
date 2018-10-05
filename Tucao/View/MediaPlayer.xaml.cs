@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using Tucao.Helpers;
+using Tucao.View.Dialogs;
 using Windows.ApplicationModel.Core;
 using Windows.Data.Json;
 using Windows.Devices.Sensors;
@@ -142,6 +143,8 @@ namespace Tucao.View
             ControlPanel.Visibility = Visibility.Collapsed;
             StatusText.Text = "";
             Status.Visibility = Visibility.Visible;
+            //设置可拖动区域
+            Window.Current.SetTitleBar(DraggableArea);
             //设置一些控件的初始值
             SetValues();
         }
@@ -248,7 +251,7 @@ namespace Tucao.View
             //<li hid="4077227" part="1" position="2" time="1533922742453">【7月】来玩游戏吧 04【喵萌茶会】</li>
             xElement.AddFirst(new XElement("li", new XAttribute("hid", hid), new XAttribute("part", part), new XAttribute("position", (int)position), new XAttribute("time", Methods.GetUnixTimestamp())) { Value = title });
             //写入文件
-            file=await folder.CreateFileAsync("history.xml", CreationCollisionOption.OpenIfExists);
+            file = await folder.CreateFileAsync("history.xml", CreationCollisionOption.OpenIfExists);
             Stream outputStream = await file.OpenStreamForWriteAsync();
             StreamWriter writer = new StreamWriter(outputStream);
             writer.Write(xDocument);
@@ -262,36 +265,41 @@ namespace Tucao.View
         /// <param name="part">分P号</param>
         private async void Play(List<string> play_list)
         {
-            //设置资源
-            StatusText.Text += Environment.NewLine + "正在初始化播放器...";
-            //载入播放引擎
-            SYEngine.Core.Initialize();
-            var playlist = new SYEngine.Playlist(param.IsLocalFile ? SYEngine.PlaylistTypes.LocalFile : SYEngine.PlaylistTypes.NetworkHttp);
-            //将分段添加到playlist
-            foreach (var url in play_list)
+            Uri source;
+            if (play_list[0].Contains("gss3.baidu.com"))
             {
-                playlist.Append(url, 0, 0);
+                source = new Uri(play_list[0]);
             }
-            //配置引擎
-            SYEngine.PlaylistNetworkConfigs cfgs = default(SYEngine.PlaylistNetworkConfigs);
-            cfgs.HttpUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
-            cfgs.HttpReferer = string.Empty;
-            cfgs.HttpCookie = string.Empty;
-            cfgs.UniqueId = string.Empty;
-            cfgs.DownloadRetryOnFail = true;
-            cfgs.DetectDurationForParts = true;
-            playlist.NetworkConfigs = cfgs;
-            StatusText.Text += "    [成功]";
+            else
+            {
+                //载入播放引擎
+                SYEngine.Core.Initialize();
+                var playlist = new SYEngine.Playlist(param.IsLocalFile ? SYEngine.PlaylistTypes.LocalFile : SYEngine.PlaylistTypes.NetworkHttp);
+                //将分段添加到playlist
+                foreach (var url in play_list)
+                {
+                    playlist.Append(url, 0, 0);
+                }
+                //配置引擎
+                SYEngine.PlaylistNetworkConfigs cfgs = default(SYEngine.PlaylistNetworkConfigs);
+                cfgs.HttpUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
+                cfgs.HttpReferer = string.Empty;
+                cfgs.HttpCookie = string.Empty;
+                cfgs.UniqueId = string.Empty;
+                cfgs.DownloadRetryOnFail = true;
+                cfgs.DetectDurationForParts = true;
+                playlist.NetworkConfigs = cfgs;
+                source = await playlist.SaveAndGetFileUriAsync();
+            }
             //开始播放
             StatusText.Text += Environment.NewLine + "开始缓冲视频...";
             try
             {
-                Media.Source = await playlist.SaveAndGetFileUriAsync();
+                Media.Source = source;
             }
             catch (Exception ex)
             {
                 StatusText.Text += "    [失败]";
-                Link.ShowToast(ex.Message);
             }
 
         }
@@ -323,8 +331,8 @@ namespace Tucao.View
         private void Media_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
             //回退打开视频进行的操作
-            StatusText.Text += "    [失败]";
-            Link.ShowToast("视频加载失败,暂时无法播放该视频");
+            var dialog=new ErrorDialog("视频播放失败");
+            var asyncOperation=dialog.ShowAsync();
         }
 
         /// <summary>
@@ -642,7 +650,7 @@ namespace Tucao.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Back_Tapped(object sender, TappedRoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             var view = ApplicationView.GetForCurrentView();
             view.ExitFullScreenMode();
@@ -714,6 +722,8 @@ namespace Tucao.View
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
             }
         }
+
+
     }
 
 

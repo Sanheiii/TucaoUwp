@@ -1,8 +1,8 @@
 ﻿<ContentDialog
-    x:Class="Tucao.Controls.UpdateLog"
+    x:Class="Tucao.View.Dialogs.UpdateLog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Tucao.Controls"
+    xmlns:local="using:Tucao.View.Dialogs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -10,8 +10,12 @@
     PrimaryButtonText="确定">
     <ScrollViewer>
         <StackPanel>
-            <TextBlock TextWrapping="WrapWholeWords" Margin="0,10,0,10">目前主站不稳定,请多刷新几次</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords" Margin="0,10,0,10">目前主站不稳定,可能对软件的使用造成影响</TextBlock>
             <TextBlock TextWrapping="WrapWholeWords" FontWeight="Bold" Margin="0,0,0,5">本次更新 2018.8.22</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords">-[新增] 一些地方添加了亚克力效果</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords">-[新增] 对贴吧源的支持</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords">-和一些没想起来的东西</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords" FontWeight="Bold" Margin="0,0,0,5">1.4.3.0 2018.8.22</TextBlock>
             <TextBlock TextWrapping="WrapWholeWords">-[新增] 自动转屏开关</TextBlock>
             <TextBlock TextWrapping="WrapWholeWords">-[新增] 手动转屏按钮</TextBlock>
             <TextBlock TextWrapping="WrapWholeWords">-[新增] 播放速率调整</TextBlock>

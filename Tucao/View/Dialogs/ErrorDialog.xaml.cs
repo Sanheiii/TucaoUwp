@@ -15,14 +15,19 @@ using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“内容对话框”项模板
 
-namespace Tucao.Controls
+namespace Tucao.View.Dialogs
 {
-    public sealed partial class UpdateLog : ContentDialog
+    public sealed partial class ErrorDialog : ContentDialog
     {
-        public UpdateLog()
+        public ErrorDialog(string message)
         {
             this.InitializeComponent();
-            Title ="吐槽UWP  "+Methods.GetAppVersion();
+            Message.Text = message;
+        }
+
+        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            Link.GoBack();
         }
     }
 }

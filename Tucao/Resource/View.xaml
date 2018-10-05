@@ -248,4 +248,5 @@
         <Setter Property="Background" Value="{ThemeResource MediaTransportControlsPanelBackground}"/>
         <Setter Property="Padding" Value="0"/>
     </Style>
+    
 </ResourceDictionary>

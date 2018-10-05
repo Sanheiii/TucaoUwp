@@ -6,13 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:muxm="using:Microsoft.UI.Xaml.Media"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
-    <Page.Resources>
-        <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLow_6" BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".6"/>
-        <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLow_7" BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".7"/>
-    </Page.Resources>
     <Grid>
 
         <SplitView Name="HamburgerMenu" Grid.Row="1" IsPaneOpen="False" OpenPaneLength="256" PaneBackground="{StaticResource AcrylicBrushChromeLow_7}" CompactPaneLength="0" DisplayMode="CompactOverlay">
@@ -71,8 +66,12 @@
                 </Grid>
             </SplitView.Pane>
             <Grid Name="PageContent" Background="#3CBFBFBF">
-                <Frame Name="Rua"/>
-                <Grid Name="TopBar" Background="{StaticResource AcrylicBrushChromeLow_6}" VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Frame Name="Rua" Grid.Row="1"/>
+                <Grid Name="TopBar" Background="{StaticResource AcrylicBrushChromeLowHost_6}" VerticalAlignment="Top" Grid.Row="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>

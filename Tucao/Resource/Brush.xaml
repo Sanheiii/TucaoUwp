@@ -1,0 +1,28 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Tucao.Resource"
+    xmlns:muxm="using:Microsoft.UI.Xaml.Media">
+
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLowHost_0" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".0"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLowHost_1" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".1"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLowHost_2" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".2"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLowHost_3" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".3"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLowHost_4" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".4"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLowHost_5" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".5"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLowHost_6" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".6"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLowHost_7" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".7"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLowHost_8" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".8"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLowHost_9" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".9"/>
+
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLow_0" BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".0"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLow_1" BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".1"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLow_2" BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".2"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLow_3" BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".3"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLow_4" BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".4"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLow_5" BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".5"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLow_6" BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".6"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLow_7" BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".7"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLow_8" BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".8"/>
+    <muxm:AcrylicBrush x:Key="AcrylicBrushChromeLow_9" BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeLowColor}" TintOpacity=".9"/>
+</ResourceDictionary>

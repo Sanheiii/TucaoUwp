@@ -6,6 +6,7 @@
     xmlns:local="using:Tucao.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:content="using:Tucao"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -19,7 +20,7 @@
     </Page.Transitions>
     <Grid>
         <ScrollViewer ViewChanged="ScrollViewer_ViewChanged">
-            <Grid ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Enabled" Padding="0,48,0,0">
+            <Grid ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Enabled">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -34,23 +35,23 @@
                         <DataTemplate x:DataType="content:Introduction">
                             <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                 <Grid Background="#22DDDDDD">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="160"/>
-                                    <ColumnDefinition Width="3*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="160"/>
+                                        <ColumnDefinition Width="3*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
                                     <Image Source="{x:Bind Imgurl}" Grid.Column="0" Grid.RowSpan="2" Stretch="UniformToFill" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5,5,5,5" x:Phase="4"/>
                                     <Border Background="#88000000" Grid.Row="1" HorizontalAlignment="Left" Margin="5,-5,5,5">
-                                    <TextBlock Text="{x:Bind Play}" VerticalAlignment="Center" FontSize="11" Foreground="#FFFFFFFF" Margin="3,0,3,0" x:Phase="1"/>
-                                </Border>
-                                <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="15" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,5,0" Foreground="#FFFF3366"/>
-                                <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="0,0,0,5">
-                                    <TextBlock Text="{x:Bind Up}" Foreground="#FFE70353" x:Phase="2"/>
+                                        <TextBlock Text="{x:Bind Play}" VerticalAlignment="Center" FontSize="11" Foreground="#FFFFFFFF" Margin="3,0,3,0" x:Phase="1"/>
+                                    </Border>
+                                    <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="15" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="8,2,5,0" Foreground="#FFFF3366"/>
+                                    <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="0,0,0,5">
+                                        <TextBlock Text="{x:Bind Up}" Foreground="#FFE70353" x:Phase="2"/>
                                         <TextBlock Text="{x:Bind Time}" Foreground="#999" FontSize="13" Margin="5,3,0,0" x:Phase="3"/>
-                                </StackPanel>
+                                    </StackPanel>
                                 </Grid>
                             </Grid>
                         </DataTemplate>
