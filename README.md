@@ -8,7 +8,6 @@
 * [商店页面](https://www.microsoft.com/store/productId/9N8QM5T8DJCD)
 * [下载安装包](https://github.com/Sanheiii/TucaoUwp/releases)
 * [更新记录](https://github.com/Sanheiii/TucaoUwp/blob/master/Tucao/Notes/UpdateLog.md)
-* [设置键值](https://github.com/Sanheiii/TucaoUwp/blob/master/Tucao/Notes/Settings.md)
 
 
 2018.7.6 星期五 阴
