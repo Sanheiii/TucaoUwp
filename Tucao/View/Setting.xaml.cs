@@ -30,9 +30,9 @@ namespace Tucao.View
         {
             this.InitializeComponent();
             Version.Text = Methods.GetAppVersion();
-            DanmakuSizeSlider.Value = (double?)SettingHelper.GetValue("DanmakuSize") ?? 0.7;
-            DanmakuSpeedSlider.Value = (double?)SettingHelper.GetValue("DanmakuSpeed") ?? 0.6;
-            DanmakuOpacitySlider.Value = (double?)SettingHelper.GetValue("DanmakuOpacity") ?? 1;
+            DanmakuSizeSlider.Value = SettingHelper.Values.DanmakuSize;
+            DanmakuSpeedSlider.Value = SettingHelper.Values.DanmakuSpeed;
+            DanmakuOpacitySlider.Value = SettingHelper.Values.DanmakuOpacity;
             ShadowTest.FontSize = 25 * DanmakuSizeSlider.Value;
             DanmakuTest.FontSize = 25 * DanmakuSizeSlider.Value;
             DanmakuGrid.Opacity = DanmakuOpacitySlider.Value;
@@ -43,16 +43,16 @@ namespace Tucao.View
         //设置这些值
         private void DanmakuOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            SettingHelper.SetValue("DanmakuOpacity", e.NewValue);
+            SettingHelper.Values.DanmakuOpacity= e.NewValue;
             DanmakuGrid.Opacity = e.NewValue;
         }
         private void DanmakuSpeedSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            SettingHelper.SetValue("DanmakuSpeed", e.NewValue);
+            SettingHelper.Values.DanmakuSpeed = e.NewValue;
         }
         private void DanmakuSizeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            SettingHelper.SetValue("DanmakuSize", e.NewValue);
+            SettingHelper.Values.DanmakuSize = e.NewValue;
             ShadowTest.FontSize = 25 * e.NewValue;
             DanmakuTest.FontSize = 25 * e.NewValue;
         }

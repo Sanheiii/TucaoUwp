@@ -46,23 +46,23 @@ namespace Tucao.View
         #region
         private void ShowDanmaku_Checked(object sender, RoutedEventArgs e)
         {
-            SettingHelper.SetValue("IsShowDanmaku", true);
+            SettingHelper.Values.IsShowDanmaku = true;
             DanmakuManager.IsShowDanmaku = true;
         }
         private void ShowDanmaku_Unchecked(object sender, RoutedEventArgs e)
         {
-            SettingHelper.SetValue("IsShowDanmaku", false);
+            SettingHelper.Values.IsShowDanmaku = false;
             DanmakuManager.IsShowDanmaku = false;
         }
         private void ShowScrollableDanmaku_Checked(object sender, RoutedEventArgs e)
         {
-            SettingHelper.SetValue("IsShowScrollableDanmaku", true);
+            SettingHelper.Values.IsShowScrollableDanmaku = true;
             HideScrollableDanmaku.Opacity = 1;
             DanmakuManager.IsShowScrollableDanmaku = true;
         }
         private void ShowScrollableDanmaku_Unchecked(object sender, RoutedEventArgs e)
         {
-            SettingHelper.SetValue("IsShowScrollableDanmaku", false);
+            SettingHelper.Values.IsShowScrollableDanmaku = false;
             HideScrollableDanmaku.Opacity = 0.3;
             DanmakuManager.IsShowScrollableDanmaku = false;
         }
@@ -72,13 +72,13 @@ namespace Tucao.View
         }
         private void ShowTopDanmaku_Checked(object sender, RoutedEventArgs e)
         {
-            SettingHelper.SetValue("IsShowTopDanmaku", true);
+            SettingHelper.Values.IsShowTopDanmaku = true;
             HideTopDanmaku.Opacity = 1;
             DanmakuManager.IsShowTopDanmaku = true;
         }
         private void ShowTopDanmaku_Unchecked(object sender, RoutedEventArgs e)
         {
-            SettingHelper.SetValue("IsShowTopDanmaku", false);
+            SettingHelper.Values.IsShowTopDanmaku = false;
             HideTopDanmaku.Opacity = 0.3;
             DanmakuManager.IsShowTopDanmaku = false;
         }
@@ -88,13 +88,13 @@ namespace Tucao.View
         }
         private void ShowBottomDanmaku_Checked(object sender, RoutedEventArgs e)
         {
-            SettingHelper.SetValue("IsShowBottomDanmaku", true);
+            SettingHelper.Values.IsShowBottomDanmaku = true;
             HideBottomDanmaku.Opacity = 1;
             DanmakuManager.IsShowBottomDanmaku = true;
         }
         private void ShowBottomDanmaku_Unchecked(object sender, RoutedEventArgs e)
         {
-            SettingHelper.SetValue("IsShowBottomDanmaku", false);
+            SettingHelper.Values.IsShowBottomDanmaku = false;
             HideBottomDanmaku.Opacity = 0.3;
             DanmakuManager.IsShowBottomDanmaku = false;
         }
@@ -104,17 +104,17 @@ namespace Tucao.View
         }
         private void DanmakuSizeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            SettingHelper.SetValue("DanmakuSize", e.NewValue);
+            SettingHelper.Values.DanmakuSize = e.NewValue;
             DanmakuManager.SizeRatio = e.NewValue;
         }
         private void DanmakuSpeedSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            SettingHelper.SetValue("DanmakuSpeed", e.NewValue);
+            SettingHelper.Values.DanmakuSpeed = e.NewValue;
             DanmakuManager.SpeedRatio = e.NewValue;
         }
         private void DanmakuOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            SettingHelper.SetValue("DanmakuOpacity", e.NewValue);
+            SettingHelper.Values.DanmakuOpacity = e.NewValue;
             DanmakuManager.Opacity = e.NewValue;
         }
         #endregion
@@ -166,13 +166,13 @@ namespace Tucao.View
         /// </summary>
         private void SetValues()
         {
-            ShowDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowDanmaku") ?? true;
-            ShowScrollableDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowScrollableDanmaku") ?? true;
-            ShowTopDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowTopDanmaku") ?? true;
-            ShowBottomDanmaku.IsChecked = (bool?)SettingHelper.GetValue("IsShowBottomDanmaku") ?? true;
-            DanmakuSizeSlider.Value = (double?)SettingHelper.GetValue("DanmakuSize") ?? 0.7;
-            DanmakuSpeedSlider.Value = (double?)SettingHelper.GetValue("DanmakuSpeed") ?? 0.6;
-            DanmakuOpacitySlider.Value = (double?)SettingHelper.GetValue("DanmakuOpacity") ?? 1;
+            ShowDanmaku.IsChecked = SettingHelper.Values.IsShowDanmaku;
+            ShowScrollableDanmaku.IsChecked = SettingHelper.Values.IsShowScrollableDanmaku;
+            ShowTopDanmaku.IsChecked = SettingHelper.Values.IsShowTopDanmaku;
+            ShowBottomDanmaku.IsChecked = SettingHelper.Values.IsShowBottomDanmaku;
+            DanmakuSizeSlider.Value = SettingHelper.Values.DanmakuSize;
+            DanmakuSpeedSlider.Value = SettingHelper.Values.DanmakuSpeed;
+            DanmakuOpacitySlider.Value = SettingHelper.Values.DanmakuOpacity;
             DanmakuManager.IsShowDanmaku = ShowDanmaku.IsChecked ?? false;
             DanmakuManager.IsShowScrollableDanmaku = ShowScrollableDanmaku.IsChecked ?? false;
             DanmakuManager.IsShowBottomDanmaku = ShowBottomDanmaku.IsChecked ?? false;
@@ -181,8 +181,8 @@ namespace Tucao.View
             DanmakuManager.SpeedRatio = DanmakuSpeedSlider.Value;
             DanmakuManager.Opacity = DanmakuOpacitySlider.Value;
 
-            AutoRotateSwitch.IsOn = (bool?)SettingHelper.GetValue("IsAutoRotate") ?? false;
-            VolumeSlider.Value = (double?)SettingHelper.GetValue("Volume") ?? 100;
+            AutoRotateSwitch.IsOn = SettingHelper.Values.IsAutoRotate;
+            VolumeSlider.Value = SettingHelper.Values.Volume;
         }
         private void Simpleorientation_OrientationChanged(SimpleOrientationSensor sender, SimpleOrientationSensorOrientationChangedEventArgs args)
         {
@@ -331,8 +331,8 @@ namespace Tucao.View
         private void Media_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
             //回退打开视频进行的操作
-            var dialog=new ErrorDialog("视频播放失败");
-            var asyncOperation=dialog.ShowAsync();
+            var dialog = new ErrorDialog("视频播放失败");
+            var asyncOperation = dialog.ShowAsync();
         }
 
         /// <summary>
@@ -684,7 +684,7 @@ namespace Tucao.View
                 int d = (int)(e.NewValue) / 34;
                 VolumeIcon.Glyph = System.Net.WebUtility.HtmlDecode("&#xE99" + (3 + d) + ";");
             }
-            SettingHelper.SetValue("Volume", e.NewValue);
+            SettingHelper.Values.Volume = (int)e.NewValue;
         }
         /// <summary>
         /// 自动转屏按钮被开关
@@ -697,7 +697,7 @@ namespace Tucao.View
             {
                 var t = sender as ToggleSwitch;
                 bool isOn = t.IsOn;
-                SettingHelper.SetValue("IsAutoRotate", isOn);
+                SettingHelper.Values.IsAutoRotate = isOn;
                 if (isOn)
                 {
                     simpleorientation.OrientationChanged += Simpleorientation_OrientationChanged;

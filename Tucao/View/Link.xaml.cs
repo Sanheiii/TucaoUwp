@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Animations;
+using Tucao.Helpers;
 using Tucao.View.Dialogs;
 using Windows.ApplicationModel.Core;
 using Windows.UI;
@@ -46,11 +47,11 @@ namespace Tucao.View
             toastArea = ToastArea;
             //如果第一次打开这个版本则弹出提示
             string appVersion = Methods.GetAppVersion();
-            if ((string)Helpers.SettingHelper.GetValue("Version") != appVersion)
+            if (SettingHelper.Values.Version != appVersion)
             {
                 var dialog = new UpdateLog();
                 var task = dialog.ShowAsync();
-                Helpers.SettingHelper.SetValue("Version", appVersion);
+                SettingHelper.Values.Version = appVersion;
             }
         }
         /// <summary>
