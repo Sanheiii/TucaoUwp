@@ -31,11 +31,6 @@ namespace Tucao.View
         {
             this.InitializeComponent();
             Getlist(); 
-            
-            
-
-
-
         }
         public  async void Getlist()
         {

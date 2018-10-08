@@ -126,7 +126,8 @@ namespace Tucao.View
             param.Hid = part.hid;
             param.Part = part.partNum;
             Frame root = Window.Current.Content as Frame;
-            App.Link.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
+            Frame frame = Window.Current.Content as Frame;
+            frame.Navigate(typeof(MediaPlayer), param, new DrillInNavigationTransitionInfo());
         }
         //打开缓存文件夹
         private async void OpenDownloadFolder_Tapped(object sender, TappedRoutedEventArgs e)
