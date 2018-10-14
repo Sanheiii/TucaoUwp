@@ -13,7 +13,7 @@
         <local:TimeConverter x:Key="cvt2"/>
     </Page.Resources>
     <Grid>
-        <Grid Name="Player" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" Tapped="Media_Tapped" DoubleTapped="Media_DoubleTapped" ManipulationMode="TranslateX" ManipulationStarted="Media_ManipulationStarted" ManipulationDelta="Media_ManipulationDelta" ManipulationCompleted="Media_ManipulationCompleted">
+        <Grid Name="MediaContainer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" Tapped="MediaContainer_Tapped" DoubleTapped="MediaContainer_DoubleTapped" ManipulationMode="TranslateX" ManipulationStarted="Media_ManipulationStarted" ManipulationDelta="Media_ManipulationDelta" ManipulationCompleted="Media_ManipulationCompleted">
             <MediaElement x:Name="Media" RealTimePlayback="True" MediaOpened="Media_MediaOpened" MediaEnded="Media_MediaEnded" CurrentStateChanged="Media_CurrentStateChanged"
                       MediaFailed="Media_MediaFailed" BufferingProgressChanged="Media_BufferingProgressChanged" Loaded="Media_Loaded" Volume="0"/>
             <controls:DanmakuManager x:Name="DanmakuManager"/>
@@ -27,11 +27,11 @@
             <TextBlock Name="BufferingProgress" Visibility="Collapsed" Foreground="White" FontSize="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
         <!--控制栏-->
-        <Grid x:Name="ControlPanel" Visibility="Collapsed">
+        <Grid Name="ControlPanel" Visibility="Collapsed" Tapped="ControlPanel_Tapped">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition x:Name="TopBarRow" Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition x:Name="BottomBarRow" Height="Auto"/>
             </Grid.RowDefinitions>
             <!--上面的控制栏-->
             <Grid Background="#99000000" VerticalAlignment="Bottom" Grid.Row="0">
@@ -44,7 +44,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <AppBarButton Style="{StaticResource AppBarButtonStyle}" Click="Back_Click">
+                    <AppBarButton Name="BackButton" Style="{StaticResource AppBarButtonStyle}" Click="Back_Click">
                         <AppBarButton.Icon>
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE973;"/>
                         </AppBarButton.Icon>
@@ -139,7 +139,7 @@
                             </Flyout>
                         </Button.Flyout>
                     </Button>
-                    <ComboBox Name="Mode" Grid.Column="2" VerticalAlignment="Center" RequestedTheme="Dark">
+                    <ComboBox Name="Mode" Grid.Column="2" VerticalAlignment="Center" RequestedTheme="Dark" Tapped="Mode_Tapped">
                         <ComboBoxItem IsSelected="True">滚动</ComboBoxItem>
                         <ComboBoxItem>顶部</ComboBoxItem>
                         <ComboBoxItem>底部</ComboBoxItem>
@@ -148,9 +148,7 @@
                 </Grid>
             </Grid>
             <!--下面的控制栏-->
-            <Grid Background="#99000000"
-                      VerticalAlignment="Bottom" 
-                      Grid.Row="2">
+            <Grid Background="#99000000" VerticalAlignment="Bottom" Grid.Row="2">
                 <Grid.RenderTransform>
                     <TranslateTransform x:Name="TranslateVertical"/>
                 </Grid.RenderTransform>
@@ -162,7 +160,7 @@
                 <Border x:Name="MediaTransportControls_Timeline_Border"
                             Grid.Row="0">
                     <Grid x:Name="MediaTransportControls_Timeline_Grid">
-                        <Slider x:Name="ProgressSlider" Height="32" IsThumbToolTipEnabled="False" MinWidth="80" Margin="12,0" ValueChanged="ProgressSlider_ValueChanged"
+                        <Slider x:Name="ProgressSlider" Height="32" IsThumbToolTipEnabled="False" MinWidth="80" Margin="12,0" ValueChanged="ProgressSlider_ValueChanged" 
                                 Style="{StaticResource MediaSliderStyle}" VerticalAlignment="Top" Value="{Binding ElementName=Media,Path=Position,Mode=TwoWay,Converter={StaticResource cvt1}}">
 
                         </Slider>
@@ -214,7 +212,7 @@
                         <CommandBar.Content>
                             <!--开始/暂停-->
                             <StackPanel Orientation="Horizontal">
-                                <AppBarButton x:Name="PlayPauseButton" MediaTransportControlsHelper.DropoutOrder="23" Style="{StaticResource AppBarButtonStyle}" Click="PlayPauseButton_Click">
+                                <AppBarButton x:Name="PlayPauseButton" MediaTransportControlsHelper.DropoutOrder="23" Style="{StaticResource AppBarButtonStyle}" FocusVisualPrimaryThickness="0" Click="PlayPauseButton_Click" KeyDown="Button_KeyDown">
                                     <AppBarButton.Icon>
                                         <SymbolIcon x:Name="PlayPauseSymbol" 
                                                         Symbol="Pause"/>

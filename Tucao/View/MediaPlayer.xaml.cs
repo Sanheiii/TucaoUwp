@@ -139,8 +139,6 @@ namespace Tucao.View
             //这两个东西有最小值,加载会出发ValueChanged事件,这里等它加载完再添加委托
             DanmakuSizeSlider.Loaded += ((sender, args) => DanmakuSizeSlider.ValueChanged += DanmakuSizeSlider_ValueChanged);
             DanmakuSpeedSlider.Loaded += ((sender, args) => DanmakuSpeedSlider.ValueChanged += DanmakuSpeedSlider_ValueChanged);
-            //隐藏控制栏
-            ControlPanel.Visibility = Visibility.Collapsed;
             StatusText.Text = "";
             Status.Visibility = Visibility.Visible;
             //设置可拖动区域
@@ -148,6 +146,8 @@ namespace Tucao.View
             //设置一些控件的初始值
             SetValues();
         }
+       
+        
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             //保存历史记录
@@ -316,6 +316,7 @@ namespace Tucao.View
             ProgressSlider.Maximum = duration;
             TimeRemainingElement.Text = ((int)duration / 60).ToString("d2") + ":" + ((int)duration % 60).ToString("d2");
             Count();
+            ControlPanel.Visibility = Visibility.Visible;
         }
         //播放数+1
         private void Count()
@@ -341,6 +342,10 @@ namespace Tucao.View
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void PlayPauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            SwitchStatus();
+        }
+        private void SwitchStatus()
         {
             var i = Media.CurrentState;
             if (i == MediaElementState.Playing)
@@ -398,8 +403,9 @@ namespace Tucao.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Media_Tapped(object sender, TappedRoutedEventArgs e)
+        private void MediaContainer_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            PlayPauseButton.Focus(FocusState.Programmatic);
             var timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(200);
             timer.Tick += ((s, ea) =>
@@ -407,29 +413,38 @@ namespace Tucao.View
                 if (isTapped)
                 {
                     isTapped = false;
-                    if (ControlPanel.Visibility == Visibility.Collapsed)
-                        ControlPanel.Visibility = Visibility.Visible;
-                    else
-                        ControlPanel.Visibility = Visibility.Collapsed;
+                    IsShowControlPanel = !IsShowControlPanel;
                 }
                 timer.Stop();
             });
             isTapped = true;
             timer.Start();
         }
+        bool IsShowControlPanel
+        {
+            get
+            {
+                return TopBarRow.Height.IsAuto;
+            }
+            set
+            {
+                TopBarRow.Height = value ? GridLength.Auto:new GridLength(0);
+                BottomBarRow.Height = value ? GridLength.Auto : new GridLength(0);
+            }
+        }
         /// <summary>
         /// 连续点击视频时
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Media_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        private void MediaContainer_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             if (isTapped)
             {
                 isTapped = false;
-                PlayPauseButton_Click(PlayPauseButton, new RoutedEventArgs());
+                SwitchStatus();
             }
-            else Media_Tapped(Media, new TappedRoutedEventArgs());
+            else MediaContainer_Tapped(Media, new TappedRoutedEventArgs());
         }
         /// <summary>
         /// 播放完成后
@@ -448,6 +463,7 @@ namespace Tucao.View
             {
                 case MediaElementState.Playing:
                     {
+                        PlayPauseButton.Focus(FocusState.Programmatic);
                         StatusText.Visibility = Visibility.Collapsed;
                         Status.Visibility = Visibility.Collapsed;
                         PlayPauseSymbol.Symbol = Symbol.Pause;
@@ -494,40 +510,6 @@ namespace Tucao.View
                 BufferingProgress.Visibility = Visibility.Collapsed;
                 BufferingProgress.Text = "";
             }
-        }
-
-        private void Page_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case VirtualKey.Space:
-                    {
-                        PlayPauseButton_Click(PlayPauseButton, new RoutedEventArgs());
-                    }
-                    break;
-                case VirtualKey.Escape:
-                    {
-                        FullWindowButton_Click(FullWindowButton, new RoutedEventArgs());
-                    }
-                    break;
-                case VirtualKey.Enter:
-                    {
-                        Media_Tapped(Media, new TappedRoutedEventArgs());
-                    }
-                    break;
-                case VirtualKey.Left:
-                    {
-                        ProgressSlider.Value -= 3;
-                    }
-                    break;
-                case VirtualKey.Right:
-                    {
-
-                        ProgressSlider.Value += 3;
-                    }
-                    break;
-            }
-            e.Handled = true;
         }
         /// <summary>
         /// 弹幕颜色改变时
@@ -613,6 +595,35 @@ namespace Tucao.View
             {
                 DanmakuManager.AddDanmaku(danmaku.Content.Trim(), danmaku.TextColor, danmaku.Type);
             }
+        }
+        private void Button_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case VirtualKey.F11: goto case VirtualKey.Escape;
+                case VirtualKey.Escape:
+                    {
+                        FullWindowButton_Click(FullWindowButton, new RoutedEventArgs());
+                    }
+                    break;
+                case VirtualKey.Control:
+                    {
+                        IsShowControlPanel = !IsShowControlPanel;
+                    }
+                    break;
+                case VirtualKey.Left:
+                    {
+                        ProgressSlider.Value -= 3;
+                    }
+                    break;
+                case VirtualKey.Right:
+                    {
+
+                        ProgressSlider.Value += 3;
+                    }
+                    break;
+            }
+            e.Handled = true;
         }
         /// <summary>
         /// 发送弹幕
@@ -708,7 +719,11 @@ namespace Tucao.View
                 }
             }
         }
-
+        /// <summary>
+        /// 点击旋转屏幕时转屏
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
         {
             //获取当前方向
@@ -722,8 +737,24 @@ namespace Tucao.View
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
             }
         }
-
-
+        /// <summary>
+        /// 点击控制栏获取焦点以便进行键盘控制
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ControlPanel_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            PlayPauseButton.Focus(FocusState.Programmatic);
+        }
+        /// <summary>
+        /// 防止事件冒泡到上层
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Mode_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            e.Handled = true;
+        }
     }
 
 

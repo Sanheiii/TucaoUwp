@@ -74,11 +74,11 @@ namespace Tucao.Helpers
             /// <summary>
             /// 播放视频时的默认音量
             /// </summary>
-            public static int Volume
+            public static double Volume
             {
                 get
                 {
-                    return (int)(GetValue("Volume") ?? 100);
+                    return (double)(GetValue("Volume") ?? 100.0);
                 }
                 set
                 {

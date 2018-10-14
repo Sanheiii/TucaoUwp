@@ -11,9 +11,10 @@
     <ScrollViewer>
         <StackPanel>
             <TextBlock TextWrapping="WrapWholeWords" Margin="0,10,0,10">目前主站不稳定,可能对软件的使用造成影响</TextBlock>
-            <TextBlock TextWrapping="WrapWholeWords" FontWeight="Bold" Margin="0,0,0,5">本次更新 2018.8.22</TextBlock>
-            <TextBlock TextWrapping="WrapWholeWords">-[修复] 播放本地视频未能隐藏多余的UI的bug</TextBlock>
-            <TextBlock TextWrapping="WrapWholeWords" FontWeight="Bold" Margin="0,0,0,5">1.4.4.0 2018.8.22</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords" FontWeight="Bold" Margin="0,0,0,5">本次更新 2018.10.12</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords">-[新增] 在播放时的键盘操作</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords">-       空格-暂停,CTRL-隐藏显示控制栏,Escape/F11-切换全屏</TextBlock>
+            <TextBlock TextWrapping="WrapWholeWords" FontWeight="Bold" Margin="0,0,0,5">1.4.4.0 2018.10.10</TextBlock>
             <TextBlock TextWrapping="WrapWholeWords">-[新增] 一些地方添加了亚克力效果</TextBlock>
             <TextBlock TextWrapping="WrapWholeWords">-[新增] 对贴吧源的支持</TextBlock>
             <TextBlock TextWrapping="WrapWholeWords">-和一些没想起来的东西</TextBlock>
