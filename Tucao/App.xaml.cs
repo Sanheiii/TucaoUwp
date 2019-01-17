@@ -47,14 +47,14 @@ namespace Tucao
             titleBar.ButtonBackgroundColor = Colors.Transparent;
             titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
 
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            {
-                //状态栏颜色
-                var statusBar = StatusBar.GetForCurrentView();
-                statusBar.BackgroundColor = Color.FromArgb(0xFF, 0xBF, 0xBF, 0xBF);
-                statusBar.BackgroundOpacity = 60d/255;
-                statusBar.ForegroundColor = RequestedTheme == ApplicationTheme.Dark ? Colors.White : Colors.Black;
-            }
+            //if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            //{
+            //    //状态栏颜色
+            //    var statusBar = StatusBar.GetForCurrentView();
+            //    statusBar.BackgroundColor = Color.FromArgb(0xFF, 0xBF, 0xBF, 0xBF);
+            //    statusBar.BackgroundOpacity = 60d/255;
+            //    statusBar.ForegroundColor = RequestedTheme == ApplicationTheme.Dark ? Colors.White : Colors.Black;
+            //}
 
             Frame rootFrame = Window.Current.Content as Frame;
             // 不要在窗口已包含内容时重复应用程序初始化，

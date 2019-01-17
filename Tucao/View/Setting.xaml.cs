@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Tucao.Helpers;
+using Tucao.View.Dialogs;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Email;
 using Windows.Foundation;
@@ -29,7 +30,7 @@ namespace Tucao.View
         public Setting()
         {
             this.InitializeComponent();
-            Version.Text = Methods.GetAppVersion();
+            Version.Content = Methods.GetAppVersion();
             DanmakuSizeSlider.Value = SettingHelper.Values.DanmakuSize;
             DanmakuSpeedSlider.Value = SettingHelper.Values.DanmakuSpeed;
             DanmakuOpacitySlider.Value = SettingHelper.Values.DanmakuOpacity;
@@ -79,6 +80,10 @@ namespace Tucao.View
 
         }
 
-
+        private void Version_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new UpdateLog();
+            var task = dialog.ShowAsync();
+        }
     }
 }

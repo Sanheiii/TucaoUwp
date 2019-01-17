@@ -281,9 +281,6 @@
     <SDKReference Include="ShanYe MediaPlayer Engine %28Windows 10 UWP%29, Version=1.0.7">
       <Name>ShanYe MediaPlayer Engine %28Windows 10 UWP%29</Name>
     </SDKReference>
-    <SDKReference Include="WindowsMobile, Version=10.0.17134.0">
-      <Name>Windows Mobile Extensions for the UWP</Name>
-    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

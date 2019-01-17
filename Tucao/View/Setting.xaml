@@ -45,7 +45,7 @@
                         </Grid>
                         <Grid>
                             <TextBlock Text="版本" HorizontalAlignment="Left" FontSize="17" FontWeight="Bold" Margin="0,5,0,0"/>
-                            <TextBlock Name="Version" HorizontalAlignment="Right" Margin="0,5,0,0" FontSize="17"/>
+                            <HyperlinkButton Name="Version" VerticalAlignment="Top"  HorizontalAlignment="Right" FontSize="17" Margin="0,-5,0,0" Click="Version_Click"/>
                         </Grid>
                         <Grid>
                             <TextBlock Text="作者" HorizontalAlignment="Left" FontSize="17" FontWeight="Bold" Margin="0,5,0,0"/>
@@ -67,9 +67,11 @@
                                 </Flyout>
                             </HyperlinkButton.ContextFlyout>
                         </HyperlinkButton>
-                        <TextBlock Text="引用开源项目" HorizontalAlignment="Left" FontSize="22" FontWeight="Bold" Margin="0,5,0,0"/>
+                        <TextBlock Text="引用" HorizontalAlignment="Left" FontSize="22" FontWeight="Bold" Margin="0,5,0,0"/>
                         <HyperlinkButton Content="NewtonSoft.Json" NavigateUri="https://github.com/JamesNK/Newtonsoft.Json" FontSize="15" FontWeight="Bold"/>
                         <HyperlinkButton Content="UWPCommunityToolkit" NavigateUri="https://github.com/Microsoft/UWPCommunityToolkit/" FontSize="15" FontWeight="Bold"/>
+                        <HyperlinkButton Content="WinUI" NavigateUri="http://aka.ms/winui" FontSize="15" FontWeight="Bold"/>
+                        <HyperlinkButton Content="SYEngine" NavigateUri="https://github.com/amamiya/SYEngine" FontSize="15" FontWeight="Bold"/>
                         <HyperlinkButton Content="XMLParser" NavigateUri="http://dev.grumpyferret.com/unity/" HorizontalAlignment="Left" FontSize="15" FontWeight="Bold"/>
                         <HyperlinkButton Content="HtmlAgilityPack" NavigateUri="http://html-agility-pack.net/" HorizontalAlignment="Left" FontSize="15" FontWeight="Bold"/>
                         

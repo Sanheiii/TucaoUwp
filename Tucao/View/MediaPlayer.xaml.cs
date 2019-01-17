@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Tucao.Helpers;
@@ -34,6 +36,7 @@ namespace Tucao.View
     public sealed partial class MediaPlayer : Page
     {
         bool isTapped = false;
+        bool syflag = false;
         MediaPlayerSource param = new MediaPlayerSource();
         List<Danmaku> danmakuList = new List<Danmaku>();
         private SimpleOrientationSensor simpleorientation;
@@ -127,7 +130,7 @@ namespace Tucao.View
             //加载弹幕
             LoadDanmaku();
             //播放视频
-            Play(param.PlayList);
+            Play();
             //设置屏幕方向
             DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape;
             //获取方向传感器
@@ -263,10 +266,26 @@ namespace Tucao.View
         /// 播放视频
         /// </summary>
         /// <param name="part">分P号</param>
-        private async void Play(List<string> play_list)
+        private async void Play()
+        {
+            List<string> play_list = param.PlayList;
+            Uri source = await GetSource(play_list);
+            //开始播放
+            StatusText.Text += Environment.NewLine + "开始缓冲视频...";
+            try
+            {
+                Media.Source = source;
+            }
+            catch (Exception ex)
+            {
+                StatusText.Text += "    [失败]";
+            }
+
+        }
+        private async Task<Uri> GetSource(List<string> play_list)
         {
             Uri source;
-            if (play_list[0].Contains("gss3.baidu.com"))
+            if (play_list.Count == 1 && !syflag)
             {
                 source = new Uri(play_list[0]);
             }
@@ -291,17 +310,7 @@ namespace Tucao.View
                 playlist.NetworkConfigs = cfgs;
                 source = await playlist.SaveAndGetFileUriAsync();
             }
-            //开始播放
-            StatusText.Text += Environment.NewLine + "开始缓冲视频...";
-            try
-            {
-                Media.Source = source;
-            }
-            catch (Exception ex)
-            {
-                StatusText.Text += "    [失败]";
-            }
-
+            return source;
         }
 
         /// <summary>
@@ -334,6 +343,12 @@ namespace Tucao.View
             //回退打开视频进行的操作
             var dialog = new ErrorDialog("视频播放失败");
             var asyncOperation = dialog.ShowAsync();
+            ApplicationView view = ApplicationView.GetForCurrentView();
+            if (view.IsFullScreenMode)
+            {
+                FullWindowButton_Click(this, new RoutedEventArgs());
+            }
+
         }
 
         /// <summary>
@@ -441,6 +456,7 @@ namespace Tucao.View
         {
             if (isTapped)
             {
+                PlayPauseButton.Focus(FocusState.Programmatic);
                 isTapped = false;
                 SwitchStatus();
             }
